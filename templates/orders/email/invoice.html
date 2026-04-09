@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - {{ order.order_number }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+        }
+        
+        .header {
+            background-color: #000000;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+        
+        .brand-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .order-header {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #333333;
+        }
+        
+        .order-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .order-date {
+            color: #cccccc;
+            margin-top: 0.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.5rem 0 1rem 0;
+            color: #ffffff;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 0.5rem;
+        }
+        
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .item-details {
+            flex-grow: 1;
+        }
+        
+        .item-name {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+        }
+        
+        .item-variant {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+        
+        .item-customization {
+            color: #999999;
+            font-size: 0.8rem;
+            font-style: italic;
+            margin-top: 0.25rem;
+        }
+        
+        .item-quantity {
+            margin: 0 1rem;
+            color: #cccccc;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .totals-section {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #333333;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
+        
+        .total-label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .total-final {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding-top: 0.5rem;
+            border-top: 1px solid #333333;
+            margin-top: 0.5rem;
+        }
+        
+        .address-section {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+        
+        .address-block {
+            flex: 1;
+            background-color: #2a2a2a;
+            padding: 1rem;
+            border: 1px solid #333333;
+        }
+        
+        .address-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .address-content {
+            color: #cccccc;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #000000;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #333333;
+        }
+        
+        .footer-text {
+            color: #999999;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        
+        .social-links {
+            margin-top: 1rem;
+        }
+        
+        .social-link {
+            color: #cccccc;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                border: none;
+            }
+            
+            .address-section {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .item-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .item-quantity, .item-price {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">NOVA</div>
+            <div class="brand-subtitle">2024</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Order Header -->
+            <div class="order-header">
+                <div class="order-number">Order {{ order.order_number }}</div>
+                <div class="order-date">{{ order.created_at|date:"F d, Y" }} at {{ order.created_at|time:"g:i A" }}</div>
+            </div>
+            
+            <!-- Thank You Message -->
+            <p>Dear {{ order.shipping_name }},</p>
+            <p>Thank you for your order! We've received your purchase and it's being processed. You'll receive another email when your items have shipped.</p>
+            
+            <!-- Order Items -->
+            <div class="section-title">Order Items</div>
+            {% for item in order.items.all %}
+            <div class="item-row">
+                <div class="item-details">
+                    <div class="item-name">{{ item.product_name }}</div>
+                    {% if item.size_name or item.color_name %}
+                    <div class="item-variant">
+                        {% if item.size_name %}Size: {{ item.size_name }}{% endif %}
+                        {% if item.color_name %}{% if item.size_name %} | {% endif %}Color: {{ item.color_name }}{% endif %}
+                    </div>
+                    {% endif %}
+                    {% if item.customization_text %}
+                    <div class="item-customization">Customization: "{{ item.customization_text }}"</div>
+                    {% endif %}
+                </div>
+                <div class="item-quantity">Qty: {{ item.quantity }}</div>
+                <div class="item-price">L.E {{ item.total_price }}</div>
+            </div>
+            {% endfor %}
+            
+            <!-- Totals -->
+            <div class="totals-section">
+                <div class="total-row">
+                    <span class="total-label">Subtotal:</span>
+                    <span>L.E {{ order.subtotal }}</span>
+                </div>
+                {% if order.tax_amount > 0 %}
+                <div class="total-row">
+                    <span class="total-label">Tax:</span>
+                    <span>L.E {{ order.tax_amount }}</span>
+                </div>
+                {% endif %}
+                {% if order.shipping_cost > 0 %}
+                <div class="total-row">
+                    <span class="total-label">Shipping:</span>
+                    <span>L.E {{ order.shipping_cost }}</span>
+                </div>
+                {% endif %}
+                <div class="total-row total-final">
+                    <span class="total-label">Total:</span>
+                    <span>L.E {{ order.total_amount }}</span>
+                </div>
+            </div>
+            
+            <!-- Addresses -->
+            <div class="section-title">Shipping & Billing Information</div>
+            <div class="address-section">
+                <div class="address-block">
+                    <div class="address-title">Shipping Address</div>
+                    <div class="address-content">
+                        {{ order.shipping_name }}<br>
+                        {% if order.shipping_email %}{{ order.shipping_email }}<br>{% endif %}
+                        {% if order.shipping_phone %}{{ order.shipping_phone }}<br>{% endif %}
+                        {{ order.shipping_address_line1 }}<br>
+                        {% if order.shipping_address_line2 %}{{ order.shipping_address_line2 }}<br>{% endif %}
+                        {{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_postal_code }}<br>
+                        {{ order.shipping_country }}
+                    </div>
+                </div>
+                
+                <div class="address-block">
+                    <div class="address-title">Billing Address</div>
+                    <div class="address-content">
+                        {% if order.billing_name %}
+                            {{ order.billing_name }}<br>
+                            {% if order.billing_email %}{{ order.billing_email }}<br>{% endif %}
+                            {% if order.billing_phone %}{{ order.billing_phone }}<br>{% endif %}
+                            {{ order.billing_address_line1 }}<br>
+                            {% if order.billing_address_line2 %}{{ order.billing_address_line2 }}<br>{% endif %}
+                            {{ order.billing_city }}, {{ order.billing_state }} {{ order.billing_postal_code }}<br>
+                            {{ order.billing_country }}
+                        {% else %}
+                            Same as shipping address
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Status -->
+            <div class="section-title">Order Status</div>
+            <p>Your order status is: <strong>{{ order.get_status_display }}</strong></p>
+            <p>Payment status: <strong>{{ order.get_payment_status_display }}</strong></p>
+            
+            {% if order.tracking_number %}
+            <p>Tracking number: <strong>{{ order.tracking_number }}</strong></p>
+            {% endif %}
+            
+            <!-- Additional Info -->
+            <div class="section-title">What's Next?</div>
+            <p>We'll send you another email when your order ships with tracking information. If you have any questions about your order, please contact us.</p>
+            
+            <p>Thank you for choosing NOVA!</p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-text">© 2025 NOVA. All rights reserved.</div>
+            <div class="footer-text">Premium softwear customization</div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="social-link">Instagram</a>
+                <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="social-link">tiktok</a>
+                <a href="https://www.facebook.com/novakidswear" class="social-link">Facebook</a>
+            </div>
+        </div>  
+    </div>
+</body>
+</html>

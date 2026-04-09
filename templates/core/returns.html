@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Returns - Nova{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-white text-center mb-5">Return Policy</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card bg-dark border-secondary">
+                <div class="card-body">
+                    <h4 class="text-white mb-4">30-Day Return Policy</h4>
+                    <p class="text-muted mb-4">We accept returns within 30 days of purchase for unused items in original condition.</p>
+                    
+                    <h5 class="text-white mb-3">Returnable Items</h5>
+                    <ul class="text-muted mb-4">
+                        <li>Unworn items with original tags</li>
+                        <li>Items in original packaging</li>
+                        <li>Standard (non-custom) products</li>
+                    </ul>
+                    
+                    <h5 class="text-white mb-3">Non-Returnable Items</h5>
+                    <ul class="text-muted mb-4">
+                        <li>Custom or personalized items</li>
+                        <li>Items worn or washed</li>
+                        <li>Items without original tags</li>
+                    </ul>
+                    
+                    <h5 class="text-white mb-3">Return Process</h5>
+                    <ol class="text-muted">
+                        <li>Contact our customer service team</li>
+                        <li>Receive return authorization and instructions</li>
+                        <li>Package items securely with original packaging</li>
+                        <li>Ship items back using provided return label</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

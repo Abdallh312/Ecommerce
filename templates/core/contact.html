@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact - Nova{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-white text-center mb-5">Contact Us</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header">
+                    <h4 class="text-white mb-0">Send us a Message</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label text-white">Name</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="name" name="name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label text-white">Email</label>
+                            <input type="email" class="form-control bg-dark text-white border-secondary" 
+                                   id="email" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label text-white">Message</label>
+                            <textarea class="form-control bg-dark text-white border-secondary" 
+                                      id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header">
+                    <h4 class="text-white mb-0">Get in Touch</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="text-white mb-2">
+                            <i class="fas fa-envelope me-2"></i>Email
+                        </h5>
+                        <p class="text-muted">novakidwear@gmail.com</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="text-white mb-2">
+                            <i class="fas fa-phone me-2"></i>Phone
+                        </h5>
+                        <p class="text-muted">+201115176611/p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="text-white mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>Address
+                        </h5>
+                        <p class="text-muted">
+                            Gesr el suez, street 10 from the 100 street <br>
+                             Egypt
+                        </p>
+                    </div>
+                    
+                    <div class="mb-4">
+                    </div>
+                    
+                    <div>
+                        <h5 class="text-white mb-2">
+                            <i class="fas fa-share-alt me-2"></i>Follow Us
+                        </h5>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                            <a href="https://www.facebook.com/novakidswear" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                            <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="text-white"><i class="fab fa-tiktok fa-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

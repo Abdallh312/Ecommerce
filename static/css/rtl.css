@@ -1,0 +1,78 @@
+/* RTL Support for Arabic Language */
+html[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Navigation */
+html[dir="rtl"] .navbar-nav {
+    padding-right: 0;
+}
+
+html[dir="rtl"] .dropdown-menu {
+    text-align: right;
+}
+
+html[dir="rtl"] .ms-auto {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+
+html[dir="rtl"] .me-auto {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+/* Margins and Paddings */
+html[dir="rtl"] .ms-1, 
+html[dir="rtl"] .ms-2, 
+html[dir="rtl"] .ms-3, 
+html[dir="rtl"] .ms-4, 
+html[dir="rtl"] .ms-5 {
+    margin-right: var(--bs-gutter-x) !important;
+    margin-left: 0 !important;
+}
+
+html[dir="rtl"] .me-1, 
+html[dir="rtl"] .me-2, 
+html[dir="rtl"] .me-3, 
+html[dir="rtl"] .me-4, 
+html[dir="rtl"] .me-5 {
+    margin-left: var(--bs-gutter-x) !important;
+    margin-right: 0 !important;
+}
+
+/* Text alignment */
+html[dir="rtl"] .text-start {
+    text-align: right !important;
+}
+
+html[dir="rtl"] .text-end {
+    text-align: left !important;
+}
+
+/* Float */
+html[dir="rtl"] .float-start {
+    float: right !important;
+}
+
+html[dir="rtl"] .float-end {
+    float: left !important;
+}
+
+/* Product cards */
+html[dir="rtl"] .card-body {
+    text-align: right;
+}
+
+/* Breadcrumbs */
+html[dir="rtl"] .breadcrumb-item+.breadcrumb-item::before {
+    float: right;
+    padding-left: 0.5rem;
+    padding-right: 0;
+}
+
+html[dir="rtl"] .breadcrumb-item+.breadcrumb-item {
+    padding-right: 0.5rem;
+    padding-left: 0;
+}

@@ -1,0 +1,44 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shipping Info - Nova{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-white text-center mb-5">Shipping Information</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card bg-dark border-secondary">
+                <div class="card-body">
+                    <h4 class="text-white mb-4">Shipping Options</h4>
+                    <p class="text-muted mb-4">We offer reliable shipping options to get your order to you as quickly as possible.</p>
+                    
+                    <div class="mb-4">
+                        <h5 class="text-white">Cairo & Giza Shipping - L.E 70.00</h5>
+                        <p class="text-muted">Delivery time: 3-5 business days</p>
+                        <p class="text-warning"><i class="fas fa-money-bill-wave me-2"></i><strong>Cash on Delivery Available</strong></p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="text-white">Other Governorates Shipping - L.E 90.00</h5>
+                        <p class="text-muted">Delivery time: 5-7 business days</p>
+                        <p class="text-muted">Available to all other Egyptian governorates including Alexandria, Qalyubia, Sharqia, Dakahlia, Beheira, Kafr El Sheikh, Gharbia, Monufia, Damietta, Port Said, Ismailia, Suez, and more</p>
+                        <p class="text-warning"><i class="fas fa-money-bill-wave me-2"></i><strong>Cash on Delivery Available</strong></p>
+                    </div>
+                    
+                    <h4 class="text-white mb-3">Order Processing</h4>
+                    <p class="text-muted mb-4">Orders are typically processed within 1-2 business days. Custom items may require additional processing time.</p>
+                    
+                    <h4 class="text-white mb-3">Tracking</h4>
+                    <p class="text-muted">Once your order ships, you'll receive a confirmation email with tracking information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

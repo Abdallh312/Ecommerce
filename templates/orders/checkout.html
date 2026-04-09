@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - NOVA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h1 class="section-title">CHECKOUT</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-white">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'orders:cart' %}" class="text-white">Cart</a></li>
+                    <li class="breadcrumb-item active text-muted">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Checkout Form -->
+        <div class="col-lg-8">
+            <form method="POST" class="checkout-form" action="{% url 'orders:paymob_initiate' %}">
+                {% csrf_token %}
+                
+                <!-- Shipping Information -->
+                <div class="checkout-section mb-5">
+                    <h4 class="mb-4">SHIPPING INFORMATION</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="shipping_name" class="form-label">Full Name *</label>
+                            <input type="text" class="form-control" id="shipping_name" name="shipping_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="shipping_email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="shipping_email" name="shipping_email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="shipping_phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="shipping_phone" name="shipping_phone">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="shipping_country" class="form-label">Country *</label>
+                            <select class="form-control" id="shipping_country" name="shipping_country" required>
+                                <option value="EG" selected>Egypt</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="shipping_address_line1" class="form-label">Address Line 1 *</label>
+                        <input type="text" class="form-control" id="shipping_address_line1" name="shipping_address_line1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="shipping_address_line2" class="form-label">Address Line 2 (Optional)</label>
+                        <input type="text" class="form-control" id="shipping_address_line2" name="shipping_address_line2">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="shipping_city" class="form-label">City *</label>
+                            <input type="text" class="form-control" id="shipping_city" name="shipping_city" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="shipping_state" class="form-label">State/Province *</label>
+                            <select class="form-control" id="shipping_state" name="shipping_state" required>
+                                <option value="">Select State/Province</option>
+                                <option value="Cairo">Cairo</option>
+                                <option value="Giza">Giza</option>
+                                <option value="Alexandria">Alexandria</option>
+                                <option value="Aswan">Aswan</option>
+                                <option value="Asyut">Asyut</option>
+                                <option value="Beheira">Beheira</option>
+                                <option value="Beni_Suef">Beni Suef</option>
+                                <option value="Dakahlia">Dakahlia</option>
+                                <option value="Damietta">Damietta</option>
+                                <option value="Faiyum">Faiyum</option>
+                                <option value="Gharbia">Gharbia</option>
+                                <option value="Ismailia">Ismailia</option>
+                                <option value="Kafr_El_Sheikh">Kafr El Sheikh</option>
+                                <option value="Luxor">Luxor</option>
+                                <option value="Matrouh">Matrouh</option>
+                                <option value="Minya">Minya</option>
+                                <option value="Monufia">Monufia</option>
+                                <option value="New_Valley">New Valley</option>
+                                <option value="North_Sinai">North Sinai</option>
+                                <option value="Port_Said">Port Said</option>
+                                <option value="Qalyubia">Qalyubia</option>
+                                <option value="Qena">Qena</option>
+                                <option value="Red_Sea">Red Sea</option>
+                                <option value="Sharqia">Sharqia</option>
+                                <option value="Sohag">Sohag</option>
+                                <option value="South_Sinai">South Sinai</option>
+                                <option value="Suez">Suez</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="shipping_postal_code" class="form-label">Postal Code *</label>
+                            <input type="text" class="form-control" id="shipping_postal_code" name="shipping_postal_code" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="checkout-section mb-5">
+                    <h4 class="mb-4">PAYMENT INFORMATION</h4>
+                    
+                    <div class="payment-methods mb-4">
+                        <!-- Cash on Delivery -->
+                        <div class="form-check mb-3 p-3 rounded" style="border: 1px solid #333;">
+                            <input class="form-check-input" type="radio" name="payment_method" id="cod_payment" value="cod" checked onchange="togglePaymentInfo()">
+                            <label class="form-check-label d-flex align-items-center" for="cod_payment">
+                                <i class="fas fa-money-bill-wave me-2 text-success"></i>
+                                <div>
+                                    <strong>Cash on Delivery</strong>
+                                    <div><small class="text-muted">Pay with cash when your order is delivered</small></div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Credit/Debit Card via Paymob -->
+                        <div class="form-check p-3 rounded" style="border: 1px solid #333;">
+                            <input class="form-check-input" type="radio" name="payment_method" id="card_payment" value="card" onchange="togglePaymentInfo()">
+                            <label class="form-check-label d-flex align-items-center" for="card_payment">
+                                <i class="fas fa-credit-card me-2 text-primary"></i>
+                                <div>
+                                    <strong>Credit/Debit Card</strong>
+                                    <div><small class="text-muted">Visa, MasterCard, Meeza &nbsp;
+                                        <img src="https://accept.paymob.com/assets/images/paymob-logo.png" height="18" alt="Paymob" style="vertical-align:middle; opacity:0.8;">
+                                    </small></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- Order Notes -->
+                <div class="checkout-section mb-5">
+                    <h4 class="mb-4">ORDER NOTES (OPTIONAL)</h4>
+                    <textarea class="form-control" name="notes" rows="4" placeholder="Special delivery instructions, gift message, etc."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg" id="place-order-btn">
+                        <i class="fas fa-lock me-2"></i>
+                        <span id="btn-text">PLACE ORDER</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="order-summary bg-dark-secondary p-4 rounded sticky-top">
+                <h5 class="mb-4">ORDER SUMMARY</h5>
+                
+                <!-- Order Items -->
+                <div class="order-items mb-4">
+                    {% for item in cart.items.all %}
+                    <div class="order-item d-flex align-items-center mb-3">
+                        <div class="item-image me-3">
+                            {% if item.product.get_main_image %}
+                                <img src="{{ item.product.get_main_image }}" alt="{{ item.product.name }}" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-dark-tertiary rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="item-details flex-grow-1">
+                            <h6 class="mb-1">{{ item.product.name }}</h6>
+                            <small class="text-muted">
+                                {% if item.variant %}
+                                    {{ item.variant.size.name }} - {{ item.variant.color.name }}
+                                {% endif %}
+                                {% if item.customization_text %}
+                                    <br>Custom: {{ item.customization_text|truncatechars:20 }}
+                                {% endif %}
+                            </small>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Qty: {{ item.quantity }}</span>
+                                <span class="fw-bold">L.E {{ item.get_total_price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <hr>
+                
+                <!-- Totals -->
+                <div class="order-totals">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal ({{ cart.get_total_items }} items)</span>
+                        <span>L.E {{ cart.get_total_price }}</span>
+                    </div>
+                    
+                    {% if cart.offer and cart.offer.is_active %}
+                    <div class="d-flex justify-content-between mb-2 text-success">
+                        <span>Discount ({{ cart.offer.discount_percent }}%)</span>
+                        <span>-L.E {{ cart.offer.discount_percent }}%</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span id="shipping-cost">L.E {{ cart.get_shipping_cost }}</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Total</strong>
+                        <strong id="order-total">L.E {{ cart.get_final_total }}</strong>
+                    </div>
+                </div>
+                
+                <!-- Security Info -->
+                <div class="security-badges text-center">
+                    <small class="text-muted d-block mb-2">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        Your order information is secure and protected
+                    </small>
+                    <div class="payment-icons d-flex justify-content-center gap-3">
+                        <i class="fas fa-money-bill-wave fa-2x text-success" title="Cash on Delivery"></i>
+                        <i class="fas fa-credit-card fa-2x text-primary" title="Card via Paymob"></i>
+                    </div>
+                    <small class="text-muted d-block mt-2">Cash on Delivery &amp; Credit/Debit Card Available</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Egyptian Governorates data
+    const statesData = {
+        'EG': [
+            { value: 'Alexandria', text: 'Alexandria' },
+            { value: 'Aswan', text: 'Aswan' },
+            { value: 'Asyut', text: 'Asyut' },
+            { value: 'Beheira', text: 'Beheira' },
+            { value: 'Beni_Suef', text: 'Beni Suef' },
+            { value: 'Cairo', text: 'Cairo' },
+            { value: 'Dakahlia', text: 'Dakahlia' },
+            { value: 'Damietta', text: 'Damietta' },
+            { value: 'Faiyum', text: 'Faiyum' },
+            { value: 'Gharbia', text: 'Gharbia' },
+            { value: 'Giza', text: 'Giza' },
+            { value: 'Ismailia', text: 'Ismailia' },
+            { value: 'Kafr_El_Sheikh', text: 'Kafr El Sheikh' },
+            { value: 'Luxor', text: 'Luxor' },
+            { value: 'Matrouh', text: 'Matrouh' },
+            { value: 'Minya', text: 'Minya' },
+            { value: 'Monufia', text: 'Monufia' },
+            { value: 'New_Valley', text: 'New Valley' },
+            { value: 'North_Sinai', text: 'North Sinai' },
+            { value: 'Port_Said', text: 'Port Said' },
+            { value: 'Qalyubia', text: 'Qalyubia' },
+            { value: 'Qena', text: 'Qena' },
+            { value: 'Red_Sea', text: 'Red Sea' },
+            { value: 'Sharqia', text: 'Sharqia' },
+            { value: 'Sohag', text: 'Sohag' },
+            { value: 'South_Sinai', text: 'South Sinai' },
+            { value: 'Suez', text: 'Suez' }
+        ]
+    };
+    
+    // Country and State dropdowns
+    const countrySelect = document.getElementById('shipping_country');
+    const stateSelect = document.getElementById('shipping_state');
+    
+    function updateStates() {
+        const selectedCountry = countrySelect.value;
+        
+        // Clear existing states
+        stateSelect.innerHTML = '<option value="">Select State/Province</option>';
+        
+        if (selectedCountry && statesData[selectedCountry]) {
+            statesData[selectedCountry].forEach(state => {
+                const option = document.createElement('option');
+                option.value = state.value;
+                option.textContent = state.text;
+                stateSelect.appendChild(option);
+            });
+            stateSelect.disabled = false;
+        } else {
+            stateSelect.disabled = true;
+        }
+    }
+    
+    countrySelect.addEventListener('change', updateStates);
+    
+    // Initialize states dropdown
+    updateStates();
+    
+    // Update shipping cost based on state selection
+    stateSelect.addEventListener('change', function() {
+        const selectedState = this.value;
+        const subtotal = parseFloat({{ cart.get_total_price }});
+        const discountPercent = parseFloat({% if cart.offer and cart.offer.is_active %}{{ cart.offer.discount_percent }}{% else %}0{% endif %});
+        const discountedSubtotal = subtotal - (subtotal * discountPercent / 100.0);
+        let shippingCost = 90; // Default shipping cost
+        
+        // Check if state is Cairo or Giza
+        if (selectedState === 'Cairo' || selectedState === 'Giza') {
+            shippingCost = 70;
+        }
+        
+        console.log("State selected:", selectedState);
+        console.log("Shipping cost:", shippingCost);
+        
+        // Update shipping cost display
+        document.getElementById('shipping-cost').textContent = `L.E ${shippingCost.toFixed(2)}`;
+        
+        // Update total
+        const total = discountedSubtotal + shippingCost;
+        document.getElementById('order-total').textContent = `L.E ${total.toFixed(2)}`;
+    });
+    
+    // Trigger change event on page load if state is already selected
+    if (stateSelect.value) {
+        stateSelect.dispatchEvent(new Event('change'));
+    }
+});
+
+// Toggle payment button label
+function togglePaymentInfo() {
+    const isCard    = document.getElementById('card_payment').checked;
+    const btnText   = document.getElementById('btn-text');
+
+    if (isCard) {
+        btnText.textContent = 'PAY WITH CARD';
+    } else {
+        btnText.textContent = 'PLACE ORDER';
+    }
+}
+</script>
+{% endblock %}

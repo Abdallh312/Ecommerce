@@ -1,0 +1,18 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .logo-cyan { fill: #00ffff; stroke: #00ffff; stroke-width: 2; }
+      .logo-outline { fill: none; stroke: #ffffff; stroke-width: 1; opacity: 0.7; }
+    </style>
+  </defs>
+  
+  <!-- Background outline shapes -->
+  <polygon class="logo-outline" points="50,40 170,40 180,50 180,160 50,160 40,150 40,50"/>
+  <polygon class="logo-outline" points="160,50 200,20 200,120 190,130 160,130"/>
+  
+  <!-- Main cyan filled shape -->
+  <polygon class="logo-cyan" points="50,40 120,40 120,160 50,160 40,150 40,50"/>
+  
+  <!-- Cyan outline arrow -->
+  <polyline class="logo-cyan" fill="none" stroke-width="4" points="160,50 200,20 200,120 190,130 160,130 160,50"/>
+</svg>

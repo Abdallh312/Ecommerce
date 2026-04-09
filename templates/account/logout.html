@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Logout - Nova{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card bg-dark border-secondary">
+                <div class="card-header bg-secondary text-center">
+                    <h3 class="text-white mb-0">Sign Out</h3>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <p class="text-white mb-4">Are you sure you want to sign out?</p>
+                    
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign Out</button>
+                            <a href="{% url 'products:home' %}" class="btn btn-outline-light">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,555 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ product.name }} - NOVA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-white">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}" class="text-white">{% trans "Products" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:category_products' product.category.slug %}" class="text-white">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active text-muted">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-lg-6">
+            <div class="product-images">
+                <!-- Main Image -->
+                <div class="mb-3">
+                    {% if product.get_main_image %}
+                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-main-image img-fluid" style="width: 480px; height: 700px; ">
+                    {% else %}
+                        <div class="product-main-image bg-dark-tertiary d-flex align-items-center justify-content-center" style="width: 480px; height: 700px;">
+                            <i class="fas fa-image fa-4x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Thumbnail Images -->
+                {% if product.get_all_images|length > 1 %}
+                <div class="d-flex gap-2 flex-wrap">
+                    {% for image in product.get_all_images %}
+                    <img src="{{ image.image.url }}" alt="{{ product.name }}" 
+                         class="product-thumbnail {% if image.is_main %}active{% endif %}"
+                         onclick="changeMainImage('{{ image.image.url }}', this)">
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-6">
+            <div class="product-info">
+                <!-- Category -->
+                <p class="product-category mb-2">
+                    <a href="{% url 'products:category_products' product.category.slug %}" class="text-muted">
+                        {{ product.category.name }}
+                    </a>
+                </p>
+
+                <!-- Product Title -->
+                <h1 class="product-title mb-3">{{ product.name }}</h1>
+
+                <!-- Price -->
+                <div class="mb-4">
+                    <span class="product-price h2">L.E {{ product.base_price }}</span>
+                    {% if product.stock_quantity > 0 %}
+                        <span class="badge bg-success ms-3">{% trans "IN STOCK" %}</span>
+                    {% else %}
+                        <span class="badge bg-danger ms-3">{% trans "OUT OF STOCK" %}</span>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                    {% if product.short_description %}
+                        <p class="lead">{{ product.short_description }}</p>
+                    {% endif %}
+                    <div class="product-description">
+                        {{ product.description|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- Product Options -->
+                <form id="add-to-cart-form" data-product-id="{{ product.id }}">
+                    {% csrf_token %}
+                    
+                    <!-- Size Selection -->
+                    {% if sizes %}
+                    <div class="size-selector mb-4">
+                        <h6 class="mb-3">{% trans "SIZE:" %}</h6>
+                        <div class="size-options">
+                            {% for size in sizes %}
+                            <button type="button" class="size-option" data-size="{{ size.id }}">
+                                {{ size.name }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Color Selection -->
+                    {% if colors %}
+                    <div class="color-selector mb-4">
+                        <h6 class="mb-3">{% trans "COLOR:" %}</h6>
+                        <div class="color-options">
+                            {% for color in colors %}
+                            <button type="button" class="color-option" 
+                                    data-color="{{ color.id }}" 
+                                    data-hex="{{ color.hex_code }}"
+                                    title="{{ color.name }}">
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% comment %} <!-- Customization -->
+                    {% if product.is_customizable %}
+                    <div class="customization-section mb-4">
+                        <h6 class="mb-3">CUSTOMIZATION:</h6>
+                        <textarea class="form-control customization-input" 
+                                  placeholder="Add your custom text or design instructions (optional)"
+                                  rows="3"></textarea>
+                        <small class="text-muted">Custom designs may take additional 3-5 business days to process.</small>
+                    </div>
+                    {% endif %} {% endcomment %}
+
+                    <!-- Quantity -->
+                    <div class="quantity-selector mb-4">
+                        <h6 class="mb-3">QUANTITY:</h6>
+                        <div class="input-group" style="width: 180px;">
+                            <button class="btn btn-outline-secondary quantity-minus" type="button">-</button>
+                            <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="{{ product.stock_quantity }}">
+                            <button class="btn btn-outline-secondary quantity-plus" type="button">+</button>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">Max available: {{ product.stock_quantity }} items</small>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <div class="mb-4">
+                        {% if product.stock_quantity > 0 %}
+                            <button type="submit" class="btn btn-primary add-to-cart-btn me-3" data-product-id="{{ product.id }}">
+                                ADD TO CART
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-secondary" disabled>
+                                OUT OF STOCK
+                            </button>
+                        {% endif %}
+                        
+                        <button type="button" class="btn {% if product.id in user_wishlist_ids %}btn-outline-danger text-danger{% else %}btn-outline-white{% endif %} wishlist-toggle-btn" 
+                                onclick="addToWishlist('{{ product.id }}', this)">
+                            <i class="{% if product.id in user_wishlist_ids %}fas{% else %}far{% endif %} fa-heart"></i> WISHLIST
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Product Details -->
+                <div class="product-details">
+                    <div class="accordion accordion-dark" id="productAccordion">
+                        <!-- Description -->
+                        <div class="accordion-item bg-dark-secondary border-dark">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark-secondary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#description">
+                                    PRODUCT DETAILS
+                                </button>
+                            </h2>
+                            <div id="description" class="accordion-collapse collapse show" data-bs-parent="#productAccordion">
+                                <div class="accordion-body">
+                                    {{ product.description|linebreaks }}
+                                    {% if product.weight %}
+                                        <p><strong>Weight:</strong> {{ product.weight }} kg</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% comment %} <!-- Size Guide -->
+                        <div class="accordion-item bg-dark-secondary border-dark">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark-secondary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#sizeGuide">
+                                    SIZE GUIDE
+                                </button>
+                            </h2>
+                            <div id="sizeGuide" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                                <div class="accordion-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Size</th>
+                                                    <th>Chest (cm)</th>
+                                                    <th>Length (cm)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>S</td><td>50</td><td>68</td></tr>
+                                                <tr><td>M</td><td>55</td><td>70</td></tr>
+                                                <tr><td>L</td><td>60</td><td>72</td></tr>
+                                                <tr><td>XL</td><td>65</td><td>74</td></tr>
+                                                <tr><td>XXL</td><td>70</td><td>76</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> {% endcomment %}
+
+                        <!-- Shipping -->
+                        <div class="accordion-item bg-dark-secondary border-dark">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark-secondary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#shipping">
+                                    SHIPPING & RETURNS
+                                </button>
+                            </h2>
+                            <div id="shipping" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                                <div class="accordion-body">
+                                    <h6>Shipping:</h6>
+                                    <ul>
+                                        <li>Cairo & Giza: L.E 70</li>
+                                        <li>Other governorates: L.E 90</li>
+                                        <li>Delivery: 3-5 business days</li>
+                                        <li>Custom orders: Additional 3-5 business days</li>
+                                    </ul>
+                                    
+                                    <h6 class="mt-3">Returns:</h6>
+                                    <ul>
+                                        <li>30-day return policy</li>
+                                        <li>Items must be in original condition</li>
+                                        <li>Custom items are non-returnable</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <section class="related-products py-5">
+        <h3 class="section-title">RELATED PRODUCTS</h3>
+        <div class="row">
+            {% for related_product in related_products %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card product-card h-100">
+                    <div class="position-relative">
+                        {% if related_product.get_main_image %}
+                            <img src="{{ related_product.get_main_image }}" alt="{{ related_product.name }}" class="card-img-top product-image">
+                        {% else %}
+                            <div class="card-img-top product-image d-flex align-items-center justify-content-center bg-dark-tertiary">
+                                <i class="fas fa-image fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p class="product-category mb-1">{{ related_product.category.name }}</p>
+                        <h6 class="product-title">{{ related_product.name }}</h6>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="product-price">L.E {{ related_product.base_price }}</span>
+                                <a href="{% url 'products:product_detail' related_product.slug %}" class="btn btn-sm btn-outline-white">VIEW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Reviews Section -->
+    {% if reviews %}
+    <section class="reviews-section py-5">
+        <h3 class="section-title">CUSTOMER REVIEWS</h3>
+        <div class="row">
+            {% for review in reviews %}
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark-secondary border-dark">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">{{ review.user.username }}</h6>
+                            <div class="rating">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-muted"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if review.title %}
+                            <h6 class="mb-2">{{ review.title }}</h6>
+                        {% endif %}
+                        <p class="mb-2">{{ review.comment }}</p>
+                        <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                        {% if review.is_verified_purchase %}
+                            <span class="badge bg-success ms-2">Verified Purchase</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function changeMainImage(src, thumbnail) {
+    const mainImage = document.querySelector('.product-main-image');
+    const thumbnails = document.querySelectorAll('.product-thumbnail');
+    
+    mainImage.src = src;
+    
+    thumbnails.forEach(thumb => thumb.classList.remove('active'));
+    thumbnail.classList.add('active');
+}
+
+// Add to cart functionality (addToWishlist is handled globally in base.html)
+async function addToCart(productId) {
+    // Get selected size and color
+    const selectedSizeBtn = document.querySelector('.size-option.active');
+    const selectedColorBtn = document.querySelector('.color-option.active');
+    
+    const selectedSize = selectedSizeBtn ? selectedSizeBtn.dataset.size : null;
+    const selectedColor = selectedColorBtn ? selectedColorBtn.dataset.color : null;
+    
+    // Check if we have size and color options available
+    const hasSizeOptions = document.querySelector('.size-option');
+    const hasColorOptions = document.querySelector('.color-option');
+    
+    // Validate selections
+    if (hasSizeOptions && !selectedSize) {
+        showNotification('Please select a size', 'warning');
+        return;
+    }
+    
+    if (hasColorOptions && !selectedColor) {
+        showNotification('Please select a color', 'warning');
+        return;
+    }
+    
+    if (hasSizeOptions && hasColorOptions && (!selectedSize || !selectedColor)) {
+        showNotification('Please select both size and color', 'warning');
+        return;
+    }
+    
+    try {
+        let variantId = null;
+        
+        // If we have size or color selections, find the variant
+        if (selectedSize || selectedColor) {
+            const variantResponse = await fetch(`/orders/api/products/${productId}/variants/`);
+            const variantData = await variantResponse.json();
+            
+            if (variantData.success) {
+                const selectedVariant = variantData.variants.find(variant => {
+                    let matchesSize = !selectedSize || variant.size_name === selectedSize;
+                    let matchesColor = !selectedColor || variant.color_name === selectedColor;
+                    return matchesSize && matchesColor;
+                });
+                
+                if (!selectedVariant) {
+                    showNotification('This size and color combination is not available', 'error');
+                    return;
+                }
+                
+                variantId = selectedVariant.id;
+            }
+        }
+        
+        // Get quantity and customization
+        const quantity = parseInt(document.querySelector('.quantity-input').value) || 1;
+        const customizationText = document.querySelector('.customization-input')?.value || '';
+        
+        // Add to cart
+        const response = await fetch('/orders/cart/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                variant_id: variantId,
+                quantity: quantity,
+                customization_text: customizationText
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Product added to cart successfully!', 'success');
+            // Update cart count in navigation if exists
+            updateCartCount(data.cart_total);
+        } else {
+            showNotification(data.error || 'Failed to add product to cart', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        showNotification('Something went wrong. Please try again.', 'error');
+    }
+}
+
+// Utility functions
+function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+           document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show notification`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+        max-width: 500px;
+    `;
+    
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+function updateCartCount(count) {
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+    });
+}
+
+// Initialize product page
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners for size option buttons
+    document.querySelectorAll('.size-option').forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from other size buttons
+            document.querySelectorAll('.size-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+        });
+    });
+    
+    // Add event listeners for color option buttons
+    document.querySelectorAll('.color-option').forEach(button => {
+        if (button.dataset.hex) {
+            button.style.backgroundColor = button.dataset.hex;
+        }
+        button.addEventListener('click', function() {
+            // Remove active class from other color buttons
+            document.querySelectorAll('.color-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+        });
+    });
+    
+    // Quantity controls
+    const quantityInput = document.querySelector('.quantity-input');
+    const quantityMinus = document.querySelector('.quantity-minus');
+    const quantityPlus = document.querySelector('.quantity-plus');
+    
+    // Add input validation for manual entry
+    if (quantityInput) {
+        quantityInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const max = parseInt(this.getAttribute('max'));
+            const min = parseInt(this.getAttribute('min')) || 1;
+            
+            if (value > max) {
+                this.value = max;
+                showNotification(`Maximum quantity available: ${max}`, 'warning');
+            } else if (value < min) {
+                this.value = min;
+            }
+        });
+        
+        quantityInput.addEventListener('blur', function() {
+            if (!this.value || parseInt(this.value) < 1) {
+                this.value = 1;
+            }
+        });
+    }
+    
+    if (quantityMinus) {
+        quantityMinus.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+    }
+    
+    if (quantityPlus) {
+        quantityPlus.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            let maxValue = parseInt(quantityInput.getAttribute('max'));
+            if (currentValue < maxValue) {
+                quantityInput.value = currentValue + 1;
+            } else {
+                showNotification(`Maximum quantity available: ${maxValue}`, 'warning');
+            }
+        });
+    }
+    
+    // Add to cart form submission
+    const addToCartForm = document.getElementById('add-to-cart-form');
+    if (addToCartForm) {
+        addToCartForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            addToCart(productId);
+        });
+    }
+    
+    // Add to cart button click (fallback)
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!e.target.closest('form')) {
+                e.preventDefault();
+                const productId = this.dataset.productId;
+                addToCart(productId);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

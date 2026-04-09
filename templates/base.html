@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    {% load static %}
+    
+    <title>
+        {% block title %}Nova - Softwear{% endblock %}
+    </title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Premium softwear and apparel. Discover ultimate comfort with high-quality materials and designs.{% endblock %}">
+    <meta name="keywords" content="softwear, comfort apparel, nova">
+    <meta name="author" content="Nova">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/IMG-20260408-WA0033.jpg' %}">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="dark-theme">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
+        <div class="container">
+            <a class="navbar-brand text-center" href="{% url 'products:home' %}" style="text-decoration: none;">
+                <div class="position-relative d-flex justify-content-center align-items-center" style="width: 140px; height: 50px;">
+                    <span class="text-white position-absolute w-100 text-center m-0 p-0" style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 800; letter-spacing: 6px; z-index: 1;">NOVA</span>
+                    <span class="text-white text-center position-absolute" style="font-family: 'Playfair Display', serif; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; z-index: 2; padding: 2px 6px; background-color: #000; margin-top: 2px; white-space: nowrap;">SOFTWEAR</span>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:product_list' %}">Products</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="categoryDropdown">
+                            {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'products:category_products' category.slug %}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'core:contact' %}">Contact</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav ms-auto align-items-center">
+                    <!-- Search -->
+                    <form class="d-flex me-3" method="GET" action="{% url 'products:search' %}">
+                        <input class="form-control form-control-sm bg-dark text-white border-secondary" 
+                               type="search" name="q" placeholder="Search..." style="width: 200px;">
+                        <button class="btn btn-outline-secondary btn-sm" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    
+                    <!-- Wishlist -->
+                    <a class="nav-link position-relative me-2" href="{% url 'products:wishlist' %}" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                    
+                    <!-- Cart -->
+                    <a class="nav-link position-relative me-2" href="{% url 'orders:cart' %}" title="Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                            0
+                        </span>
+                    </a>
+                    
+                    <!-- Track Orders -->
+                    <a class="nav-link" href="{% url 'core:track_order' %}" title="Track Orders">
+                        <i class="fas fa-box"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Messages -->
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-start align-items-center mb-3">
+                        <div class="position-relative d-flex justify-content-center align-items-center" style="width: 140px; height: 50px;">
+                            <span class="text-white position-absolute w-100 text-center m-0 p-0" style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 800; letter-spacing: 6px; z-index: 1;">NOVA</span>
+                            <span class="text-white text-center position-absolute" style="font-family: 'Playfair Display', serif; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; z-index: 2; padding: 2px 6px; background-color: #000; margin-top: 2px; white-space: nowrap;">SOFTWEAR</span>
+                        </div>
+                    </div>
+                    <p class="small text-muted">
+                         Premium soft underwear and apparel. 
+                        Discover ultimate comfort with our high-quality materials and designs.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/novakidswear" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="text-white"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                {% comment %} <div class="col-md-2">
+                    <h6 class="fw-bold mb-3">SHOP</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% url 'products:product_list' %}" class="text-muted">New Arrivals</a></li>
+                        <li><a href="{% url 'products:category_products' 't-shirts' %}" class="text-muted">T-Shirts</a></li>
+                        <li><a href="{% url 'products:category_products' 'hoodies' %}" class="text-muted">Hoodies</a></li>
+                        <li><a href="{% url 'products:category_products' 'pants' %}" class="text-muted">Pants</a></li>
+                        <li><a href="{% url 'products:category_products' 'accessories' %}" class="text-muted">Accessories</a></li>
+                    </ul>
+                </div> {% endcomment %}
+                <div class="col-md-2">
+                    <h6 class="fw-bold mb-3">HELP</h6>
+                    <ul class="list-unstyled small">
+                        {% comment %} <li><a href="{% url 'core:size_guide' %}" class="text-muted">Size Guide</a></li> {% endcomment %}
+                        <li><a href="{% url 'core:shipping_info' %}" class="text-muted">Shipping Info</a></li>
+                        <li><a href="{% url 'core:returns' %}" class="text-muted">Returns</a></li>
+                        <li><a href="{% url 'core:faq' %}" class="text-muted">FAQ</a></li>
+                        <li><a href="{% url 'core:contact' %}" class="text-muted">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="small text-muted mb-0">© 2025 Nova. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small text-muted mb-0">
+                        <a href="{% url 'core:privacy_policy' %}" class="text-muted">Privacy Policy</a> | 
+                        <a href="{% url 'core:terms_of_service' %}" class="text-muted">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Read CSRF token from cookie (works for both authenticated & anonymous users)
+        function getCsrfTokenGlobal() {
+            const name = 'csrftoken';
+            const cookies = document.cookie.split(';');
+            for (let c of cookies) {
+                c = c.trim();
+                if (c.startsWith(name + '=')) {
+                    return decodeURIComponent(c.substring(name.length + 1));
+                }
+            }
+            // Fall back to meta tag
+            return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        }
+
+        function showNotificationGlobal(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show`;
+            notification.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 280px; max-width: 480px;';
+            notification.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+            document.body.appendChild(notification);
+            setTimeout(() => { if (notification.parentNode) notification.remove(); }, 4000);
+        }
+
+        window.addToWishlist = function(productId, btnElement = null) {
+            fetch(`/wishlist/toggle/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCsrfTokenGlobal(),
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin'
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Server error: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showNotificationGlobal(data.message, 'success');
+                    if (btnElement) {
+                        if (data.is_favorite) {
+                            btnElement.classList.remove('text-white', 'btn-outline-white');
+                            btnElement.classList.add('text-danger');
+                            if (btnElement.classList.contains('btn') && !btnElement.classList.contains('btn-link')) {
+                                btnElement.classList.add('btn-outline-danger');
+                            }
+                            const icon = btnElement.querySelector('i');
+                            if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
+                        } else {
+                            btnElement.classList.remove('text-danger', 'btn-outline-danger');
+                            btnElement.classList.add('text-white');
+                            if (btnElement.classList.contains('btn') && !btnElement.classList.contains('btn-link')) {
+                                btnElement.classList.add('btn-outline-white');
+                            }
+                            const icon = btnElement.querySelector('i');
+                            if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
+                        }
+                    }
+                } else {
+                    showNotificationGlobal(data.error || 'Could not update wishlist.', 'warning');
+                }
+            })
+            .catch(err => {
+                console.error('Wishlist error:', err);
+                showNotificationGlobal('Could not update wishlist. Please try again.', 'warning');
+            });
+        };
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
