@@ -26,11 +26,12 @@ SECRET_KEY = 'django-insecure-pet&)nw881osi!2c^6_5#2&^38^&%*(q_8$q5=7^vxsf=wkq4u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pilotshopkidwear-sn0w.onrender.com','pilotshopkidwear.onrender.com','127.0.0.1','127.0.0.1:8000','localhost','localhost:8000']
+ALLOWED_HOSTS = ['pilotshopkidwear-sn0w.onrender.com','pilotshopkidwear.onrender.com','novashop-production-b6eb.up.railway.app','127.0.0.1','127.0.0.1:8000','localhost','localhost:8000']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://pilotshopkidwear-sn0w.onrender.com',
     'https://pilotshopkidwear.onrender.com',
+    'https://novashop-production-b6eb.up.railway.app',
     'http://127.0.0.1',
     'http://127.0.0.1:8000',
     'http://localhost:8000/'
@@ -40,6 +41,7 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 CORS_ALLOWED_ORIGINS = [
     'https://pilotshopkidwear-sn0w.onrender.com',
     'https://pilotshopkidwear.onrender.com',
+    'https://novashop-production-b6eb.up.railway.app',
     'http://localhost:8000/',
     'http://127.0.0.1:8000/',
 ]
