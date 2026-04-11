@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
 
@@ -11,7 +11,9 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-white">{% trans "Home" %}</a></li>
             <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}" class="text-white">{% trans "Products" %}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'products:category_products' product.category.slug %}" class="text-white">{{ product.category.name }}</a></li>
+            {% for cat in product.category.get_path %}
+                <li class="breadcrumb-item"><a href="{% url 'products:category_products' cat.slug %}" class="text-white">{{ cat.name }}</a></li>
+            {% endfor %}
             <li class="breadcrumb-item active text-muted">{{ product.name }}</li>
         </ol>
     </nav>
@@ -23,9 +25,9 @@
                 <!-- Main Image -->
                 <div class="mb-3">
                     {% if product.get_main_image %}
-                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-main-image img-fluid" style="width: 480px; height: 700px; ">
+                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-main-image img-fluid w-100" style="object-fit: cover; max-height: 700px;">
                     {% else %}
-                        <div class="product-main-image bg-dark-tertiary d-flex align-items-center justify-content-center" style="width: 480px; height: 700px;">
+                        <div class="product-main-image bg-dark-tertiary d-flex align-items-center justify-content-center w-100" style="height: 500px;">
                             <i class="fas fa-image fa-4x text-muted"></i>
                         </div>
                     {% endif %}
@@ -59,7 +61,7 @@
 
                 <!-- Price -->
                 <div class="mb-4">
-                    <span class="product-price h2">L.E {{ product.base_price }}</span>
+                    <span class="product-price h2">LE {{ product.base_price }}</span>
                     {% if product.stock_quantity > 0 %}
                         <span class="badge bg-success ms-3">{% trans "IN STOCK" %}</span>
                     {% else %}
@@ -216,8 +218,8 @@
                                 <div class="accordion-body">
                                     <h6>Shipping:</h6>
                                     <ul>
-                                        <li>Cairo & Giza: L.E 70</li>
-                                        <li>Other governorates: L.E 90</li>
+                                        <li>Cairo & Giza: LE 70</li>
+                                        <li>Other governorates: LE 90</li>
                                         <li>Delivery: 3-5 business days</li>
                                         <li>Custom orders: Additional 3-5 business days</li>
                                     </ul>
@@ -259,7 +261,7 @@
                         <h6 class="product-title">{{ related_product.name }}</h6>
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="product-price">L.E {{ related_product.base_price }}</span>
+                                <span class="product-price">LE {{ related_product.base_price }}</span>
                                 <a href="{% url 'products:product_detail' related_product.slug %}" class="btn btn-sm btn-outline-white">VIEW</a>
                             </div>
                         </div>

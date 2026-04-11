@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}{{ category.name }} - Nova{% endblock %}
@@ -44,7 +44,7 @@
                     
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="product-price">L.E {{ product.base_price }}</span>
+                            <span class="product-price">LE {{ product.base_price }}</span>
                             <button type="button" class="btn btn-sm btn-link text-{% if product.id in user_wishlist_ids %}danger{% else %}white{% endif %} wishlist-toggle-btn" 
                                     onclick="addToWishlist('{{ product.id }}', this)"
                                     style="text-decoration: none;">

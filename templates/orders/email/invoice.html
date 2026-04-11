@@ -249,7 +249,7 @@
                     {% endif %}
                 </div>
                 <div class="item-quantity">Qty: {{ item.quantity }}</div>
-                <div class="item-price">L.E {{ item.total_price }}</div>
+                <div class="item-price">LE {{ item.total_price }}</div>
             </div>
             {% endfor %}
             
@@ -257,23 +257,23 @@
             <div class="totals-section">
                 <div class="total-row">
                     <span class="total-label">Subtotal:</span>
-                    <span>L.E {{ order.subtotal }}</span>
+                    <span>LE {{ order.subtotal }}</span>
                 </div>
                 {% if order.tax_amount > 0 %}
                 <div class="total-row">
                     <span class="total-label">Tax:</span>
-                    <span>L.E {{ order.tax_amount }}</span>
+                    <span>LE {{ order.tax_amount }}</span>
                 </div>
                 {% endif %}
                 {% if order.shipping_cost > 0 %}
                 <div class="total-row">
                     <span class="total-label">Shipping:</span>
-                    <span>L.E {{ order.shipping_cost }}</span>
+                    <span>LE {{ order.shipping_cost }}</span>
                 </div>
                 {% endif %}
                 <div class="total-row total-final">
                     <span class="total-label">Total:</span>
-                    <span>L.E {{ order.total_amount }}</span>
+                    <span>LE {{ order.total_amount }}</span>
                 </div>
             </div>
             
@@ -334,7 +334,7 @@
             <div class="social-links">
                 <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="social-link">Instagram</a>
                 <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="social-link">tiktok</a>
-                <a href="https://www.facebook.com/novakidswear" class="social-link">Facebook</a>
+                <a href="https://www.facebook.com/novasoftunderwear" class="social-link">Facebook</a>
             </div>
         </div>  
     </div>

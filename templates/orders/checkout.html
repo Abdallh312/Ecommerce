@@ -188,7 +188,7 @@
                             </small>
                             <div class="d-flex justify-content-between">
                                 <span class="text-muted">Qty: {{ item.quantity }}</span>
-                                <span class="fw-bold">L.E {{ item.get_total_price }}</span>
+                                <span class="fw-bold">LE {{ item.get_total_price }}</span>
                             </div>
                         </div>
                     </div>
@@ -201,26 +201,26 @@
                 <div class="order-totals">
                     <div class="d-flex justify-content-between mb-2">
                         <span>Subtotal ({{ cart.get_total_items }} items)</span>
-                        <span>L.E {{ cart.get_total_price }}</span>
+                        <span>LE {{ cart.get_total_price }}</span>
                     </div>
                     
                     {% if cart.offer and cart.offer.is_active %}
                     <div class="d-flex justify-content-between mb-2 text-success">
                         <span>Discount ({{ cart.offer.discount_percent }}%)</span>
-                        <span>-L.E {{ cart.offer.discount_percent }}%</span>
+                        <span>-LE {{ cart.offer.discount_percent }}%</span>
                     </div>
                     {% endif %}
                     
                     <div class="d-flex justify-content-between mb-2">
                         <span>Shipping</span>
-                        <span id="shipping-cost">L.E {{ cart.get_shipping_cost }}</span>
+                        <span id="shipping-cost">LE {{ cart.get_shipping_cost }}</span>
                     </div>
                     
                     <hr>
                     
                     <div class="d-flex justify-content-between mb-4">
                         <strong>Total</strong>
-                        <strong id="order-total">L.E {{ cart.get_final_total }}</strong>
+                        <strong id="order-total">LE {{ cart.get_final_total }}</strong>
                     </div>
                 </div>
                 
@@ -323,11 +323,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Shipping cost:", shippingCost);
         
         // Update shipping cost display
-        document.getElementById('shipping-cost').textContent = `L.E ${shippingCost.toFixed(2)}`;
+        document.getElementById('shipping-cost').textContent = `LE ${shippingCost.toFixed(2)}`;
         
         // Update total
         const total = discountedSubtotal + shippingCost;
-        document.getElementById('order-total').textContent = `L.E ${total.toFixed(2)}`;
+        document.getElementById('order-total').textContent = `LE ${total.toFixed(2)}`;
     });
     
     // Trigger change event on page load if state is already selected

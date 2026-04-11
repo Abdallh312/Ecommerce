@@ -1,4 +1,4 @@
-﻿from django.db import models
+from django.db import models
 from django.contrib.auth.models import User
 from products.models import Product, ProductVariant
 from django.core.validators import MinValueValidator
@@ -35,8 +35,8 @@ class Cart(models.Model):
     def get_shipping_cost(self, shipping_state=None):
         """
         Calculate shipping cost based on state:
-        - Giza and Cairo: L.E 70
-        - Any other state: L.E 90
+        - Giza and Cairo: LE 70
+        - Any other state: LE 90
         """
         if shipping_state and shipping_state.lower() in ['giza', 'cairo']:
             return Decimal('70.00')

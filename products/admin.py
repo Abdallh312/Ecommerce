@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, ProductImage, Color, Size, ProductVariant, ProductReview, Wishlist
+from .models import Category, Product, ProductImage, Color, Size, ProductVariant, ProductReview, Wishlist, Announcement
 
 
 class ProductImageInline(admin.TabularInline):
@@ -89,3 +89,34 @@ class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('user__username', 'product__name')
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'announcement_type', 'has_discount', 'discount_code',
+                    'discount_percentage', 'is_active', 'start_date', 'end_date', 'created_at')
+    list_filter = ('announcement_type', 'is_active', 'has_discount')
+    search_fields = ('title', 'message', 'discount_code')
+    readonly_fields = ('created_at', 'created_by')
+
+    fieldsets = (
+        ('Content', {
+            'fields': ('title', 'message', 'announcement_type')
+        }),
+        ('Discount', {
+            'fields': ('has_discount', 'discount_code', 'discount_percentage'),
+            'description': 'Fill these in only when this announcement is a promotional offer.'
+        }),
+        ('Scheduling', {
+            'fields': ('is_active', 'start_date', 'end_date')
+        }),
+        ('Meta', {
+            'fields': ('created_at', 'created_by'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)

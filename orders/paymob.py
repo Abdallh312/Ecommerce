@@ -46,7 +46,7 @@ class PaymobService:
     # ------------------------------------------------------------------
     def register_order(self, auth_token, amount_cents, order_id, items):
         """
-        amount_cents : integer – total in Egyptian Piastres (L.E × 100)
+        amount_cents : integer – total in Egyptian Piastres (LE × 100)
         order_id     : your internal Order UUID (used as merchant_order_id)
         items        : list of dicts with name, amount_cents, quantity, description
         """
@@ -115,7 +115,7 @@ class PaymobService:
             self.integration_id = self.wallet_integration_id
             self.iframe_id      = self.wallet_iframe_id
 
-        # Amount in piastres (1 L.E = 100 piastres)
+        # Amount in piastres (1 LE = 100 piastres)
         amount_cents = int(order.total_amount * 100)
 
         # Build items list for Paymob

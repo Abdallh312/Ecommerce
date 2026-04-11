@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
 
@@ -11,7 +11,7 @@
         <div class="col-12 text-center">
             <h1 class="section-title">{% trans "PRODUCTS" %}</h1>
             <p class="section-subtitle">
-                {% trans "Discover our complete collection of customizable streetwear pieces" %}
+                {% trans "Discover our complete collection of customizable softwear pieces" %}
             </p>
         </div>
     </div>
@@ -26,8 +26,16 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark">
                     <li><a class="dropdown-item" href="{% url 'products:product_list' %}">{% trans "All Categories" %}</a></li>
-                    {% for category in categories %}
-                    <li><a class="dropdown-item" href="?category={{ category.slug }}">{{ category.name }}</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    {% for category in global_categories %}
+                        <li>
+                            <a class="dropdown-item fw-bold" href="?category={{ category.slug }}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% for child in category.children.all %}
+                            <li><a class="dropdown-item ps-4 py-1" href="?category={{ child.slug }}" style="font-size: 0.9rem; color: #adb5bd;">{{ child.name }}</a></li>
+                        {% endfor %}
                     {% endfor %}
                 </ul>
             </div>
@@ -52,11 +60,11 @@
     <!-- Products Grid -->
     <div class="row">
         {% for product in products %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 fade-in-up">
             <div class="card product-card h-100">
                 <div class="position-relative">
                     {% if product.get_main_image %}
-                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image">
+                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image" loading="lazy">
                     {% else %}
                         <div class="card-img-top product-image d-flex align-items-center justify-content-center bg-dark-tertiary">
                             <i class="fas fa-image fa-3x text-muted"></i>
@@ -85,7 +93,7 @@
                     
                     <div class="mt-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="product-price">L.E {{ product.base_price }}</span>
+                            <span class="product-price">LE {{ product.base_price }}</span>
                             <button type="button" class="btn btn-sm btn-link text-{% if product.id in user_wishlist_ids %}danger{% else %}white{% endif %} wishlist-toggle-btn" 
                                     onclick="addToWishlist('{{ product.id }}', this)"
                                     style="text-decoration: none;">

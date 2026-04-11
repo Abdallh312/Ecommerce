@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Profile - Nova{% endblock %}
@@ -58,7 +58,7 @@
                                                     {{ order.get_status_display }}
                                                 </span>
                                             </td>
-                                            <td>L.E {{ order.total_amount }}</td>
+                                            <td>LE {{ order.total_amount }}</td>
                                             <td>
                                                 <a href="{% url 'orders:order_detail' order.id %}" 
                                                    class="btn btn-sm btn-outline-light">View</a>

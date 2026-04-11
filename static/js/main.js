@@ -1,27 +1,132 @@
 // Pilot - Main JavaScript File
 // =============================================================================
 
+// Global helpers
+window.getCsrfTokenGlobal = function() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let c of cookies) {
+        c = c.trim();
+        if (c.startsWith(name + '=')) {
+            return decodeURIComponent(c.substring(name.length + 1));
+        }
+    }
+    // Fall back to meta tag
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+};
+
+window.showNotificationGlobal = function(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show`;
+    notification.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 280px; max-width: 480px;';
+    notification.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+    document.body.appendChild(notification);
+    setTimeout(() => { if (notification.parentNode) notification.remove(); }, 4000);
+};
+
+window.addToWishlist = function(productId, btnElement = null) {
+    fetch(`/wishlist/toggle/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': window.getCsrfTokenGlobal(),
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'same-origin'
+    })
+    .then(res => {
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        return res.json();
+    })
+    .then(data => {
+        if (data.success) {
+            window.showNotificationGlobal(data.message, 'success');
+            if (btnElement) {
+                if (data.is_favorite) {
+                    btnElement.classList.remove('text-white', 'btn-outline-white');
+                    btnElement.classList.add('text-danger');
+                    if (btnElement.classList.contains('btn') && !btnElement.classList.contains('btn-link')) {
+                        btnElement.classList.add('btn-outline-danger');
+                    }
+                    const icon = btnElement.querySelector('i');
+                    if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
+                } else {
+                    btnElement.classList.remove('text-danger', 'btn-outline-danger');
+                    btnElement.classList.add('text-white');
+                    if (btnElement.classList.contains('btn') && !btnElement.classList.contains('btn-link')) {
+                        btnElement.classList.add('btn-outline-white');
+                    }
+                    const icon = btnElement.querySelector('i');
+                    if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
+                }
+            }
+        } else {
+            window.showNotificationGlobal(data.error || 'Could not update wishlist.', 'warning');
+        }
+    })
+    .catch(err => {
+        console.error('Wishlist error:', err);
+        window.showNotificationGlobal('Could not update wishlist. Please try again.', 'warning');
+    });
+};
+
+// Global helpers
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initCartFunctionality();
     initProductInteractions();
     initFormValidation();
     updateCartCount();
+    initAnimations();
     
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
+            
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const target = document.querySelector(href);
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
                 });
             }
         });
     });
 });
+
+// Animations on scroll
+function initAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // If it has fade-in-up, make it visible
+                if (entry.target.classList.contains('fade-in-up')) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in-up, .animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+}
 
 // Cart Management
 // =============================================================================

@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Track Your Order - Nova{% endblock %}
@@ -68,7 +68,7 @@
                                         <div class="col-md-6">
                                             <h6 class="text-white">Order Summary</h6>
                                             <p class="text-muted mb-0">Total Items: {{ order.items.count }}</p>
-                                            <p class="text-muted mb-0">Total: L.E {{ order.total_amount }}</p>
+                                            <p class="text-muted mb-0">Total: LE {{ order.total_amount }}</p>
                                             <p class="text-muted">Payment Status: 
                                                 <span class="
                                                     {% if order.payment_status == 'paid' %}text-success{% endif %}

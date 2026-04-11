@@ -46,7 +46,7 @@
                 <div class="card product-card h-100">
                     <div class="position-relative">
                         {% if product.get_main_image %}
-                            <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image">
+                            <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image" loading="lazy">
                         {% else %}
                             <div class="card-img-top product-image d-flex align-items-center justify-content-center">
                                 <i class="fas fa-image fa-3x text-muted"></i>
@@ -65,7 +65,7 @@
                         <h5 class="product-title">{{ product.name }}</h5>
                         <p class="card-text text-muted small flex-grow-1">{{ product.short_description|truncatewords:10 }}</p>
                         <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <span class="product-price">L.E {{ product.base_price }}</span>
+                            <span class="product-price">LE {{ product.base_price }}</span>
                             <button type="button" class="btn btn-sm btn-link text-{% if product.id in user_wishlist_ids %}danger{% else %}white{% endif %} wishlist-toggle-btn" 
                                     onclick="addToWishlist('{{ product.id }}', this)"
                                     style="text-decoration: none;">
@@ -103,28 +103,30 @@
             </div>
         </div>
         
-        <div class="row">
-            {% for category in categories %}
-            <div class="col-lg-4 col-md-6 mb-4 fade-in-up">
-                <div class="category-card">
-                    {% if category.image %}
-                        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image">
-                    {% else %}
-                        <div class="category-image bg-dark-tertiary"></div>
-                    {% endif %}
-                    <div class="category-overlay">
-                        <div>
-                            <h3 class="category-title mb-3">{{ category.name }}</h3>
-                            <a href="{% url 'products:category_products' category.slug %}" class="btn btn-outline-white">EXPLORE</a>
+        <div class="category-slider-container">
+            <div class="category-slider" id="categorySlider">
+                {% for category in categories %}
+                <div class="category-slider-item fade-in-up">
+                    <div class="category-card">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image" loading="lazy">
+                        {% else %}
+                            <div class="category-image bg-dark-tertiary"></div>
+                        {% endif %}
+                        <div class="category-overlay">
+                            <div>
+                                <h3 class="category-title mb-3">{{ category.name }}</h3>
+                                <a href="{% url 'products:category_products' category.slug %}" class="btn btn-outline-white">EXPLORE</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p class="text-muted">No categories available.</p>
+                </div>
+                {% endfor %}
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="text-muted">No categories available.</p>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </section>
@@ -154,27 +156,4 @@
         </div>
     </div>
 </section> {% endcomment %}
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Add fade-in animation on scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animationDelay = '0s';
-                entry.target.classList.add('fade-in-up');
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.fade-in-up').forEach(el => {
-        observer.observe(el);
-    });
-</script>
 {% endblock %}

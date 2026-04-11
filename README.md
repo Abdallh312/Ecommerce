@@ -1,6 +1,6 @@
-# Pilot - Streetwear Store
+# Pilot - Softwear Store
 
-A modern Django-based e-commerce platform for streetwear customization, featuring a dark theme and comprehensive product management system.
+A modern Django-based e-commerce platform for softwear customization, featuring a dark theme and comprehensive product management system.
 
 ## Features
 
@@ -13,7 +13,7 @@ A modern Django-based e-commerce platform for streetwear customization, featurin
 - **Email Invoices**: Automatic invoice generation and sending
 
 ### 🎨 Design & UI
-- **Dark Theme**: Modern streetwear-inspired black and white design
+- **Dark Theme**: Modern softwear-inspired black and white design
 - **Responsive Design**: Mobile-friendly layout using Bootstrap 5
 - **Interactive Elements**: Smooth animations and hover effects
 - **Product Gallery**: Multiple images with thumbnail navigation
@@ -176,7 +176,7 @@ DEFAULT_FROM_EMAIL = 'Pilot <noreply@pilot.com>'
 ### Templates
 - Base template with navigation and footer
 - Modular template structure for easy modifications
-- Dark theme optimized for streetwear aesthetic
+- Dark theme optimized for softwear aesthetic
 
 ### JavaScript
 - Interactive cart functionality

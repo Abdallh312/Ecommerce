@@ -12,6 +12,12 @@
         {% block title %}Nova - Softwear{% endblock %}
     </title>
     
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
     <!-- Meta Tags -->
     <meta name="description" content="{% block meta_description %}Premium softwear and apparel. Discover ultimate comfort with high-quality materials and designs.{% endblock %}">
     <meta name="keywords" content="softwear, comfort apparel, nova">
@@ -19,10 +25,10 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     
     <!-- Favicon -->
-    <link rel="icon" href="{% static 'images/IMG-20260408-WA0033.jpg' %}">
+    <link rel="icon" href="{% static 'images/IMG-20260408-WA0033.jpg' %}" type="image/jpeg">
     
     <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     
@@ -33,6 +39,44 @@
 </head>
 
 <body class="dark-theme">
+    {% if site_announcements %}
+    <!-- Announcement Top Bar -->
+    <div class="announcement-topbar" id="announcementTopbar">
+        <div class="announcement-topbar-inner">
+            {% for ann in site_announcements %}
+            <div class="topbar-item {% if not forloop.first %}topbar-item-hidden{% endif %}" data-index="{{ forloop.counter0 }}">
+                <span class="topbar-icon">
+                    {% if ann.announcement_type == 'discount' %}
+                        <i class="fas fa-tag"></i>
+                    {% elif ann.announcement_type == 'new_arrival' %}
+                        <i class="fas fa-star"></i>
+                    {% elif ann.announcement_type == 'event' %}
+                        <i class="fas fa-calendar-alt"></i>
+                    {% else %}
+                        <i class="fas fa-bullhorn"></i>
+                    {% endif %}
+                </span>
+                <span class="topbar-text">
+                    <strong>{{ ann.title }}</strong> &mdash; {{ ann.message }}
+                </span>
+                {% if ann.has_discount and ann.discount_percentage %}
+                <span class="topbar-discount-badge">{{ ann.discount_percentage }}% OFF</span>
+                {% endif %}
+                {% if ann.has_discount and ann.discount_code %}
+                <button class="topbar-code-btn" onclick="copyCode('{{ ann.discount_code }}', this)" title="Click to copy">
+                    <span class="code-text">{{ ann.discount_code }}</span>
+                    <i class="fas fa-copy ms-1"></i>
+                </button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <button class="topbar-close" onclick="dismissTopbar()" aria-label="Dismiss">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    {% endif %}
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
         <div class="container">
@@ -60,8 +104,20 @@
                             Categories
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="categoryDropdown">
-                            {% for category in categories %}
-                                <li><a class="dropdown-item" href="{% url 'products:category_products' category.slug %}">{{ category.name }}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_list' %}">All Products</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% for category in global_categories %}
+                                <li>
+                                    <a class="dropdown-item fw-bold text-uppercase" href="{% url 'products:category_products' category.slug %}" style="letter-spacing: 1px; font-size: 0.85rem;">
+                                        {{ category.name }}
+                                    </a>
+                                </li>
+                                {% for child in category.children.all %}
+                                    <li><a class="dropdown-item ps-4 py-1" href="{% url 'products:category_products' child.slug %}" style="font-size: 0.8rem; color: #adb5bd;">{{ child.name }}</a></li>
+                                {% endfor %}
+                                {% if not forloop.last %}
+                                    <li class="py-1"></li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </li>
@@ -139,7 +195,7 @@
                     </p>
                     <div class="social-links">
                         <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.facebook.com/novakidswear" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.facebook.com/novasoftunderwear" class="text-white me-3"><i class="fab fa-facebook"></i></a>
                         <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="text-white"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
@@ -183,76 +239,67 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script>
-        // Read CSRF token from cookie (works for both authenticated & anonymous users)
-        function getCsrfTokenGlobal() {
-            const name = 'csrftoken';
-            const cookies = document.cookie.split(';');
-            for (let c of cookies) {
-                c = c.trim();
-                if (c.startsWith(name + '=')) {
-                    return decodeURIComponent(c.substring(name.length + 1));
-                }
-            }
-            // Fall back to meta tag
-            return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-        }
-
-        function showNotificationGlobal(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `alert alert-${type} alert-dismissible fade show`;
-            notification.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 280px; max-width: 480px;';
-            notification.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
-            document.body.appendChild(notification);
-            setTimeout(() => { if (notification.parentNode) notification.remove(); }, 4000);
-        }
-
-        window.addToWishlist = function(productId, btnElement = null) {
-            fetch(`/wishlist/toggle/${productId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCsrfTokenGlobal(),
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                credentials: 'same-origin'
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Server error: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    showNotificationGlobal(data.message, 'success');
-                    if (btnElement) {
-                        if (data.is_favorite) {
-                            btnElement.classList.remove('text-white', 'btn-outline-white');
-                            btnElement.classList.add('text-danger');
-                            if (btnElement.classList.contains('btn') && !btnElement.classList.contains('btn-link')) {
-                                btnElement.classList.add('btn-outline-danger');
-                            }
-                            const icon = btnElement.querySelector('i');
-                            if (icon) { icon.classList.remove('far'); icon.classList.add('fas'); }
-                        } else {
-                            btnElement.classList.remove('text-danger', 'btn-outline-danger');
-                            btnElement.classList.add('text-white');
-                            if (btnElement.classList.contains('btn') && !btnElement.classList.contains('btn-link')) {
-                                btnElement.classList.add('btn-outline-white');
-                            }
-                            const icon = btnElement.querySelector('i');
-                            if (icon) { icon.classList.remove('fas'); icon.classList.add('far'); }
-                        }
-                    }
+        // Announcement helpers
+        function copyCode(code, btn) {
+            navigator.clipboard.writeText(code).then(() => {
+                const codeSpan = btn.querySelector('.code-text');
+                const orig = codeSpan.textContent;
+                codeSpan.textContent = 'COPIED!';
+                btn.classList.add('copied');
+                setTimeout(() => { 
+                    codeSpan.textContent = orig; 
+                    btn.classList.remove('copied'); 
+                }, 2000);
+                if (typeof showNotificationGlobal === 'function') {
+                    showNotificationGlobal('Discount code copied!', 'success');
                 } else {
-                    showNotificationGlobal(data.error || 'Could not update wishlist.', 'warning');
+                    alert('Discount code copied!');
                 }
-            })
-            .catch(err => {
-                console.error('Wishlist error:', err);
-                showNotificationGlobal('Could not update wishlist. Please try again.', 'warning');
+            }).catch(() => {
+                const inp = document.createElement('input');
+                inp.value = code; document.body.appendChild(inp); inp.select();
+                document.execCommand('copy'); document.body.removeChild(inp);
+                if (typeof showNotificationGlobal === 'function') {
+                    showNotificationGlobal('Discount code copied!', 'success');
+                } else {
+                    alert('Discount code copied!');
+                }
             });
-        };
+        }
+
+        function dismissTopbar() {
+            const bar = document.getElementById('announcementTopbar');
+            if (bar) {
+                bar.style.display = 'none';
+                document.body.classList.remove('has-topbar');
+                sessionStorage.setItem('topbar_dismissed', '1');
+            }
+        }
+
+        // Auto-rotate announcements in top bar
+        document.addEventListener('DOMContentLoaded', function() {
+            const bar = document.getElementById('announcementTopbar');
+            if (!bar) return;
+
+            if (sessionStorage.getItem('topbar_dismissed') === '1') {
+                bar.style.display = 'none';
+                document.body.classList.remove('has-topbar');
+                return;
+            }
+
+            // Add class to shift navbar and content down
+            document.body.classList.add('has-topbar');
+
+            const items = bar.querySelectorAll('.topbar-item');
+            if (items.length <= 1) return;
+
+            let current = 0;
+            setInterval(() => {
+                items[current].classList.add('topbar-item-hidden');
+                current = (current + 1) % items.length;
+                items[current].classList.remove('topbar-item-hidden');
+            }, 5000);
+        });
     </script>
     {% block extra_js %}{% endblock %}
 </body>

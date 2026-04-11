@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 import uuid
 
 
@@ -8,6 +9,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     image = models.ImageField(upload_to='categories/', blank=True)
     
     class Meta:
@@ -21,6 +23,22 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_descendants(self):
+        """Returns all subcategories of this category recursively."""
+        descendants = [self]
+        for child in self.children.all():
+            descendants.extend(child.get_descendants())
+        return descendants
+
+    def get_path(self):
+        """Returns the path from root to this category."""
+        path = []
+        curr = self
+        while curr:
+            path.append(curr)
+            curr = curr.parent
+        return path[::-1]
 
 
 class Color(models.Model):
@@ -153,3 +171,58 @@ class Wishlist(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
+
+
+class Announcement(models.Model):
+    ANNOUNCEMENT_TYPES = [
+        ('info', 'Info'),
+        ('discount', 'Discount / Sale'),
+        ('new_arrival', 'New Arrival'),
+        ('event', 'Event'),
+    ]
+
+    title = models.CharField(max_length=200)
+    message = models.TextField(help_text="Main announcement message shown to customers")
+    announcement_type = models.CharField(max_length=20, choices=ANNOUNCEMENT_TYPES, default='info')
+
+    # Optional discount fields
+    has_discount = models.BooleanField(default=False)
+    discount_code = models.CharField(max_length=50, blank=True, help_text="Promo / coupon code to display")
+    discount_percentage = models.PositiveIntegerField(
+        blank=True, null=True,
+        validators=[MaxValueValidator(100)],
+        help_text="Discount percentage (e.g. 20 for 20% off)"
+    )
+
+    # Scheduling
+    is_active = models.BooleanField(default=True)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(
+        blank=True, null=True,
+        help_text="Leave blank to show indefinitely"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='announcements'
+    )
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Announcement'
+        verbose_name_plural = 'Announcements'
+
+    def __str__(self):
+        return self.title
+
+    def is_currently_active(self):
+        """Returns True if the announcement is active and within its date range."""
+        now = timezone.now()
+        if not self.is_active:
+            return False
+        if self.start_date and now < self.start_date:
+            return False
+        if self.end_date and now > self.end_date:
+            return False
+        return True

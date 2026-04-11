@@ -106,7 +106,7 @@
                     </div>
                     
                     <div class="item-price text-end">
-                        <strong>L.E {{ item.total_price }}</strong>
+                        <strong>LE {{ item.total_price }}</strong>
                     </div>
                 </div>
                 {% endfor %}
@@ -118,30 +118,24 @@
             <div class="order-summary bg-dark-tertiary p-4 rounded mb-4">
                 <h5 class="mb-4">ORDER SUMMARY</h5>
                 
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal:</span>
-                    <span>L.E {{ order.subtotal }}</span>
+                <div class="summary-item d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span>LE {{ order.subtotal }}</span>
                 </div>
-                
-                {% if order.tax_amount > 0 %}
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Tax:</span>
-                    <span>L.E {{ order.tax_amount }}</span>
-                </div>
-                {% endif %}
-                
-                {% if order.shipping_cost > 0 %}
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Shipping:</span>
-                    <span>L.E {{ order.shipping_cost }}</span>
+                {% if order.tax_amount %}
+                <div class="summary-item d-flex justify-content-between mb-2">
+                    <span>Tax</span>
+                    <span>LE {{ order.tax_amount }}</span>
                 </div>
                 {% endif %}
-                
-                <hr class="my-3">
-                
-                <div class="d-flex justify-content-between mb-4">
-                    <strong>Total:</strong>
-                    <strong class="text-success">L.E {{ order.total_amount }}</strong>
+                <div class="summary-item d-flex justify-content-between mb-2">
+                    <span>Shipping</span>
+                    <span>LE {{ order.shipping_cost }}</span>
+                </div>
+                <hr>
+                <div class="summary-total d-flex justify-content-between">
+                    <strong>Total Paid</strong>
+                    <strong class="text-success">LE {{ order.total_amount }}</strong>
                 </div>
             </div>
 

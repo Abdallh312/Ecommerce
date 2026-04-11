@@ -77,9 +77,9 @@
                                         <div class="text-white">Qty: {{ item.quantity }}</div>
                                     </div>
                                     <div class="col-md-2 text-end">
-                                        <div class="text-white">L.E {{ item.unit_price }}</div>
+                                        <div class="text-white">LE {{ item.unit_price }}</div>
                                         {% if item.quantity > 1 %}
-                                            <small class="text-muted">L.E {{ item.total_price }} total</small>
+                                            <small class="text-muted">LE {{ item.total_price }} total</small>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -129,22 +129,22 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">Subtotal:</span>
-                                <span class="text-white">L.E {{ order.subtotal }}</span>
+                                <span class="text-white">LE {{ order.subtotal }}</span>
                             </div>
                             {% if order.tax_amount > 0 %}
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">Tax:</span>
-                                    <span class="text-white">L.E {{ order.tax_amount }}</span>
+                                    <span class="text-white">LE {{ order.tax_amount }}</span>
                                 </div>
                             {% endif %}
                             <div class="d-flex justify-content-between mb-3">
                                 <span class="text-muted">Shipping:</span>
-                                <span class="text-white">L.E {{ order.shipping_cost }}</span>
+                                <span class="text-white">LE {{ order.shipping_cost }}</span>
                             </div>
                             <hr class="border-secondary">
                             <div class="d-flex justify-content-between">
                                 <strong class="text-white">Total:</strong>
-                                <strong class="text-white">L.E {{ order.total_amount }}</strong>
+                                <strong class="text-white">LE {{ order.total_amount }}</strong>
                             </div>
                         </div>
                     </div>

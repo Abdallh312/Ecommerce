@@ -4,16 +4,16 @@ from decimal import Decimal
 
 
 class Command(BaseCommand):
-    help = 'Load sample data for the streetwear store'
+    help = 'Load sample data for the softwear store'
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Loading sample data...'))
         
         # Create categories
         categories_data = [
-            {'name': 'T-Shirts', 'slug': 't-shirts', 'description': 'Premium streetwear t-shirts with custom designs'},
+            {'name': 'T-Shirts', 'slug': 't-shirts', 'description': 'Premium softwear t-shirts with custom designs'},
             {'name': 'Hoodies', 'slug': 'hoodies', 'description': 'Comfortable hoodies perfect for any season'},
-            {'name': 'Pants', 'slug': 'pants', 'description': 'Stylish streetwear pants and joggers'},
+            {'name': 'Pants', 'slug': 'pants', 'description': 'Stylish softwear pants and joggers'},
             {'name': 'Accessories', 'slug': 'accessories', 'description': 'Complete your look with our accessories'},
         ]
         
@@ -68,7 +68,7 @@ class Command(BaseCommand):
                 'name': 'Urban Logo Tee',
                 'slug': 'urban-logo-tee',
                 'category_slug': 't-shirts',
-                'description': 'Premium cotton t-shirt featuring the Pilot logo. Perfect for everyday streetwear.',
+                'description': 'Premium cotton t-shirt featuring the Pilot logo. Perfect for everyday softwear.',
                 'short_description': 'Premium cotton tee with iconic logo design',
                 'base_price': Decimal('29.99'),
                 'is_featured': True,
@@ -87,8 +87,8 @@ class Command(BaseCommand):
                 'stock_quantity': 30,
             },
             {
-                'name': 'Streetwear Cargo Pants',
-                'slug': 'streetwear-cargo-pants',
+                'name': 'Softwear Cargo Pants',
+                'slug': 'softwear-cargo-pants',
                 'category_slug': 'pants',
                 'description': 'Tactical-inspired cargo pants with multiple pockets. Perfect for urban exploration.',
                 'short_description': 'Tactical cargo pants with urban style',

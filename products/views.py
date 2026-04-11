@@ -53,10 +53,11 @@ class ProductListView(ListView):
     def get_queryset(self):
         queryset = Product.objects.filter(is_active=True)
         
-        # Filter by category
-        category = self.request.GET.get('category')
-        if category:
-            queryset = queryset.filter(category__slug=category)
+        # Filter by category slug from GET parameter
+        category_slug = self.request.GET.get('category')
+        if category_slug:
+            category_obj = get_object_or_404(Category, slug=category_slug)
+            queryset = queryset.filter(category__in=category_obj.get_descendants())
         
         # Sort by price, name, etc.
         sort_by = self.request.GET.get('sort', '-created_at')
@@ -109,7 +110,7 @@ class CategoryProductsView(ListView):
     
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
-        return Product.objects.filter(category=category, is_active=True)
+        return Product.objects.filter(category__in=category.get_descendants(), is_active=True)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
