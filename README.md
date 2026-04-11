@@ -225,4 +225,4 @@ This project is developed for educational purposes. Please ensure proper licensi
 ---
 
 **Pilot 2024** - Premium Streetwear Customization Platform
-"# pilotshopkidwear" 
+"# pilotshopkidwear"
