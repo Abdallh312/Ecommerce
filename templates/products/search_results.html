@@ -40,6 +40,9 @@
             <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none">
                 <div class="product-card">
                     <div class="product-image-container">
+                        {% if product.has_discount %}
+                            <div class="product-badge-discount">SALE -{{ product.discount_percentage }}%</div>
+                        {% endif %}
                         {% if product.get_main_image %}
                             <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
                         {% else %}
@@ -51,7 +54,14 @@
                             <h3 class="product-title-min">{{ product.name }}</h3>
                             <span class="product-cat-min">{{ product.category.name|upper }}</span>
                         </div>
-                        <div class="product-price-min">LE {{ product.base_price }}</div>
+                        <div class="product-price-min">
+                            {% if product.has_discount %}
+                                <span class="product-price-old">LE {{ product.base_price }}</span>
+                                <span class="product-price-current has-discount">LE {{ product.discount_price }}</span>
+                            {% else %}
+                                <span class="product-price-current">LE {{ product.base_price }}</span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </a>

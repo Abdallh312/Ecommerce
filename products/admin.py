@@ -25,8 +25,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('get_thumbnail', 'name', 'category', 'base_price', 'is_active', 'is_featured', 'stock_quantity', 'created_at')
-    list_editable = ('is_active', 'is_featured', 'stock_quantity')
+    list_display = ('get_thumbnail', 'name', 'category', 'base_price', 'discount_price', 'is_active', 'is_featured', 'stock_quantity', 'created_at')
+    list_editable = ('is_active', 'is_featured', 'stock_quantity', 'discount_price')
     list_filter = ('category', 'is_active', 'is_featured', 'is_customizable', 'created_at')
     search_fields = ('name', 'description', 'short_description')
     prepopulated_fields = {'slug': ('name',)}
@@ -38,7 +38,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('name', 'slug', 'category', 'description', 'short_description')
         }),
         ('Pricing & Stock', {
-            'fields': ('base_price', 'stock_quantity', 'weight')
+            'fields': ('base_price', 'discount_price', 'stock_quantity', 'weight')
         }),
         ('Availability', {
             'fields': ('available_sizes', 'available_colors')

@@ -65,6 +65,7 @@ class Product(models.Model):
     short_description = models.CharField(max_length=300, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     base_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, validators=[MinValueValidator(0)], help_text="Set a lower price for sales (e.g., from 200 to 170)")
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     is_customizable = models.BooleanField(default=True)
@@ -95,6 +96,26 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+    @property
+    def final_price(self):
+        """Returns the discounted price if available, otherwise the base price."""
+        if self.discount_price and self.discount_price < self.base_price:
+            return self.discount_price
+        return self.base_price
+
+    @property
+    def has_discount(self):
+        """Returns True if the product has a valid discount."""
+        return self.discount_price is not None and self.discount_price < self.base_price
+
+    @property
+    def discount_percentage(self):
+        """Returns the discount percentage as an integer."""
+        if self.has_discount:
+            discount = ((self.base_price - self.discount_price) / self.base_price) * 100
+            return int(discount)
+        return 0
+
     def get_main_image(self):
         main_image = self.images.filter(is_main=True).first()
         return main_image.image.url if main_image else None
@@ -141,7 +162,7 @@ class ProductVariant(models.Model):
     
     @property
     def final_price(self):
-        return self.product.base_price + self.price_adjustment
+        return self.product.final_price + self.price_adjustment
 
 
 class ProductReview(models.Model):
