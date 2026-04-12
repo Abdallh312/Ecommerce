@@ -142,13 +142,14 @@ body {
     border: 1px solid var(--alpine-black);
     background: transparent;
     color: var(--alpine-black);
-    padding: 0.8rem 2rem;
-    font-size: 0.8rem;
-    font-weight: 600;
+    padding: 1.1rem 3.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     transition: all 0.3s ease;
     border-radius: 0;
+    display: inline-block;
 }
 
 .btn-alpine:hover {
