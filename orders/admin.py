@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Cart, CartItem, Order, OrderItem, ShippingMethod, OrderTracking
+from .models import Cart, CartItem, Order, OrderItem, ShippingMethod, OrderTracking, Offer
+
+
+@admin.register(Offer)
+class OfferAdmin(admin.ModelAdmin):
+    list_display = ('code', 'discount_percent', 'is_active')
+    list_editable = ('is_active',)
+    search_fields = ('code',)
 
 
 class CartItemInline(admin.TabularInline):
@@ -25,8 +32,8 @@ class OrderTrackingInline(admin.TabularInline):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'session_key', 'get_total_items', 'get_total_price', 'created_at')
-    list_filter = ('created_at', 'updated_at')
+    list_display = ('id', 'session_key', 'offer', 'get_total_items', 'get_total_price', 'created_at')
+    list_filter = ('created_at', 'updated_at', 'offer')
     search_fields = ('session_key',)
     readonly_fields = ('id', 'created_at', 'updated_at')
     inlines = [CartItemInline]
@@ -42,7 +49,8 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_number', 'email', 'status', 'payment_status', 'total_amount', 'created_at')
+    list_display = ('order_number', 'email', 'status', 'payment_status', 'total_amount', 'get_item_count', 'created_at')
+    list_editable = ('status', 'payment_status')
     list_filter = ('status', 'payment_status', 'created_at', 'shipped_at')
     search_fields = ('order_number', 'email', 'shipping_email', 'tracking_number')
     readonly_fields = ('id', 'order_number', 'created_at', 'updated_at')
@@ -53,7 +61,7 @@ class OrderAdmin(admin.ModelAdmin):
             'fields': ('order_number', 'email', 'status', 'payment_status', 'tracking_number')
         }),
         ('Pricing', {
-            'fields': ('subtotal', 'tax_amount', 'shipping_cost', 'total_amount')
+            'fields': ('subtotal', 'tax_amount', 'shipping_cost', 'offer', 'total_amount')
         }),
         ('Shipping Address', {
             'fields': ('shipping_name', 'shipping_email', 'shipping_phone', 
@@ -72,6 +80,10 @@ class OrderAdmin(admin.ModelAdmin):
     
     actions = ['mark_as_processing', 'mark_as_shipped', 'mark_as_delivered']
     
+    def get_item_count(self, obj):
+        return obj.items.count()
+    get_item_count.short_description = 'Items'
+
     def mark_as_processing(self, request, queryset):
         queryset.update(status='processing')
     mark_as_processing.short_description = 'Mark selected orders as processing'

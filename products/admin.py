@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from .models import Category, Product, ProductImage, Color, Size, ProductVariant, ProductReview, Wishlist, Announcement
 
 
@@ -16,14 +17,16 @@ class ProductVariantInline(admin.TabularInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'description')
+    list_display = ('name', 'parent', 'slug', 'description')
+    list_filter = ('parent',)
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'base_price', 'is_active', 'is_featured', 'stock_quantity', 'created_at')
+    list_display = ('get_thumbnail', 'name', 'category', 'base_price', 'is_active', 'is_featured', 'stock_quantity', 'created_at')
+    list_editable = ('is_active', 'is_featured', 'stock_quantity')
     list_filter = ('category', 'is_active', 'is_featured', 'is_customizable', 'created_at')
     search_fields = ('name', 'description', 'short_description')
     prepopulated_fields = {'slug': ('name',)}
@@ -49,11 +52,22 @@ class ProductAdmin(admin.ModelAdmin):
         })
     )
 
+    def get_thumbnail(self, obj):
+        main_image = obj.images.filter(is_main=True).first()
+        if main_image and main_image.image:
+            return mark_safe(f'<img src="{main_image.image.url}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />')
+        return "No Image"
+    get_thumbnail.short_description = 'Thumbnail'
+
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'hex_code')
+    list_display = ('name', 'hex_code', 'color_preview')
     search_fields = ('name',)
+
+    def color_preview(self, obj):
+        return mark_safe(f'<div style="width: 30px; height: 30px; background-color: {obj.hex_code}; border: 1px solid #ccc; border-radius: 4px;"></div>')
+    color_preview.short_description = 'Preview'
 
 
 @admin.register(Size)
@@ -64,9 +78,15 @@ class SizeAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('product', 'alt_text', 'is_main', 'order', 'color')
+    list_display = ('get_image_preview', 'product', 'alt_text', 'is_main', 'order', 'color')
     list_filter = ('is_main', 'color')
     search_fields = ('product__name', 'alt_text')
+
+    def get_image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />')
+        return "No Image"
+    get_image_preview.short_description = 'Preview'
 
 
 @admin.register(ProductVariant)
@@ -78,10 +98,14 @@ class ProductVariantAdmin(admin.ModelAdmin):
 
 @admin.register(ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
-    list_display = ('product', 'user', 'rating', 'created_at', 'is_verified_purchase')
+    list_display = ('product', 'user', 'rating_stars', 'created_at', 'is_verified_purchase')
     list_filter = ('rating', 'is_verified_purchase', 'created_at')
     search_fields = ('product__name', 'user__username', 'title', 'comment')
     readonly_fields = ('created_at',)
+
+    def rating_stars(self, obj):
+        return mark_safe('★' * obj.rating + '☆' * (5 - obj.rating))
+    rating_stars.short_description = 'Rating'
 
 
 @admin.register(Wishlist)

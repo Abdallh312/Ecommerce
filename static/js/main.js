@@ -2,7 +2,7 @@
 // =============================================================================
 
 // Global helpers
-window.getCsrfTokenGlobal = function() {
+function getCsrfToken() {
     const name = 'csrftoken';
     const cookies = document.cookie.split(';');
     for (let c of cookies) {
@@ -11,18 +11,23 @@ window.getCsrfTokenGlobal = function() {
             return decodeURIComponent(c.substring(name.length + 1));
         }
     }
-    // Fall back to meta tag
-    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-};
+    // Fall back to meta tag or hidden input
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+           document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+}
 
-window.showNotificationGlobal = function(message, type = 'info') {
+function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `alert alert-${type} alert-dismissible fade show`;
+    notification.className = `alert alert-${type} alert-dismissible fade show notification`;
     notification.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 280px; max-width: 480px;';
     notification.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
     document.body.appendChild(notification);
     setTimeout(() => { if (notification.parentNode) notification.remove(); }, 4000);
-};
+}
+
+// Map global names for backward compatibility if needed in templates
+window.getCsrfTokenGlobal = getCsrfToken;
+window.showNotificationGlobal = showNotification;
 
 window.addToWishlist = function(productId, btnElement = null) {
     fetch(`/wishlist/toggle/${productId}/`, {
@@ -380,16 +385,6 @@ function initVariantSelectors() {
 }
 
 function initQuantitySelectors() {
-    document.querySelectorAll('.quantity-minus').forEach(button => {
-        button.addEventListener('click', function() {
-            const input = this.nextElementSibling;
-            const currentValue = parseInt(input.value);
-            if (currentValue > 1) {
-                input.value = currentValue - 1;
-            }
-        });
-    });
-    
     document.querySelectorAll('.quantity-plus').forEach(button => {
         button.addEventListener('click', function() {
             const input = this.previousElementSibling;
@@ -397,11 +392,59 @@ function initQuantitySelectors() {
             const maxValue = parseInt(input.getAttribute('max')) || 999;
             if (currentValue < maxValue) {
                 input.value = currentValue + 1;
+                // Auto-update cart if it's a cart item
+                if (input.dataset.itemId) {
+                    triggerCartUpdate(input.dataset.itemId, input.value);
+                }
             } else {
                 showNotification(`Maximum quantity available: ${maxValue}`, 'warning');
             }
         });
     });
+
+    document.querySelectorAll('.quantity-minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.nextElementSibling;
+            const currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                // Auto-update cart if it's a cart item
+                if (input.dataset.itemId) {
+                    triggerCartUpdate(input.dataset.itemId, input.value);
+                }
+            }
+        });
+    });
+}
+
+async function triggerCartUpdate(itemId, quantity) {
+    try {
+        const response = await fetch('/orders/cart/update/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+                quantity: parseInt(quantity)
+            })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            updateCartCount(data.cart_total);
+            if (window.location.pathname.includes('/cart/')) {
+                location.reload();
+            } else {
+                showNotification('Cart updated', 'success');
+            }
+        } else {
+            showNotification(data.error || 'Failed to update cart', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating cart:', error);
+    }
 }
 
 async function updateVariantInfo() {
@@ -500,13 +543,6 @@ function clearFieldError(field) {
     }
 }
 
-// Utility Functions
-// =============================================================================
-function getCsrfToken() {
-    return document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
-           document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-}
-
 function getSelectedVariant() {
     const selectedSize = document.querySelector('.size-option.active')?.dataset.size;
     const selectedColor = document.querySelector('.color-option.active')?.dataset.color;
@@ -591,34 +627,6 @@ function updateCartTotal(total) {
     totalElements.forEach(element => {
         element.textContent = `LE ${total}`;
     });
-}
-
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type} alert-dismissible fade show notification`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        z-index: 9999;
-        min-width: 300px;
-        max-width: 500px;
-    `;
-    
-    notification.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 5000);
 }
 
 function isValidEmail(email) {

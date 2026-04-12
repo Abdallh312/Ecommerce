@@ -23,6 +23,13 @@
     --border-color: var(--alpine-border);
     --font-primary: 'Inter', sans-serif;
     --font-serif: 'Playfair Display', serif;
+
+    /* Theme Harmonization Variables */
+    --deep-onyx: var(--alpine-black);
+    --skin-nude: var(--alpine-light-gray);
+    --rich-cream: var(--alpine-white);
+    --misty-blue: var(--alpine-bg);
+    --deep-navy: var(--alpine-black);
 }
 
 /* Base Styles */

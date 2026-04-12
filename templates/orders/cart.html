@@ -69,11 +69,11 @@
                         <div class="col-6 col-md-3 mt-3 mt-md-0">
                             <div class="d-flex align-items-center">
                                 <div class="input-group border" style="width: 110px;">
-                                    <button class="btn btn-link text-dark text-decoration-none p-0 px-2" type="button" onclick="updateCartQuantity({{ item.id }}, {{ item.quantity|add:'-1' }})"><i class="fas fa-minus small"></i></button>
-                                    <input type="number" class="form-control border-0 text-center bg-transparent px-1 small fw-bold" value="{{ item.quantity }}" readonly style="min-width: 30px;">
-                                    <button class="btn btn-link text-dark text-decoration-none p-0 px-2" type="button" onclick="updateCartQuantity({{ item.id }}, {{ item.quantity|add:'1' }})"><i class="fas fa-plus small"></i></button>
+                                    <button class="btn btn-link text-dark text-decoration-none p-0 px-2 quantity-minus" type="button"><i class="fas fa-minus small"></i></button>
+                                    <input type="number" class="form-control border-0 text-center bg-transparent px-1 small fw-bold quantity-input" value="{{ item.quantity }}" min="1" data-item-id="{{ item.id }}" readonly style="min-width: 30px;">
+                                    <button class="btn btn-link text-dark text-decoration-none p-0 px-2 quantity-plus" type="button"><i class="fas fa-plus small"></i></button>
                                 </div>
-                                <button class="btn btn-link text-muted small ms-3 text-decoration-none remove-cart-btn" onclick="removeFromCart({{ item.id }})">
+                                <button class="btn btn-link text-muted small ms-3 text-decoration-none remove-cart-btn" data-item-id="{{ item.id }}">
                                     REMOVE
                                 </button>
                             </div>

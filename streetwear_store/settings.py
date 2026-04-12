@@ -24,9 +24,9 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-pet&)nw881osi!2c^6_5#2&^38^&%*(q_8$q5=7^vxsf=wkq4u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['pilotshopkidwear-sn0w.onrender.com','pilotshopkidwear.onrender.com','novashop-production-b6eb.up.railway.app','127.0.0.1','127.0.0.1:8000','localhost','localhost:8000']
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://pilotshopkidwear-sn0w.onrender.com',
@@ -36,6 +36,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:8000/'
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 CSRF_COOKIE_SECURE = False  # Must be False for HTTP/local dev; set True only in production HTTPS
 CSRF_COOKIE_SAMESITE = 'Lax'
 CORS_ALLOWED_ORIGINS = [
@@ -63,6 +66,8 @@ CORS_ALLOWED_HEADERS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,9 +80,6 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'core',
-    
-    # Whitenoise
-    'whitenoise.runserver_nostatic',
     
     # django-allauth
     'allauth',
@@ -134,7 +136,11 @@ import dj_database_url
 # https://docs.djangoproject.com/en/4.2/ref/ /#databases
 import os
 DATABASES = {
-    'default': dj_database_url.parse("postgresql://postgres:YwItQtTjmcnLQdkbWqIkdOKLqsjYTUhd@metro.proxy.rlwy.net:20576/railway")
+    'default': dj_database_url.parse(
+        "postgresql://postgres:YwItQtTjmcnLQdkbWqIkdOKLqsjYTUhd@metro.proxy.rlwy.net:20576/railway",
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -183,7 +189,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -195,9 +201,11 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+
+WHITENOISE_MANIFEST_STRICT = False
 
 # Media files (uploaded content)
 # Media files (uploaded content)
@@ -235,6 +243,76 @@ PAYMOB_CARD_IFRAME_ID         = os.getenv('PAYMOB_CARD_IFRAME_ID', '')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Jazzmin Admin Theme Settings
+JAZZMIN_SETTINGS = {
+    "site_title": "NOVA Admin",
+    "site_header": "NOVA Essentials",
+    "site_brand": "NOVA Admin",
+    "site_logo": "images/IMG-20260408-WA0033.jpg",
+    "login_logo": "images/IMG-20260408-WA0033.jpg",
+    "site_logo_classes": "",
+    "site_icon": "images/IMG-20260408-WA0033.jpg",
+    "welcome_sign": "Welcome to NOVA Store Management",
+    "copyright": "NOVA Essentials Ltd",
+    "search_model": ["auth.User", "products.Product"],
+    "user_avatar": None,
+    "topmenu_links": [
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "products.Product": "fas fa-tshirt",
+        "products.Category": "fas fa-th-list",
+        "products.ProductVariant": "fas fa-layer-group",
+        "orders.Order": "fas fa-shopping-cart",
+        "orders.Cart": "fas fa-shopping-bag",
+        "orders.Offer": "fas fa-tag",
+    },
+    "order_with_respect_to": ["products", "orders", "auth"],
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+}
+
+JAZZMIN_UI_CONFIG = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_fixed": True,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-light-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-dark",
+        "secondary": "btn-outline-dark",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}
 
 # Django-allauth settings
 SITE_ID = 1
