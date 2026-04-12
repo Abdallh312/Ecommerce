@@ -366,18 +366,18 @@ function initImageGallery() {
 
 function initVariantSelectors() {
     // Size selectors
-    document.querySelectorAll('.size-option').forEach(option => {
+    document.querySelectorAll('.size-option-btn').forEach(option => {
         option.addEventListener('click', function() {
-            document.querySelectorAll('.size-option').forEach(o => o.classList.remove('active'));
+            document.querySelectorAll('.size-option-btn').forEach(o => o.classList.remove('active'));
             this.classList.add('active');
             updateVariantInfo();
         });
     });
     
     // Color selectors
-    document.querySelectorAll('.color-option').forEach(option => {
+    document.querySelectorAll('.color-option-circle').forEach(option => {
         option.addEventListener('click', function() {
-            document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+            document.querySelectorAll('.color-option-circle').forEach(o => o.classList.remove('active'));
             this.classList.add('active');
             updateVariantInfo();
         });

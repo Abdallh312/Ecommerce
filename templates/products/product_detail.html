@@ -18,25 +18,30 @@
         </ol>
     </nav>
 
-    <div class="row">
+    <div class="row g-5">
         <!-- Product Images -->
         <div class="col-lg-7">
             <div class="product-images">
                 <!-- Main Image -->
-                <div class="bg-light p-5 mb-3 text-center">
+                <div class="bg-white border p-4 p-md-5 mb-4 text-center overflow-hidden" style="min-height: 400px; display: flex; align-items: center; justify-content: center;">
                     {% if product.get_main_image %}
-                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="img-fluid product-main-image" style="max-height: 600px; width: auto;">
+                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="img-fluid product-main-image transition-all" style="max-height: 650px; width: auto; object-fit: contain;">
                     {% else %}
-                        <i class="fas fa-image fa-4x text-muted opacity-20"></i>
+                        <div class="py-5">
+                            <i class="fas fa-image fa-4x text-muted opacity-10"></i>
+                            <p class="text-muted mt-3 small">NO IMAGE AVAILABLE</p>
+                        </div>
                     {% endif %}
                 </div>
 
                 <!-- Thumbnail Images -->
                 {% if product.get_all_images|length > 1 %}
-                <div class="d-flex gap-3 justify-content-center">
+                <div class="row g-3 justify-content-start">
                     {% for image in product.get_all_images %}
-                    <div class="bg-light p-2 cursor-pointer" onclick="changeMainImage('{{ image.image.url }}', this)">
-                        <img src="{{ image.image.url }}" alt="{{ product.name }}" class="product-thumbnail {% if image.is_main %}active{% endif %}" style="width: 80px; height: 80px; object-fit: contain;">
+                    <div class="col-3 col-sm-2">
+                        <div class="bg-white border p-2 cursor-pointer thumbnail-wrapper transition-all {% if image.is_main %}active{% endif %}" onclick="changeMainImage('{{ image.image.url }}', this)">
+                            <img src="{{ image.image.url }}" alt="{{ product.name }}" class="img-fluid product-thumbnail" style="aspect-ratio: 1/1; object-fit: contain;">
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
@@ -46,23 +51,23 @@
 
         <!-- Product Info -->
         <div class="col-lg-5 ps-lg-5 mt-5 mt-lg-0">
-            <div class="product-info">
+            <div class="product-info-sticky" style="position: sticky; top: 120px;">
                 <span class="hero-tag">{{ product.category.name|upper }}</span>
-                <h1 class="hero-title mt-2 mb-4" style="font-size: 2.5rem;">{{ product.name }}</h1>
+                <h1 class="hero-title mt-2 mb-3" style="font-size: 2.8rem; letter-spacing: -1.5px; line-height: 1.1;">{{ product.name }}</h1>
 
-                <div class="mb-5 pb-4 border-bottom">
-                    <span class="h3 fw-bold" id="product-price">LE {{ product.base_price }}</span>
-                    <div id="stock-status" class="d-inline-block ms-3">
+                <div class="mb-4 pb-4 border-bottom d-flex align-items-baseline">
+                    <span class="h3 fw-bold mb-0" id="product-price" style="letter-spacing: -1px;">LE {{ product.base_price }}</span>
+                    <div id="stock-status" class="ms-3">
                         {% if product.stock_quantity > 0 %}
-                            <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> {% trans "IN STOCK" %}</span>
+                            <span class="small text-success fw-bold" style="font-size: 0.75rem;"><i class="fas fa-circle me-1" style="font-size: 0.5rem; vertical-align: middle;"></i> {% trans "AVAILABLE" %}</span>
                         {% else %}
-                            <span class="small text-danger fw-bold"><i class="fas fa-times-circle me-1"></i> {% trans "OUT OF STOCK" %}</span>
+                            <span class="small text-danger fw-bold" style="font-size: 0.75rem;"><i class="fas fa-circle me-1" style="font-size: 0.5rem; vertical-align: middle;"></i> {% trans "SOLD OUT" %}</span>
                         {% endif %}
                     </div>
                 </div>
 
                 <div class="mb-5">
-                    <p class="text-muted">{{ product.description }}</p>
+                    <p class="text-muted" style="line-height: 1.8; font-size: 0.95rem;">{{ product.description }}</p>
                 </div>
 
                 <!-- Product Options -->
@@ -70,11 +75,14 @@
                     {% csrf_token %}
                     
                     {% if sizes %}
-                    <div class="mb-4">
-                        <h6 class="small fw-bold mb-3">SELECT SIZE:</h6>
-                        <div class="d-flex flex-wrap">
+                    <div class="mb-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="small fw-bold mb-0" style="letter-spacing: 1px;">SELECT SIZE</h6>
+                            <a href="#" class="text-muted small text-decoration-underline" style="font-size: 0.75rem;">SIZE GUIDE</a>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
                             {% for size in sizes %}
-                            <button type="button" class="size-option me-2 mb-2" data-size="{{ size.id }}">
+                            <button type="button" class="size-option-btn" data-size="{{ size.id }}">
                                 {{ size.name }}
                             </button>
                             {% endfor %}
@@ -83,25 +91,28 @@
                     {% endif %}
 
                     {% if colors %}
-                    <div class="mb-4">
-                        <h6 class="small fw-bold mb-3">SELECT COLOR:</h6>
-                        <div class="d-flex flex-wrap">
+                    <div class="mb-5">
+                        <h6 class="small fw-bold mb-3" style="letter-spacing: 1px;">SELECT COLOR</h6>
+                        <div class="d-flex flex-wrap gap-3">
                             {% for color in colors %}
-                            <button type="button" class="color-option me-2 mb-2" data-color="{{ color.id }}" data-hex="{{ color.hex_code }}" title="{{ color.name }}" style="background-color: {{ color.hex_code }};">
-                            </button>
+                            <div class="color-option-wrapper" title="{{ color.name }}">
+                                <button type="button" class="color-option-circle" data-color="{{ color.id }}" style="background-color: {{ color.hex_code }};">
+                                </button>
+                                <span class="color-name-tooltip">{{ color.name|upper }}</span>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
                     {% endif %}
 
-                    <div class="d-flex align-items-center mb-5 mt-5">
-                        <div class="input-group border" style="width: 120px;">
-                            <button class="btn btn-link text-dark text-decoration-none quantity-minus px-2" type="button"><i class="fas fa-minus small"></i></button>
-                            <input type="number" class="form-control border-0 text-center bg-transparent quantity-input px-1 fw-bold" value="1" min="1" max="{{ product.stock_quantity }}" style="min-width: 40px;">
-                            <button class="btn btn-link text-dark text-decoration-none quantity-plus px-2" type="button"><i class="fas fa-plus small"></i></button>
+                    <div class="d-flex align-items-center gap-3 mb-5 mt-5">
+                        <div class="input-group border bg-white" style="width: 130px; height: 54px;">
+                            <button class="btn btn-link text-dark text-decoration-none quantity-minus px-3" type="button"><i class="fas fa-minus small"></i></button>
+                            <input type="number" class="form-control border-0 text-center bg-transparent quantity-input px-1 fw-bold" value="1" min="1" max="{{ product.stock_quantity }}" style="font-size: 1.1rem;">
+                            <button class="btn btn-link text-dark text-decoration-none quantity-plus px-3" type="button"><i class="fas fa-plus small"></i></button>
                         </div>
-                        <button type="submit" class="btn-alpine ms-4 flex-grow-1" {% if product.stock_quantity == 0 %}disabled{% endif %}>
-                            {% if product.stock_quantity > 0 %}ADD TO CART{% else %}OUT OF STOCK{% endif %}
+                        <button type="submit" class="btn-alpine py-3 px-5 flex-grow-1" style="height: 54px;" {% if product.stock_quantity == 0 %}disabled{% endif %}>
+                            {% if product.stock_quantity > 0 %}ADD TO BAG{% else %}OUT OF STOCK{% endif %}
                         </button>
                     </div>
                 </form>

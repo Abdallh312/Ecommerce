@@ -97,50 +97,50 @@
 
         <!-- Cart Summary -->
         <div class="col-lg-4">
-            <div class="p-5 bg-white border">
-                <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Summary</h3>
+            <div class="p-4 p-md-5 bg-white border" style="position: sticky; top: 120px;">
+                <h3 class="fw-bold mb-4" style="letter-spacing: -1.5px;">Summary</h3>
                 
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted small">SUBTOTAL</span>
+                    <span class="text-muted small fw-bold">SUBTOTAL</span>
                     <span class="fw-bold small">LE {{ cart.get_total_price }}</span>
                 </div>
                 
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted small">SHIPPING</span>
-                    <span class="text-muted small">Calculated at checkout</span>
+                    <span class="text-muted small fw-bold">SHIPPING</span>
+                    <span class="text-muted small">FREE</span>
                 </div>
                 
                 {% if cart.offer and cart.offer.is_active %}
                 <div class="d-flex justify-content-between mb-3 text-success">
-                    <span class="small">DISCOUNT ({{ cart.offer.code }})</span>
-                    <span class="small">-{{ cart.offer.discount_percent }}%</span>
+                    <span class="small fw-bold">DISCOUNT ({{ cart.offer.code }})</span>
+                    <span class="small fw-bold">-{{ cart.offer.discount_percent }}%</span>
                 </div>
                 {% endif %}
                 
-                <hr class="my-4">
+                <hr class="my-4 opacity-10">
                 
                 <div class="d-flex justify-content-between mb-5">
-                    <span class="fw-bold">TOTAL</span>
-                    <span class="fw-bold h4 mb-0">LE {{ cart.get_final_total }}</span>
+                    <span class="fw-bold h5 mb-0">TOTAL</span>
+                    <span class="fw-bold h4 mb-0" style="letter-spacing: -1px;">LE {{ cart.get_final_total }}</span>
                 </div>
                 
                 <div class="d-grid gap-3">
-                    <a href="{% url 'orders:checkout' %}" class="btn-alpine text-center text-decoration-none">
+                    <a href="{% url 'orders:checkout' %}" class="btn-alpine py-3 text-center text-decoration-none">
                         PROCEED TO CHECKOUT
                     </a>
                 </div>
                 
                 <!-- Promo Code -->
                 <div class="mt-5 pt-4 border-top">
-                    <h6 class="small fw-bold mb-3">PROMO CODE</h6>
-                    <div class="input-group border">
-                        <input type="text" id="promo-code-input" class="form-control border-0 rounded-0 shadow-none small" placeholder="Enter code" value="{{ cart.offer.code|default:'' }}">
+                    <h6 class="small fw-bold mb-3" style="letter-spacing: 1px;">PROMO CODE</h6>
+                    <div class="input-group border bg-light">
+                        <input type="text" id="promo-code-input" class="form-control border-0 rounded-0 shadow-none small bg-transparent" placeholder="Enter code" value="{{ cart.offer.code|default:'' }}" style="height: 45px;">
                         {% if cart.offer and cart.offer.is_active %}
-                            <button class="btn btn-link text-danger text-decoration-none" type="button" onclick="removeOffer()">
+                            <button class="btn btn-link text-danger text-decoration-none px-3" type="button" onclick="removeOffer()">
                                 <i class="fas fa-times"></i>
                             </button>
                         {% else %}
-                            <button class="btn btn-link text-dark text-decoration-none small fw-bold" type="button" onclick="applyOffer()">APPLY</button>
+                            <button class="btn btn-link text-dark text-decoration-none small fw-bold px-3" type="button" onclick="applyOffer()">APPLY</button>
                         {% endif %}
                     </div>
                 </div>
