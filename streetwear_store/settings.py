@@ -247,14 +247,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Jazzmin Admin Theme Settings
 JAZZMIN_SETTINGS = {
     "site_title": "NOVA Admin",
-    "site_header": "NOVA Essentials",
-    "site_brand": "NOVA Admin",
-    "site_logo": "images/pilot-logo.svg",
-    "login_logo": "images/pilot-logo.svg",
-    "site_logo_classes": "",
-    "site_icon": "images/pilot-logo-symbol.svg",
-    "welcome_sign": "Welcome to NOVA Store Management",
-    "copyright": "NOVA Essentials Ltd",
+    "site_header": "NOVA",
+    "site_brand": None,
+    "site_logo": "images/IMG-20260408-WA0033.jpg",
+    "login_logo": "images/IMG-20260408-WA0033.jpg",
+    "site_logo_classes": "brand-image",
+    "site_icon": "images/IMG-20260408-WA0033.jpg",
+    "welcome_sign": "NOVA Administration",
+    "copyright": "NOVA Soft Underwear",
     "search_model": ["auth.User", "products.Product"],
     "user_avatar": None,
     "topmenu_links": [
@@ -280,6 +280,7 @@ JAZZMIN_SETTINGS = {
     "use_google_fonts_cdn": True,
     "show_ui_builder": False,
     "changeform_format": "horizontal_tabs",
+    "custom_css": "css/admin.css",
 }
 
 JAZZMIN_UI_CONFIG = {
@@ -288,7 +289,7 @@ JAZZMIN_UI_CONFIG = {
     "body_small_text": False,
     "brand_small_text": False,
     "brand_colour": False,
-    "accent": "accent-primary",
+    "accent": "accent-dark",
     "navbar": "navbar-white navbar-light",
     "no_navbar_border": True,
     "navbar_fixed": True,
@@ -302,7 +303,7 @@ JAZZMIN_UI_CONFIG = {
     "sidebar_nav_compact_style": True,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "default",
+    "theme": "flatly",
     "dark_mode_theme": None,
     "button_classes": {
         "primary": "btn-dark",

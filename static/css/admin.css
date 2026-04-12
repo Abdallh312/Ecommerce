@@ -1,0 +1,85 @@
+/* Custom Admin Styling for Jazzmin */
+
+/* Login Page Logo Fix - More aggressive to override Jazzmin defaults */
+.login-page {
+    background-color: #f8f8f8 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important; /* Center up */
+    padding-top: 5vh !important;
+}
+
+.login-box, .register-box {
+    margin: 0 auto !important; /* Centered horizontally */
+    width: 360px !important;
+}
+
+/* Ensure only ONE logo is shown */
+.login-logo, .register-logo {
+    margin-bottom: 2rem !important;
+    text-align: center !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    background: transparent !important;
+}
+
+.login-logo a, .register-logo a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+/* Hide any potential double logo or text branding */
+.login-logo a b, .login-logo a span {
+    display: none !important;
+}
+
+.login-logo img, .register-logo img, .login-logo a img, .register-logo a img {
+    max-width: 130px !important; /* Slightly smaller for elegance */
+    max-height: 60px !important;
+    height: auto !important;
+    width: auto !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+    display: block !important;
+}
+
+.card-primary.card-outline {
+    border-top: 3px solid #1a1a1a !important;
+}
+
+.btn-primary {
+    background-color: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+}
+
+/* Sidebar Logo Fix */
+.brand-link {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 15px 10px !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.brand-image {
+    max-height: 40px !important;
+    width: auto !important;
+    float: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Global Admin Aesthetic */
+.main-header {
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.btn-dark {
+    background-color: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+}
+
+.btn-dark:hover {
+    background-color: #333 !important;
+}

@@ -47,7 +47,7 @@
         <!-- Product Info -->
         <div class="col-lg-5 ps-lg-5 mt-5 mt-lg-0">
             <div class="product-info">
-                <span class="hero-tag">/ {{ product.category.name|upper }}</span>
+                <span class="hero-tag">{{ product.category.name|upper }}</span>
                 <h1 class="hero-title mt-2 mb-4" style="font-size: 2.5rem;">{{ product.name }}</h1>
 
                 <div class="mb-5 pb-4 border-bottom">
@@ -130,7 +130,7 @@
     <!-- Related Products -->
     {% if related_products %}
     <section class="related-products py-5 mt-5">
-        <span class="hero-tag">/ YOU MAY ALSO LIKE</span>
+        <span class="hero-tag">YOU MAY ALSO LIKE</span>
         <h2 class="fw-bold mb-5 mt-2">Related Products</h2>
         <div class="alpine-grid">
             {% for related_product in related_products %}
@@ -162,7 +162,7 @@
     <!-- Reviews Section -->
     {% if reviews %}
     <section class="reviews-section py-5 mt-5">
-        <span class="hero-tag">/ FEEDBACK</span>
+        <span class="hero-tag">FEEDBACK</span>
         <h2 class="fw-bold mb-5 mt-2">Customer Reviews</h2>
         <div class="row g-4">
             {% for review in reviews %}

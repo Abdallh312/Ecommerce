@@ -44,8 +44,9 @@
     <!-- Announcement Top Bar -->
     <div class="announcement-topbar" id="announcementTopbar">
         <div class="announcement-topbar-inner">
+            {% for i in "1234" %} <!-- Repeat 4 times for very wide monitors -->
             {% for ann in site_announcements %}
-            <div class="topbar-item {% if not forloop.first %}topbar-item-hidden{% endif %}" data-index="{{ forloop.counter0 }}">
+            <div class="topbar-item" data-index="{{ forloop.counter0 }}">
                 <span class="topbar-icon">
                     {% if ann.announcement_type == 'discount' %}
                         <i class="fas fa-tag"></i>
@@ -70,6 +71,7 @@
                 </button>
                 {% endif %}
             </div>
+            {% endfor %}
             {% endfor %}
         </div>
         <button class="topbar-close" onclick="dismissTopbar()" aria-label="Dismiss">
@@ -274,16 +276,6 @@
 
             // Add class to shift navbar and content down
             document.body.classList.add('has-topbar');
-
-            const items = bar.querySelectorAll('.topbar-item');
-            if (items.length <= 1) return;
-
-            let current = 0;
-            setInterval(() => {
-                items[current].classList.add('topbar-item-hidden');
-                current = (current + 1) % items.length;
-                items[current].classList.remove('topbar-item-hidden');
-            }, 5000);
         });
     </script>
     {% block extra_js %}{% endblock %}
