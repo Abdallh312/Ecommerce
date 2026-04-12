@@ -12,6 +12,7 @@ Django==4.2.7
 django-allauth==0.57.0
 django-crispy-forms==2.0
 django-environ==0.12.0
+django-jazzmin==3.0.1
 django-recaptcha==4.1.0
 dotenv==0.9.9
 fonttools==4.59.1
