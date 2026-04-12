@@ -1,45 +1,82 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Returns - Nova{% endblock %}
+{% block title %}Returns - NOVA{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-white text-center mb-5">Return Policy</h1>
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+            <li class="breadcrumb-item active text-muted small">RETURNS</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <span class="hero-tag">/ SERVICE</span>
+            <h1 class="hero-title mt-2 mb-4">Return Policy</h1>
+            <p class="text-muted">We want you to be completely satisfied with your Nova Essentials purchase.</p>
         </div>
     </div>
-    
+
     <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="card bg-dark border-secondary">
-                <div class="card-body">
-                    <h4 class="text-white mb-4">30-Day Return Policy</h4>
-                    <p class="text-muted mb-4">We accept returns within 30 days of purchase for unused items in original condition.</p>
-                    
-                    <h5 class="text-white mb-3">Returnable Items</h5>
-                    <ul class="text-muted mb-4">
-                        <li>Unworn items with original tags</li>
-                        <li>Items in original packaging</li>
-                        <li>Standard (non-custom) products</li>
-                    </ul>
-                    
-                    <h5 class="text-white mb-3">Non-Returnable Items</h5>
-                    <ul class="text-muted mb-4">
-                        <li>Custom or personalized items</li>
-                        <li>Items worn or washed</li>
-                        <li>Items without original tags</li>
-                    </ul>
-                    
-                    <h5 class="text-white mb-3">Return Process</h5>
-                    <ol class="text-muted">
-                        <li>Contact our customer service team</li>
-                        <li>Receive return authorization and instructions</li>
-                        <li>Package items securely with original packaging</li>
-                        <li>Ship items back using provided return label</li>
-                    </ol>
+        <div class="col-lg-10">
+            <div class="p-5 bg-white border mb-5">
+                <section class="mb-5">
+                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">14-Day Return Window</h3>
+                    <p class="text-muted">We accept returns within 14 days of delivery for unused items in their original condition and packaging. Please note the specific conditions for returnable and non-returnable items below.</p>
+                </section>
+                
+                <div class="row g-5 mb-5">
+                    <div class="col-md-6">
+                        <h4 class="small fw-bold mb-3">RETURNABLE ITEMS</h4>
+                        <ul class="list-unstyled text-muted small">
+                            <li class="mb-2"><i class="fas fa-check me-2 text-success"></i> Unworn items with original tags</li>
+                            <li class="mb-2"><i class="fas fa-check me-2 text-success"></i> Items in original packaging</li>
+                            <li><i class="fas fa-check me-2 text-success"></i> Standard (non-custom) products</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="small fw-bold mb-3">NON-RETURNABLE ITEMS</h4>
+                        <ul class="list-unstyled text-muted small">
+                            <li class="mb-2"><i class="fas fa-times me-2 text-danger"></i> Custom or personalized items</li>
+                            <li class="mb-2"><i class="fas fa-times me-2 text-danger"></i> Items worn, washed or damaged</li>
+                            <li><i class="fas fa-times me-2 text-danger"></i> Items without original tags</li>
+                        </ul>
+                    </div>
                 </div>
+                
+                <section>
+                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">The Return Process</h3>
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="text-center p-3">
+                                <div class="h3 fw-bold mb-2">01</div>
+                                <p class="small text-muted">Contact our support team via email or phone.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center p-3">
+                                <div class="h3 fw-bold mb-2">02</div>
+                                <p class="small text-muted">Receive return authorization and instructions.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center p-3">
+                                <div class="h3 fw-bold mb-2">03</div>
+                                <p class="small text-muted">Package items securely in original packaging.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center p-3">
+                                <div class="h3 fw-bold mb-2">04</div>
+                                <p class="small text-muted">Ship items back using the provided instructions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </div>

@@ -1,85 +1,94 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Profile - Nova{% endblock %}
+{% block title %}Profile - NOVA{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-white mb-4">My Profile</h1>
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+            <li class="breadcrumb-item active text-muted small">MY PROFILE</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <span class="hero-tag">/ ACCOUNT</span>
+            <h1 class="hero-title mt-2 mb-4">My Profile</h1>
+            <p class="text-muted small">MANAGE YOUR ORDERS AND PERSONAL INFORMATION.</p>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card bg-dark border-secondary">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle fa-5x text-secondary mb-3"></i>
-                    <h4 class="text-white">{{ user.username }}</h4>
-                    {% if user.email %}
-                        <p class="text-muted">{{ user.email }}</p>
-                    {% endif %}
-                    <p class="text-muted small">Member since {{ user.date_joined|date:"F Y" }}</p>
+
+    <div class="row g-5">
+        <div class="col-lg-4">
+            <div class="p-5 bg-white border text-center">
+                <div class="mb-4">
+                    <i class="fas fa-user-circle fa-4x text-muted opacity-20"></i>
+                </div>
+                <h4 class="fw-bold mb-1" style="letter-spacing: -1px;">{{ user.username }}</h4>
+                {% if user.email %}
+                    <p class="text-muted small mb-3">{{ user.email }}</p>
+                {% endif %}
+                <p class="text-muted" style="font-size: 0.7rem;">MEMBER SINCE {{ user.date_joined|date:"F Y"|upper }}</p>
+                
+                <div class="d-grid mt-4">
+                    <a href="{% url 'account_logout' %}" class="btn-alpine py-2 small">LOGOUT</a>
                 </div>
             </div>
         </div>
         
-        <div class="col-md-8">
-            <div class="card bg-dark border-secondary">
-                <div class="card-header">
-                    <h5 class="text-white mb-0">Recent Orders</h5>
-                </div>
-                <div class="card-body">
-                    {% if recent_orders %}
-                        <div class="table-responsive">
-                            <table class="table table-dark">
-                                <thead>
+        <div class="col-lg-8">
+            <div class="p-5 bg-white border">
+                <h3 class="fw-bold mb-5" style="letter-spacing: -1px;">Recent Orders</h3>
+                
+                {% if recent_orders %}
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="small fw-bold border-0 py-3">ORDER #</th>
+                                    <th class="small fw-bold border-0 py-3">DATE</th>
+                                    <th class="small fw-bold border-0 py-3">STATUS</th>
+                                    <th class="small fw-bold border-0 py-3">TOTAL</th>
+                                    <th class="small fw-bold border-0 py-3 text-end">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
                                     <tr>
-                                        <th>Order #</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Total</th>
-                                        <th>Action</th>
+                                        <td class="small fw-bold">{{ order.order_number|truncatechars:12 }}</td>
+                                        <td class="small text-muted">{{ order.created_at|date:"M d, Y" }}</td>
+                                        <td>
+                                            <span class="badge rounded-0 px-2 py-1 small
+                                                {% if order.status == 'pending' %}bg-warning text-dark{% endif %}
+                                                {% if order.status == 'processing' %}bg-info text-white{% endif %}
+                                                {% if order.status == 'shipped' %}bg-primary text-white{% endif %}
+                                                {% if order.status == 'delivered' %}bg-success text-white{% endif %}
+                                                {% if order.status == 'cancelled' %}bg-danger text-white{% endif %}
+                                            ">
+                                                {{ order.get_status_display|upper }}
+                                            </span>
+                                        </td>
+                                        <td class="small fw-bold">LE {{ order.total_amount }}</td>
+                                        <td class="text-end">
+                                            <a href="{% url 'orders:order_detail' order.id %}" 
+                                               class="text-dark small fw-bold text-decoration-none border-bottom border-dark pb-1">VIEW</a>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {% for order in recent_orders %}
-                                        <tr>
-                                            <td>{{ order.order_number }}</td>
-                                            <td>{{ order.created_at|date:"M d, Y" }}</td>
-                                            <td>
-                                                <span class="badge 
-                                                    {% if order.status == 'pending' %}bg-warning text-dark{% endif %}
-                                                    {% if order.status == 'processing' %}bg-info{% endif %}
-                                                    {% if order.status == 'shipped' %}bg-primary{% endif %}
-                                                    {% if order.status == 'delivered' %}bg-success{% endif %}
-                                                ">
-                                                    {{ order.get_status_display }}
-                                                </span>
-                                            </td>
-                                            <td>LE {{ order.total_amount }}</td>
-                                            <td>
-                                                <a href="{% url 'orders:order_detail' order.id %}" 
-                                                   class="btn btn-sm btn-outline-light">View</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="{% url 'products:home' %}" class="btn btn-primary">Return to Home</a>
-                        </div>
-                    {% else %}
-                        <div class="text-center py-4">
-                            <i class="fas fa-shopping-bag fa-3x text-secondary mb-3"></i>
-                            <h5 class="text-white">No orders yet</h5>
-                            <p class="text-muted">Start shopping to see your orders here.</p>
-                            <a href="{% url 'products:product_list' %}" class="btn btn-primary">Browse Products</a>
-                        </div>
-                    {% endif %}
-                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-shopping-bag fa-2x text-muted mb-4 opacity-20"></i>
+                        <h5 class="fw-bold mb-3">No orders yet</h5>
+                        <p class="text-muted small mb-5">Start shopping to see your orders here.</p>
+                        <a href="{% url 'products:product_list' %}" class="btn-alpine text-decoration-none">BROWSE PRODUCTS</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -24,7 +24,7 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-pet&)nw881osi!2c^6_5#2&^38^&%*(q_8$q5=7^vxsf=wkq4u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['pilotshopkidwear-sn0w.onrender.com','pilotshopkidwear.onrender.com','novashop-production-b6eb.up.railway.app','127.0.0.1','127.0.0.1:8000','localhost','localhost:8000']
 
@@ -112,6 +112,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'products.context_processors.active_announcements',
                 'products.context_processors.categories_processor',
+                'orders.context_processors.cart_count_processor',
             ],
         },
     },
@@ -162,59 +163,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
 USE_L10N = True
+USE_TZ = True
 
-# django-allauth settings
+from django.utils.translation import gettext_lazy as _
+LANGUAGES = [
+    ('en', _('English')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
+
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-# Allauth configuration
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
-LOGIN_REDIRECT_URL = '/'
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
-USE_TZ = True
-
-LANGUAGES = [
-    ('en', 'English'),
-]
-
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
-]
-
-
-USE_TZ = True
-
-# Available languages
-from django.utils.translation import gettext_lazy as _
-LANGUAGES = [
-    ('en', _('English')),
-]
-
-# Locale paths
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [

@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initCartFunctionality();
     initProductInteractions();
     initFormValidation();
-    updateCartCount();
     initAnimations();
     
     // Smooth scrolling for anchor links
@@ -104,6 +103,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Animations on scroll
 function initAnimations() {
+    // Initialize Category Swiper
+    if (document.querySelector('.category-swiper')) {
+        new Swiper('.category-swiper', {
+            slidesPerView: 1.2,
+            spaceBetween: 20,
+            freeMode: true,
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-next-cat',
+                prevEl: '.swiper-prev-cat',
+            },
+            breakpoints: {
+                480: {
+                    slidesPerView: 2.2,
+                    spaceBetween: 25,
+                },
+                768: {
+                    slidesPerView: 3.2,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 4.2,
+                    spaceBetween: 35,
+                },
+                1400: {
+                    slidesPerView: 5.2,
+                    spaceBetween: 40,
+                }
+            }
+        });
+    }
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -235,8 +266,13 @@ async function handleUpdateCart(event) {
         const data = await response.json();
         
         if (data.success) {
-            updateCartTotal(data.cart_total);
+            updateCartCount(data.cart_total);
+            updateCartTotal(data.total);
             showNotification('Cart updated successfully!', 'success');
+            // If on cart page, we might want to reload to update all totals or use AJAX to update specifically
+            if (window.location.pathname.includes('/cart/')) {
+                location.reload();
+            }
         } else {
             showNotification(data.error || 'Failed to update cart', 'error');
         }
@@ -530,28 +566,21 @@ function resetProductSelections() {
 function updateCartCount(count) {
     const cartCountElements = document.querySelectorAll('.cart-count');
     
-    if (count !== undefined) {
+    if (count !== undefined && count !== null) {
         cartCountElements.forEach(element => {
             element.textContent = count;
-            element.style.display = count > 0 ? 'block' : 'none';
         });
     } else {
         // Fetch current cart count
-        fetch('/orders/cart/')
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const cartItems = doc.querySelectorAll('.cart-item');
-                const totalItems = Array.from(cartItems).reduce((sum, item) => {
-                    const quantityInput = item.querySelector('.quantity-input');
-                    return sum + (quantityInput ? parseInt(quantityInput.value) : 0);
-                }, 0);
-                
-                cartCountElements.forEach(element => {
-                    element.textContent = totalItems;
-                    element.style.display = totalItems > 0 ? 'block' : 'none';
-                });
+        fetch('/orders/cart/count/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const totalItems = data.cart_total !== undefined ? data.cart_total : 0;
+                    cartCountElements.forEach(element => {
+                        element.textContent = totalItems;
+                    });
+                }
             })
             .catch(error => console.error('Error fetching cart count:', error));
     }
@@ -560,7 +589,7 @@ function updateCartCount(count) {
 function updateCartTotal(total) {
     const totalElements = document.querySelectorAll('.cart-total');
     totalElements.forEach(element => {
-        element.textContent = `$${total}`;
+        element.textContent = `LE ${total}`;
     });
 }
 

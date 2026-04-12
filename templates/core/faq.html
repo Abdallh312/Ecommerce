@@ -1,74 +1,90 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}FAQ - Nova{% endblock %}
+{% block title %}FAQ - NOVA{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-white text-center mb-5">Frequently Asked Questions</h1>
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+            <li class="breadcrumb-item active text-muted small">FAQ</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <span class="hero-tag">/ ASSISTANCE</span>
+            <h1 class="hero-title mt-2 mb-4">Frequently Asked Questions</h1>
+            <p class="text-muted">Find answers to common questions about our products, shipping, and more.</p>
         </div>
     </div>
-    
+
     <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="accordion" id="faqAccordion">
-                <div class="accordion-item bg-dark border-secondary mb-3">
+        <div class="col-lg-10">
+            <div class="accordion accordion-flush border-top" id="faqAccordion">
+                <div class="accordion-item border-bottom">
                     <h2 class="accordion-header">
-                        <button class="accordion-button bg-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        <button class="accordion-button bg-transparent text-dark fw-bold py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
                             How do I place an order?
                         </button>
                     </h2>
                     <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
-                            Simply browse our products, select your size and color, add items to your cart, and proceed to checkout. You'll need to create an account or log in to complete your purchase.
+                        <div class="accordion-body text-muted px-0 pb-4 small">
+                            Simply browse our products, select your size and color, add items to your cart, and proceed to checkout. You can check out as a guest or create an account for faster future purchases.
                         </div>
                     </div>
                 </div>
                 
-                <div class="accordion-item bg-dark border-secondary mb-3">
+                <div class="accordion-item border-bottom">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed bg-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        <button class="accordion-button collapsed bg-transparent text-dark fw-bold py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
                             What are your shipping options?
                         </button>
                     </h2>
                     <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
-                            We offer standard shipping (5-7 business days) for LE 70. Express shipping options are available at checkout for faster delivery.
+                        <div class="accordion-body text-muted px-0 pb-4 small">
+                            We offer shipping to Cairo & Giza for LE 70 and to other governorates for LE 90. Delivery typically takes 3-7 business days depending on your location.
                         </div>
                     </div>
                 </div>
                 
-                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
-                            Yes! Most of our products support customization. You can add custom text or designs during the ordering process. Additional fees may apply.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="accordion-item bg-dark border-secondary mb-3">
+                <div class="accordion-item border-bottom">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed bg-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                        <button class="accordion-button collapsed bg-transparent text-dark fw-bold py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Can I customize my softwear?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted px-0 pb-4 small">
+                            Yes! Many of our products support customization. Look for the "Customization" field on the product page to add your personal touch.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item border-bottom">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-transparent text-dark fw-bold py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
                             What is your return policy?
                         </button>
                     </h2>
                     <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
-                            We accept returns within 30 days of purchase for unused items in original condition. Custom items may not be returnable. Please see our returns page for full details.
+                        <div class="accordion-body text-muted px-0 pb-4 small">
+                            We accept returns within 14 days of delivery for non-customized items in original condition. Please note that personalized or custom-made items cannot be returned unless they arrive damaged.
                         </div>
                     </div>
                 </div>
                 
-                <div class="accordion-item bg-dark border-secondary">
+                <div class="accordion-item border-bottom">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed bg-dark text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                        <button class="accordion-button collapsed bg-transparent text-dark fw-bold py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
                             How do I track my order?
                         </button>
                     </h2>
                     <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted">
-                            Once your order ships, you'll receive an email with tracking information. You can also check your order status by logging into your account and visiting "My Orders".
+                        <div class="accordion-body text-muted px-0 pb-4 small">
+                            Once your order is shipped, we will send you an email with a tracking number and a link to follow its progress.
                         </div>
                     </div>
                 </div>

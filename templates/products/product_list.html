@@ -5,127 +5,74 @@
 {% block title %}{% trans "Products - NOVA" %}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-5" style="margin-top: 100px;">
     <!-- Page Header -->
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h1 class="section-title">{% trans "PRODUCTS" %}</h1>
-            <p class="section-subtitle">
-                {% trans "Discover our complete collection of customizable softwear pieces" %}
+            <h1 class="hero-title" style="font-size: 2.5rem;">Collection</h1>
+            <p class="hero-desc mx-auto">
+                {% trans "Explore our curated collection of premium soft underwear and apparel." %}
             </p>
         </div>
     </div>
     
-    <!-- Filters Row -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <!-- Category Filter -->
+    <!-- Filters Row - Alpine Style -->
+    <div class="row mb-5 border-bottom pb-4">
+        <div class="col-md-6 d-flex align-items-center">
+            <span class="small fw-bold text-muted me-4">FILTER:</span>
             <div class="dropdown">
-                <button class="btn btn-outline-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    {% if current_category %}{{ current_category|title }}{% else %}{% trans "ALL CATEGORIES" %}{% endif %}
+                <button class="btn btn-link text-dark text-decoration-none small fw-bold p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    {% if current_category %}{{ current_category|upper }}{% else %}ALL CATEGORIES{% endif %}
                 </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="{% url 'products:product_list' %}">{% trans "All Categories" %}</a></li>
-                    <li><hr class="dropdown-divider"></li>
+                <ul class="dropdown-menu border shadow-sm rounded-0">
+                    <li><a class="dropdown-item small" href="{% url 'products:product_list' %}">ALL CATEGORIES</a></li>
                     {% for category in global_categories %}
-                        <li>
-                            <a class="dropdown-item fw-bold" href="?category={{ category.slug }}">
-                                {{ category.name }}
-                            </a>
-                        </li>
-                        {% for child in category.children.all %}
-                            <li><a class="dropdown-item ps-4 py-1" href="?category={{ child.slug }}" style="font-size: 0.9rem; color: #adb5bd;">{{ child.name }}</a></li>
-                        {% endfor %}
+                        <li><a class="dropdown-item small" href="?category={{ category.slug }}">{{ category.name|upper }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
-        <div class="col-md-6 text-end">
-            <!-- Sort Options -->
+        <div class="col-md-6 text-md-end d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
+            <span class="small fw-bold text-muted me-4">SORT:</span>
             <div class="dropdown">
-                <button class="btn btn-outline-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    {% trans "SORT BY" %}
+                <button class="btn btn-link text-dark text-decoration-none small fw-bold p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    {% if current_sort == '-created_at' %}NEWEST{% elif current_sort == 'base_price' %}PRICE LOW-HIGH{% elif current_sort == '-base_price' %}PRICE HIGH-LOW{% else %}DEFAULT{% endif %}
                 </button>
-                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                    <li><a class="dropdown-item" href="?sort=-created_at{% if current_category %}&category={{ current_category }}{% endif %}">{% trans "Newest" %}</a></li>
-                    <li><a class="dropdown-item" href="?sort=name{% if current_category %}&category={{ current_category }}{% endif %}">{% trans "Name A-Z" %}</a></li>
-                    <li><a class="dropdown-item" href="?sort=-name{% if current_category %}&category={{ current_category }}{% endif %}">{% trans "Name Z-A" %}</a></li>
-                    <li><a class="dropdown-item" href="?sort=base_price{% if current_category %}&category={{ current_category }}{% endif %}">{% trans "Price Low-High" %}</a></li>
-                    <li><a class="dropdown-item" href="?sort=-base_price{% if current_category %}&category={{ current_category }}{% endif %}">{% trans "Price High-Low" %}</a></li>
+                <ul class="dropdown-menu dropdown-menu-end border shadow-sm rounded-0">
+                    <li><a class="dropdown-item small" href="?sort=-created_at">NEWEST</a></li>
+                    <li><a class="dropdown-item small" href="?sort=base_price">PRICE LOW-HIGH</a></li>
+                    <li><a class="dropdown-item small" href="?sort=-base_price">PRICE HIGH-LOW</a></li>
                 </ul>
             </div>
         </div>
     </div>
     
-    <!-- Products Grid -->
-    <div class="row">
+    <!-- Products Grid - Alpine Style -->
+    <div class="alpine-grid">
         {% for product in products %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 fade-in-up">
-            <div class="card product-card h-100">
-                <div class="position-relative">
-                    {% if product.get_main_image %}
-                        <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image" loading="lazy">
-                    {% else %}
-                        <div class="card-img-top product-image d-flex align-items-center justify-content-center bg-dark-tertiary">
-                            <i class="fas fa-image fa-3x text-muted"></i>
-                        </div>
-                    {% endif %}
-                    
-                    {% if product.is_customizable %}
-                    <div class="position-absolute top-0 end-0 m-2">
-                        <span class="badge bg-white text-dark">{% trans "CUSTOMIZABLE" %}</span>
+        <div class="fade-in-up">
+            <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none">
+                <div class="product-card">
+                    <div class="product-image-container">
+                        {% if product.get_main_image %}
+                            <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
+                        {% else %}
+                            <i class="fas fa-image fa-3x text-muted opacity-20"></i>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                    
-                    {% if product.is_featured %}
-                    <div class="position-absolute top-0 start-0 m-2">
-                        <span class="badge bg-danger">{% trans "FEATURED" %}</span>
-                    </div>
-                    {% endif %}
-                </div>
-                
-                <div class="card-body d-flex flex-column">
-                    <p class="product-category mb-1">{{ product.category.name }}</p>
-                    <h5 class="product-title">{{ product.name }}</h5>
-                    <p class="card-text text-muted small flex-grow-1">
-                        {{ product.short_description|default:product.description|truncatewords:12 }}
-                    </p>
-                    
-                    <div class="mt-auto">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="product-price">LE {{ product.base_price }}</span>
-                            <button type="button" class="btn btn-sm btn-link text-{% if product.id in user_wishlist_ids %}danger{% else %}white{% endif %} wishlist-toggle-btn" 
-                                    onclick="addToWishlist('{{ product.id }}', this)"
-                                    style="text-decoration: none;">
-                                <i class="{% if product.id in user_wishlist_ids %}fas{% else %}far{% endif %} fa-heart fa-lg"></i>
-                            </button>
-                            {% if product.stock_quantity > 0 %}
-                                <span class="badge bg-success">{% trans "IN STOCK" %}</span>
-                            {% else %}
-                                <span class="badge bg-danger">{% trans "OUT OF STOCK" %}</span>
-                            {% endif %}
+                    <div class="product-info-minimal">
+                        <div>
+                            <h3 class="product-title-min">{{ product.name }}</h3>
+                            <span class="product-cat-min">{{ product.category.name }}</span>
                         </div>
-                        
-                        <div class="d-grid">
-                            <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-outline-white btn-sm">
-                                {% trans "VIEW DETAILS" %}
-                            </a>
-                        </div>
+                        <div class="product-price-min">LE {{ product.base_price }}</div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
         {% empty %}
         <div class="col-12 text-center py-5">
-            <i class="fas fa-search fa-3x text-muted mb-3"></i>
-            <h3 class="text-muted">No Products Found</h3>
-            <p class="text-muted">
-                {% if current_category %}
-                    No products found in this category. <a href="{% url 'products:product_list' %}" class="text-white">View all products</a>
-                {% else %}
-                    No products available at the moment. Check back soon!
-                {% endif %}
-            </p>
+            <p class="text-muted">No products found.</p>
         </div>
         {% endfor %}
     </div>
@@ -133,10 +80,10 @@
     <!-- Pagination -->
     {% if is_paginated %}
     <nav aria-label="Product pagination" class="mt-5">
-        <ul class="pagination pagination-dark justify-content-center">
+        <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link bg-dark border-secondary text-white" href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">
+                    <a class="page-link border-0 text-dark" href="?page={{ page_obj.previous_page_number }}">
                         <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
@@ -144,19 +91,15 @@
             
             {% for num in page_obj.paginator.page_range %}
                 {% if page_obj.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link bg-white text-dark border-white">{{ num }}</span>
-                    </li>
+                    <li class="page-item"><span class="page-link border-0 text-dark fw-bold">{{ num }}</span></li>
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <li class="page-item">
-                        <a class="page-link bg-dark border-secondary text-white" href="?page={{ num }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{{ num }}</a>
-                    </li>
+                    <li class="page-item"><a class="page-link border-0 text-muted" href="?page={{ num }}">{{ num }}</a></li>
                 {% endif %}
             {% endfor %}
             
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link bg-dark border-secondary text-white" href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">
+                    <a class="page-link border-0 text-dark" href="?page={{ page_obj.next_page_number }}">
                         <i class="fas fa-chevron-right"></i>
                     </a>
                 </li>
@@ -165,22 +108,4 @@
     </nav>
     {% endif %}
 </div>
-
-<!-- Newsletter Section -->
-<section class="py-5 bg-dark-secondary">
-    <div class="container">
-        <div class="row justify-content-center text-center">
-            <div class="col-lg-6">
-                <h3 class="mb-3">STAY UPDATED</h3>
-                <p class="text-muted mb-4">
-                    Get notified about new products and exclusive offers
-                </p>
-                <form class="d-flex justify-content-center">
-                    <input type="email" class="form-control me-2" placeholder="Your email" style="max-width: 300px;">
-                    <button class="btn btn-white" type="submit">SUBSCRIBE</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
 {% endblock %}

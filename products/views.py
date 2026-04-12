@@ -143,34 +143,7 @@ class SearchView(ListView):
         return context
 
 
-class ProductVariantsAPIView(View):
-    def get(self, request, product_id):
-        try:
-            product = get_object_or_404(Product, id=product_id)
-            variants = ProductVariant.objects.filter(product=product)
-            
-            variants_data = []
-            for variant in variants:
-                variants_data.append({
-                    'id': variant.id,
-                    'size': variant.size.name,
-                    'color': variant.color.name,
-                    'color_hex': variant.color.hex_code,
-                    'price': str(variant.final_price),
-                    'stock': variant.stock_quantity,
-                    'sku': variant.sku
-                })
-            
-            return JsonResponse({
-                'success': True,
-                'variants': variants_data
-            })
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': str(e)
-            })
-
+from orders.views import ProductVariantsAPIView
 
 class WishlistListView(ListView):
     """Shows wishlist for both logged-in users (DB) and guests (session)."""

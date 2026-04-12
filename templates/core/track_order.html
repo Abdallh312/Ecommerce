@@ -1,103 +1,117 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Track Your Order - Nova{% endblock %}
+{% block title %}Track Your Order - NOVA{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card bg-dark border-secondary">
-                <div class="card-header bg-secondary">
-                    <h4 class="text-white mb-0">Track Your Order</h4>
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+            <li class="breadcrumb-item active text-muted small">TRACK ORDER</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <span class="hero-tag">/ STATUS</span>
+            <h1 class="hero-title mt-2 mb-4">Track Your Order</h1>
+            <p class="text-muted">Enter your order number to see the current status of your shipment.</p>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-lg-6">
+            <div class="p-5 bg-white border">
+                <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Order Lookup</h3>
+                <form method="post" action="{% url 'core:track_order' %}" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="order_number" class="small fw-bold mb-2">ORDER NUMBER</label>
+                        <input type="text" class="form-control rounded-0 border-dark shadow-none" 
+                               id="order_number" name="order_number" 
+                               placeholder="e.g. ORD-2024..." required>
+                        <div class="form-text small text-muted mt-2">
+                            You can find this in your confirmation email.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-alpine w-100">TRACK ORDER</button>
+                </form>
+                
+                {% if messages %}
+                    <div class="mt-4">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} rounded-0 small">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if order %}
+        <div class="col-lg-6">
+            <div class="p-5 bg-white border">
+                <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Order #{{ order.order_number|truncatechars:15 }}</h3>
+                
+                <div class="mb-4 pb-4 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="small fw-bold text-muted">STATUS</span>
+                        <span class="badge rounded-0 px-3 py-2 
+                            {% if order.status == 'pending' %}bg-warning text-dark{% endif %}
+                            {% if order.status == 'processing' %}bg-info text-white{% endif %}
+                            {% if order.status == 'shipped' %}bg-primary text-white{% endif %}
+                            {% if order.status == 'delivered' %}bg-success text-white{% endif %}
+                            {% if order.status == 'cancelled' %}bg-danger text-white{% endif %}
+                        ">
+                            {{ order.get_status_display|upper }}
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small fw-bold text-muted">ORDERED ON</span>
+                        <span class="small">{{ order.created_at|date:"F d, Y" }}</span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form method="post" action="{% url 'core:track_order' %}">
-                        {% csrf_token %}
-                        <div class="mb-4">
-                            <label for="order_number" class="form-label text-white">Order Number</label>
-                            <input type="text" class="form-control bg-dark text-white border-secondary" 
-                                   id="order_number" name="order_number" 
-                                   placeholder="Enter your order number" required>
-                            <div class="form-text text-muted">
-                                Enter the order number from your confirmation email
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Track Order</button>
-                    </form>
-                    
-                    {% if messages %}
-                        <div class="mt-4">
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    
-                    {% if order %}
-                        <div class="mt-5">
-                            <h5 class="text-white">Order #{{ order.order_number }}</h5>
-                            <div class="card bg-dark border-secondary mt-3">
-                                <div class="card-header bg-secondary">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span>Status: 
-                                            <span class="badge 
-                                                {% if order.status == 'pending' %}bg-warning text-dark{% endif %}
-                                                {% if order.status == 'processing' %}bg-info{% endif %}
-                                                {% if order.status == 'shipped' %}bg-primary{% endif %}
-                                                {% if order.status == 'delivered' %}bg-success{% endif %}
-                                                {% if order.status == 'cancelled' %}bg-danger{% endif %}
-                                            ">
-                                                {{ order.get_status_display }}
-                                            </span>
-                                        </span>
-                                        <span>Ordered on: {{ order.created_at|date:"F d, Y" }}</span>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h6 class="text-white">Shipping Details</h6>
-                                            <p class="text-muted mb-0">{{ order.shipping_name }}</p>
-                                            <p class="text-muted mb-0">{{ order.shipping_address }}</p>
-                                            <p class="text-muted mb-0">{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_zip }}</p>
-                                            <p class="text-muted">{{ order.shipping_country }}</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6 class="text-white">Order Summary</h6>
-                                            <p class="text-muted mb-0">Total Items: {{ order.items.count }}</p>
-                                            <p class="text-muted mb-0">Total: LE {{ order.total_amount }}</p>
-                                            <p class="text-muted">Payment Status: 
-                                                <span class="
-                                                    {% if order.payment_status == 'paid' %}text-success{% endif %}
-                                                    {% if order.payment_status == 'pending' %}text-warning{% endif %}
-                                                    {% if order.payment_status == 'failed' %}text-danger{% endif %}
-                                                ">
-                                                    {{ order.get_payment_status_display }}
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    {% if order.tracking_number %}
-                                        <div class="mt-4">
-                                            <h6 class="text-white">Tracking Information</h6>
-                                            <p class="text-muted">Tracking Number: {{ order.tracking_number }}</p>
-                                        </div>
-                                    {% endif %}
-                                    
-                                    <div class="mt-4">
-                                        <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-outline-light">View Order Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <h6 class="small fw-bold mb-3">SHIPPING TO</h6>
+                        <p class="small text-muted mb-0">{{ order.shipping_name }}</p>
+                        <p class="small text-muted mb-0">{{ order.shipping_address_line1 }}</p>
+                        <p class="small text-muted mb-0">{{ order.shipping_city }}, {{ order.shipping_state }}</p>
+                        <p class="small text-muted">{{ order.shipping_country }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="small fw-bold mb-3">ORDER SUMMARY</h6>
+                        <p class="small text-muted mb-0">Total Items: {{ order.items.count }}</p>
+                        <p class="small text-muted mb-0">Total Amount: LE {{ order.total_amount }}</p>
+                        <p class="small text-muted">Payment: 
+                            <span class="fw-bold
+                                {% if order.payment_status == 'paid' %}text-success{% endif %}
+                                {% if order.payment_status == 'pending' %}text-warning{% endif %}
+                                {% if order.payment_status == 'failed' %}text-danger{% endif %}
+                            ">
+                                {{ order.get_payment_status_display|upper }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                {% if order.tracking_number %}
+                <div class="mb-5 p-3 bg-light border">
+                    <h6 class="small fw-bold mb-2">TRACKING NUMBER</h6>
+                    <p class="mb-0 fw-bold">{{ order.tracking_number }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="d-grid">
+                    <a href="{% url 'orders:order_detail' order.id %}" class="btn-alpine text-center text-decoration-none">VIEW FULL DETAILS</a>
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

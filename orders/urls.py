@@ -29,4 +29,5 @@ urlpatterns = [
     path('cart/count/', views.CartCountAPIView.as_view(), name='cart_count'),
     path('cart/totals/', views.CartTotalsAPIView.as_view(), name='cart_totals'),
     path('cart/apply-offer/', views.ApplyOfferView.as_view(), name='apply_offer'),
+    path('cart/remove-offer/', views.RemoveOfferView.as_view(), name='remove_offer'),
 ]

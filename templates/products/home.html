@@ -4,126 +4,72 @@
 {% block title %}NOVA - Premium Softwear Customization{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section position-relative overflow-hidden">
-    <!-- Hero Background with Banner -->
-    <div class="position-absolute w-100 h-100" style="top: 0; left: 0; z-index: 1;">
-        <img src="{% static 'images/IMG-20260408-WA0033.jpg' %}" alt="NOVA" class="w-100 h-100" style="object-fit: cover; opacity: 0.8;">
-        <div class="position-absolute w-100 h-100" style="top: 0; left: 0; background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%);"></div>
+<!-- Hero Section - Alpine Style -->
+<section class="hero-section">
+    <div class="hero-grid">
+        <div class="hero-text-side fade-in-up">
+            <span class="hero-tag">/ Softwear</span>
+            <h1 class="hero-title">Nova<br>Essentials</h1>
+            <p class="hero-desc">
+                Premium soft underwear and apparel designed for ultimate comfort and minimalist aesthetic.
+                Experience the next level of softwear.
+            </p>
+            <div class="d-flex align-items-center">
+                <a href="{% url 'products:product_list' %}" class="btn-alpine me-4">SHOP NOW</a>
+                <a href="#featured" class="text-dark text-decoration-none small fw-bold">
+                    <i class="fas fa-chevron-down me-2"></i> PRODUCT DETAILS
+                </a>
+            </div>
+        </div>
+        <div class="hero-image-side fade-in-up">
+            <img src="{% static 'images/IMG-20260408-WA0033.jpg' %}" alt="NOVA Hero" class="hero-main-img">
+            <div class="position-absolute bottom-0 start-0 p-4 d-none d-md-block">
+                <div class="small fw-bold text-muted">01 ——— 04 <i class="fas fa-arrow-right ms-2 text-primary"></i></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category Slider Section -->
+<section class="py-5 bg-light overflow-hidden">
+    <div class="container mb-4">
+        <div class="d-flex justify-content-between align-items-end">
+            <div>
+                <span class="hero-tag">/ EXPLORE</span>
+                <h2 class="fw-bold mt-2 mb-0">Browse Categories</h2>
+            </div>
+            <div class="swiper-navigation-custom">
+                <button class="swiper-prev-cat btn btn-outline-dark rounded-circle me-2"><i class="fas fa-chevron-left small"></i></button>
+                <button class="swiper-next-cat btn btn-outline-dark rounded-circle"><i class="fas fa-chevron-right small"></i></button>
+            </div>
+        </div>
     </div>
     
-    <div class="hero-content position-relative" style="z-index: 3;">
-        <!-- NOVA Logo Display -->
-        <div class="mb-4 fade-in-up">
-            <h1 class="display-1 fw-bold text-white mb-0" style="opacity: 0.9; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 8rem; letter-spacing: 0.2em;">NOVA</h1>
-        </div>
-        
-        <h1 class="hero-title fade-in-up">SOFTWEAR</h1>
-        <p class="hero-subtitle fade-in-up">Create your own unique look with premium customization</p>
-        <div class="fade-in-up">
-            <a href="{% url 'products:product_list' %}" class="btn btn-primary me-3">SHOP NOW</a>
-            <a href="#featured" class="btn btn-outline-white">EXPLORE</a>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Products Section -->
-<section id="featured" class="featured-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="section-title">FEATURED PRODUCTS</h2>
-                <p class="section-subtitle">
-                    Discover our latest softwear pieces designed for the modern urban lifestyle.
-                    Each item can be customized to reflect your unique style.
-                </p>
-            </div>
-        </div>
-        
-        <div class="row">
-            {% for product in featured_products %}
-            <div class="col-md-3 col-sm-6 mb-4 fade-in-up">
-                <div class="card product-card h-100">
-                    <div class="position-relative">
-                        {% if product.get_main_image %}
-                            <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image" loading="lazy">
-                        {% else %}
-                            <div class="card-img-top product-image d-flex align-items-center justify-content-center">
-                                <i class="fas fa-image fa-3x text-muted"></i>
-                            </div>
-                        {% endif %}
-                        
-                        {% if product.is_customizable %}
-                        <div class="position-absolute top-0 end-0 m-2">
-                            <span class="badge bg-white text-dark">CUSTOMIZABLE</span>
-                        </div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="card-body d-flex flex-column">
-                        <p class="product-category mb-1">{{ product.category.name }}</p>
-                        <h5 class="product-title">{{ product.name }}</h5>
-                        <p class="card-text text-muted small flex-grow-1">{{ product.short_description|truncatewords:10 }}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <span class="product-price">LE {{ product.base_price }}</span>
-                            <button type="button" class="btn btn-sm btn-link text-{% if product.id in user_wishlist_ids %}danger{% else %}white{% endif %} wishlist-toggle-btn" 
-                                    onclick="addToWishlist('{{ product.id }}', this)"
-                                    style="text-decoration: none;">
-                                <i class="{% if product.id in user_wishlist_ids %}fas{% else %}far{% endif %} fa-heart fa-lg"></i>
-                            </button>
-                            <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-sm btn-outline-white">VIEW</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="text-muted">No featured products available.</p>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="row mt-5">
-            <div class="col-12 text-center">
-                <a href="{% url 'products:product_list' %}" class="btn btn-primary">VIEW ALL PRODUCTS</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Categories Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="section-title">CATEGORIES</h2>
-                <p class="section-subtitle">
-                    Explore our different product categories and find the perfect piece for your style.
-                </p>
-            </div>
-        </div>
-        
-        <div class="category-slider-container">
-            <div class="category-slider" id="categorySlider">
+    <div class="container-fluid pe-0">
+        <div class="swiper category-swiper">
+            <div class="swiper-wrapper">
                 {% for category in categories %}
-                <div class="category-slider-item fade-in-up">
-                    <div class="category-card">
-                        {% if category.image %}
-                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image" loading="lazy">
-                        {% else %}
-                            <div class="category-image bg-dark-tertiary"></div>
-                        {% endif %}
-                        <div class="category-overlay">
-                            <div>
-                                <h3 class="category-title mb-3">{{ category.name }}</h3>
-                                <a href="{% url 'products:category_products' category.slug %}" class="btn btn-outline-white">EXPLORE</a>
+                <div class="swiper-slide">
+                    <a href="{% url 'products:category_products' category.slug %}" class="text-decoration-none group">
+                        <div class="category-slide-card">
+                            <div class="category-image-wrapper">
+                                {% if category.image %}
+                                    <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
+                                {% else %}
+                                    <div class="category-img-placeholder d-flex align-items-center justify-content-center bg-white h-100 w-100">
+                                        <i class="fas fa-th-large fa-2x text-muted opacity-20"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="category-overlay">
+                                    <span class="btn-alpine py-2 px-3 small">EXPLORE</span>
+                                </div>
+                            </div>
+                            <div class="category-info pt-3">
+                                <h5 class="category-title-min mb-1">{{ category.name|upper }}</h5>
+                                <span class="small text-muted">{{ category.products.count }} PRODUCTS</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-12 text-center">
-                    <p class="text-muted">No categories available.</p>
+                    </a>
                 </div>
                 {% endfor %}
             </div>
@@ -131,29 +77,41 @@
     </div>
 </section>
 
-
-
-{% comment %} <!-- Newsletter Section -->
-<section class="py-5">
+<!-- Featured Products - Alpine Grid -->
+<section id="featured" class="py-5">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 text-center">
-                <h2 class="section-title">STAY UPDATED</h2>
-                <p class="section-subtitle">
-                    Subscribe to our newsletter and be the first to know about new products, 
-                    exclusive offers, and customization tips.
-                </p>
-                
-                <form class="d-flex justify-content-center">
-                    <input type="email" class="form-control me-2" placeholder="Your email address" style="max-width: 300px;">
-                    <button class="btn btn-primary" type="submit">SUBSCRIBE</button>
-                </form>
-                
-                <p class="small text-muted mt-3">
-                    By subscribing, you agree to receive marketing emails from NOVA.
-                </p>
+        <div class="alpine-grid">
+            {% for product in featured_products %}
+            <div class="fade-in-up">
+                <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none">
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            {% if product.get_main_image %}
+                                <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
+                            {% else %}
+                                <i class="fas fa-image fa-3x text-muted opacity-20"></i>
+                            {% endif %}
+                        </div>
+                        <div class="product-info-minimal">
+                            <div>
+                                <h3 class="product-title-min">{{ product.name }}</h3>
+                                <span class="product-cat-min">{{ product.category.name }}</span>
+                            </div>
+                            <div class="product-price-min">LE {{ product.base_price }}</div>
+                        </div>
+                    </div>
+                </a>
             </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No featured products available.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'products:product_list' %}" class="btn-alpine">VIEW ALL COLLECTION</a>
         </div>
     </div>
-</section> {% endcomment %}
+</section>
 {% endblock %}

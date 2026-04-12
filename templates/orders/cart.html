@@ -5,15 +5,16 @@
 {% block title %}{% trans "Shopping Cart - NOVA" %}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-5" style="margin-top: 100px;">
     <!-- Page Header -->
     <div class="row mb-5">
         <div class="col-12">
-            <h1 class="section-title">{% trans "SHOPPING CART" %}</h1>
+            <span class="hero-tag">/ YOUR SELECTION</span>
+            <h1 class="hero-title mt-2 mb-4">Shopping Cart</h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-white">{% trans "Home" %}</a></li>
-                    <li class="breadcrumb-item active text-muted">{% trans "Shopping Cart" %}</li>
+                    <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+                    <li class="breadcrumb-item active text-muted small">SHOPPING CART</li>
                 </ol>
             </nav>
         </div>
@@ -21,129 +22,135 @@
 
     {% if cart.items.all %}
     <!-- Cart Items -->
-    <div class="row">
+    <div class="row g-5">
         <div class="col-lg-8">
-            <div class="cart-items">
+            <div class="cart-items border-top">
                 {% for item in cart.items.all %}
-                <div class="cart-item mb-4">
+                <div class="cart-item py-4 border-bottom" data-item-id="{{ item.id }}">
                     <div class="row align-items-center">
                         <!-- Product Image -->
-                        <div class="col-md-3">
-                            {% if item.product.get_main_image %}
-                                <img src="{{ item.product.get_main_image }}" alt="{{ item.product.name }}" class="cart-item-image img-fluid rounded">
-                            {% else %}
-                                <div class="cart-item-image bg-dark-tertiary d-flex align-items-center justify-content-center rounded">
-                                    <i class="fas fa-image text-muted"></i>
-                                </div>
-                            {% endif %}
+                        <div class="col-3 col-md-2">
+                            <div class="bg-light p-2">
+                                {% if item.product.get_main_image %}
+                                    <img src="{{ item.product.get_main_image }}" alt="{{ item.product.name }}" class="img-fluid">
+                                {% else %}
+                                    <div class="text-center py-3">
+                                        <i class="fas fa-image text-muted opacity-20"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
 
                         <!-- Product Info -->
-                        <div class="col-md-5">
-                            <h6 class="product-title">{{ item.product.name }}</h6>
-                            <p class="text-muted small mb-1">{{ item.product.category.name }}</p>
+                        <div class="col-9 col-md-5">
+                            <h6 class="fw-bold mb-1" style="letter-spacing: -0.5px;">{{ item.product.name }}</h6>
+                            <p class="text-muted small mb-2">{{ item.product.category.name|upper }}</p>
                             
                             {% if item.variant %}
-                            <div class="variant-info mb-3">
-                                <small class="text-muted">
-                                    {% if item.variant.size %}Size: {{ item.variant.size.name }}{% endif %}
+                            <div class="mb-2">
+                                <span class="small text-muted bg-light px-2 py-1">
+                                    {% if item.variant.size %}SIZE: {{ item.variant.size.name }}{% endif %}
                                     {% if item.variant.size and item.variant.color %} | {% endif %}
-                                    {% if item.variant.color %}Color: {{ item.variant.color.name }}{% endif %}
-                                </small>
+                                    {% if item.variant.color %}COLOR: {{ item.variant.color.name }}{% endif %}
+                                </span>
                             </div>
                             {% endif %}
                             
                             {% if item.customization_text %}
-                            <div class="customization-info mt-2">
-                                <small class="text-muted">
-                                    <i class="fas fa-pencil-alt me-1"></i>
-                                    Custom: "{{ item.customization_text|truncatechars:50 }}"
+                            <div>
+                                <small class="text-muted italic">
+                                    "{{ item.customization_text|truncatechars:50 }}"
                                 </small>
                             </div>
                             {% endif %}
                         </div>
 
                         <!-- Quantity -->
-                        <div class="col-md-2">
-                            <div class="input-group input-group-sm">
-                                <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity({{ item.id }}, {{ item.quantity|add:'-1' }})">-</button>
-                                <input type="number" class="form-control text-center quantity-input" value="{{ item.quantity }}" min="1" max="{{ item.product.stock_quantity }}" data-item-id="{{ item.id }}" readonly>
-                                <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity({{ item.id }}, {{ item.quantity|add:'1' }})">+</button>
+                        <div class="col-6 col-md-3 mt-3 mt-md-0">
+                            <div class="d-flex align-items-center">
+                                <div class="input-group border" style="width: 110px;">
+                                    <button class="btn btn-link text-dark text-decoration-none p-0 px-2" type="button" onclick="updateCartQuantity({{ item.id }}, {{ item.quantity|add:'-1' }})"><i class="fas fa-minus small"></i></button>
+                                    <input type="number" class="form-control border-0 text-center bg-transparent px-1 small fw-bold" value="{{ item.quantity }}" readonly style="min-width: 30px;">
+                                    <button class="btn btn-link text-dark text-decoration-none p-0 px-2" type="button" onclick="updateCartQuantity({{ item.id }}, {{ item.quantity|add:'1' }})"><i class="fas fa-plus small"></i></button>
+                                </div>
+                                <button class="btn btn-link text-muted small ms-3 text-decoration-none remove-cart-btn" onclick="removeFromCart({{ item.id }})">
+                                    REMOVE
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Price and Remove -->
-                        <div class="col-md-2 text-end">
-                            <div class="item-price mb-2">
-                                <strong>LE {{ item.get_total_price }}</strong>
-                            </div>
-                            <button class="btn btn-sm btn-outline-danger remove-cart-btn" data-item-id="{{ item.id }}">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                        <!-- Price -->
+                        <div class="col-6 col-md-2 text-end mt-3 mt-md-0">
+                            <span class="fw-bold">LE {{ item.get_total_price }}</span>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
+            
+            <div class="mt-4">
+                <a href="{% url 'products:product_list' %}" class="text-dark small fw-bold text-decoration-none">
+                    <i class="fas fa-arrow-left me-2"></i> CONTINUE SHOPPING
+                </a>
+            </div>
         </div>
 
         <!-- Cart Summary -->
         <div class="col-lg-4">
-            <div class="order-summary bg-dark-secondary p-4 rounded">
-                <h5 class="mb-4">ORDER SUMMARY</h5>
+            <div class="p-5 bg-white border">
+                <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Summary</h3>
                 
-                <div class="summary-item d-flex justify-content-between mb-2">
-                    <span>Items ({{ cart.get_total_items }})</span>
-                    <span class="cart-subtotal">LE {{ cart.get_total_price }}</span>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted small">SUBTOTAL</span>
+                    <span class="fw-bold small">LE {{ cart.get_total_price }}</span>
                 </div>
                 
-                <div class="summary-item d-flex justify-content-between mb-2">
-                    <span>Shipping</span>
-                    <span>LE {{ cart.get_shipping_cost }}</span>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted small">SHIPPING</span>
+                    <span class="text-muted small">Calculated at checkout</span>
                 </div>
                 
-                <hr class="my-3">
+                {% if cart.offer and cart.offer.is_active %}
+                <div class="d-flex justify-content-between mb-3 text-success">
+                    <span class="small">DISCOUNT ({{ cart.offer.code }})</span>
+                    <span class="small">-{{ cart.offer.discount_percent }}%</span>
+                </div>
+                {% endif %}
                 
-                <div class="summary-total d-flex justify-content-between mb-4">
-                    <strong>Total</strong>
-                    <strong class="cart-total">
-                        LE {{ cart.get_final_total }}
-                    </strong>
+                <hr class="my-4">
+                
+                <div class="d-flex justify-content-between mb-5">
+                    <span class="fw-bold">TOTAL</span>
+                    <span class="fw-bold h4 mb-0">LE {{ cart.get_final_total }}</span>
                 </div>
                 
-                <div class="d-grid gap-2">
-                    <a href="{% url 'orders:checkout' %}" class="btn btn-primary">
+                <div class="d-grid gap-3">
+                    <a href="{% url 'orders:checkout' %}" class="btn-alpine text-center text-decoration-none">
                         PROCEED TO CHECKOUT
-                    </a>
-                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-white">
-                        CONTINUE SHOPPING
                     </a>
                 </div>
                 
                 <!-- Promo Code -->
-                <div class="mt-4">
-                    <h6 class="mb-3">PROMO CODE</h6>
-                    <div class="input-group">
-                        <input type="text" id="promo-code-input" class="form-control" placeholder="Enter code" value="{{ cart.offer.code|default:'' }}">
+                <div class="mt-5 pt-4 border-top">
+                    <h6 class="small fw-bold mb-3">PROMO CODE</h6>
+                    <div class="input-group border">
+                        <input type="text" id="promo-code-input" class="form-control border-0 rounded-0 shadow-none small" placeholder="Enter code" value="{{ cart.offer.code|default:'' }}">
                         {% if cart.offer and cart.offer.is_active %}
-                            <button class="btn btn-outline-danger" type="button" onclick="removeOffer()" title="Remove Code">
+                            <button class="btn btn-link text-danger text-decoration-none" type="button" onclick="removeOffer()">
                                 <i class="fas fa-times"></i>
                             </button>
                         {% else %}
-                            <button class="btn btn-outline-white" type="button" onclick="applyOffer()">APPLY</button>
+                            <button class="btn btn-link text-dark text-decoration-none small fw-bold" type="button" onclick="applyOffer()">APPLY</button>
                         {% endif %}
                     </div>
-                    <small id="promo-code-msg" class="mt-2 d-block text-success">
-                        {% if cart.offer and cart.offer.is_active %}{{ cart.offer.discount_percent }}% discount applied!{% endif %}
-                    </small>
                 </div>
                 
                 <!-- Security Info -->
-                <div class="security-info mt-4 text-center">
-                    <small class="text-muted">
+                <div class="mt-5 text-center">
+                    <p class="text-muted" style="font-size: 0.7rem;">
                         <i class="fas fa-lock me-1"></i>
-                        Secure checkout with SSL encryption
-                    </small>
+                        SECURE CHECKOUT WITH SSL ENCRYPTION
+                    </p>
                 </div>
             </div>
         </div>
@@ -153,13 +160,13 @@
     <!-- Empty Cart -->
     <div class="row">
         <div class="col-12 text-center py-5">
-            <div class="empty-cart">
-                <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
-                <h3 class="mb-3">Your cart is empty</h3>
-                <p class="text-muted mb-4">
+            <div class="py-5">
+                <i class="fas fa-shopping-cart fa-3x text-muted mb-4 opacity-20"></i>
+                <h3 class="fw-bold mb-3">Your cart is empty</h3>
+                <p class="text-muted mb-5">
                     Looks like you haven't added any items to your cart yet.
                 </p>
-                <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                <a href="{% url 'products:product_list' %}" class="btn-alpine text-decoration-none">
                     START SHOPPING
                 </a>
             </div>
@@ -167,231 +174,88 @@
     </div>
     {% endif %}
 </div>
-
-<!-- Recently Viewed -->
-<section class="py-5 bg-dark-secondary">
-    <div class="container">
-        <h3 class="section-title mb-4">YOU MIGHT ALSO LIKE</h3>
-        <div class="row">
-            {% for product in recently_viewed %}
-            <div class="col-md-3 mb-4">
-                <div class="card product-card">
-                    <div class="position-relative">
-                        {% if product.get_main_image %}
-                            <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="card-img-top product-image">
-                        {% else %}
-                            <div class="card-img-top product-image bg-dark-tertiary d-flex align-items-center justify-content-center">
-                                <i class="fas fa-image fa-2x text-muted"></i>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="card-body">
-                        <p class="product-category mb-1">{{ product.category.name }}</p>
-                        <h6 class="product-title">{{ product.name }}</h6>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="product-price">LE {{ product.base_price }}</span>
-                            <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-sm btn-outline-white">VIEW</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="text-muted">No products in the same category.</p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-async function updateQuantity(itemId, newQuantity) {
-    if (newQuantity < 1) {
-        if (confirm('Remove this item from cart?')) {
-            removeFromCart(itemId);
-        }
-        return;
-    }
-    
-    try {
-        const response = await fetch('/orders/cart/update/', {
+    function updateCartQuantity(itemId, quantity) {
+        if (quantity < 1) return;
+        
+        fetch('{% url "orders:update_cart" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
+                'X-CSRFToken': '{{ csrf_token }}'
             },
             body: JSON.stringify({
                 item_id: itemId,
-                quantity: newQuantity
+                quantity: quantity
             })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            location.reload(); // Reload to update totals
-        } else {
-            showNotification(data.error || 'Failed to update cart', 'error');
-        }
-        
-    } catch (error) {
-        console.error('Error updating cart:', error);
-        showNotification('Something went wrong. Please try again.', 'error');
-    }
-}
-
-async function removeFromCart(itemId) {
-    try {
-        const response = await fetch(`/orders/cart/remove/${itemId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCsrfToken()
-            }
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            location.reload();
-        } else {
-            showNotification(data.error || 'Failed to remove item', 'error');
-        }
-    } catch (error) {
-        console.error('Error removing item:', error);
-        showNotification('Something went wrong. Please try again.', 'error');
-    }
-}
-
-async function applyOffer() {
-    const codeInput = document.getElementById('promo-code-input').value;
-    try {
-        const response = await fetch('/orders/cart/apply-offer/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
-            },
-            body: JSON.stringify({ code: codeInput })
-        });
-        
-        const data = await response.json();
-        const msgEl = document.getElementById('promo-code-msg');
-        
-        if (data.success) {
-            if (codeInput) {
-                msgEl.textContent = data.message;
-                msgEl.className = 'mt-2 d-block text-success';
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
             } else {
-                msgEl.textContent = '';
+                alert(data.error || 'Failed to update cart');
             }
-            
-            // update totals via DOM
-            document.querySelector('.cart-subtotal').textContent = `LE ${data.subtotal}`;
-            document.querySelector('.cart-total').textContent = `LE ${data.total}`;
-        } else {
-            msgEl.textContent = data.error;
-            msgEl.className = 'mt-2 d-block text-danger';
-        }
-    } catch (error) {
-        console.error('Error applying offer:', error);
-        showNotification('Something went wrong checking the offer code.', 'error');
+        });
     }
-}
 
-async function removeOffer() {
-    try {
-        const response = await fetch('/orders/cart/apply-offer/', {
+    function removeFromCart(itemId) {
+        if (!confirm('Are you sure you want to remove this item?')) return;
+        
+        fetch(`/orders/cart/remove/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Failed to remove item');
+            }
+        });
+    }
+
+    function applyOffer() {
+        const code = document.getElementById('promo-code-input').value;
+        if (!code) return;
+        
+        fetch('{% url "orders:apply_offer" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
+                'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: JSON.stringify({ code: '' })
+            body: JSON.stringify({ code: code })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Invalid promo code');
+            }
         });
-        
-        const data = await response.json();
-        if (data.success) {
-            location.reload(); // Refresh to update the UI
-        } else {
-            showNotification(data.error || 'Failed to remove offer', 'error');
-        }
-    } catch (error) {
-        console.error('Error removing offer:', error);
-        showNotification('Something went wrong removing the offer.', 'error');
     }
-}
 
-
-// Utility function to get CSRF token
-function getCsrfToken() {
-    return document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
-           document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-}
-
-// Utility function to show notifications
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type} alert-dismissible fade show notification`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        z-index: 9999;
-        min-width: 300px;
-        max-width: 500px;
-    `;
-    
-    notification.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 5000);
-}
-
-// Initialize cart functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Add quantity validation for manual input changes
-    document.querySelectorAll('.quantity-input').forEach(input => {
-        input.addEventListener('input', function() {
-            const value = parseInt(this.value);
-            const max = parseInt(this.getAttribute('max'));
-            const min = parseInt(this.getAttribute('min')) || 1;
-            
-            if (value > max) {
-                this.value = max;
-                showNotification(`Maximum quantity available: ${max}`, 'warning');
-            } else if (value < min) {
-                this.value = min;
+    function removeOffer() {
+        fetch('{% url "orders:remove_offer" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
             }
         });
-        
-        input.addEventListener('blur', function() {
-            if (!this.value || parseInt(this.value) < 1) {
-                this.value = 1;
-            }
-        });
-    });
-    
-    // Add event listeners for remove cart buttons
-    document.querySelectorAll('.remove-cart-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const itemId = this.dataset.itemId;
-            if (confirm('Remove this item from cart?')) {
-                removeFromCart(itemId);
-            }
-        });
-    });
-});
+    }
 </script>
 {% endblock %}

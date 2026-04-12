@@ -1,91 +1,96 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Contact - Nova{% endblock %}
+{% block title %}Contact - NOVA{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-white text-center mb-5">Contact Us</h1>
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+            <li class="breadcrumb-item active text-muted small">CONTACT</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <span class="hero-tag">/ GET IN TOUCH</span>
+            <h1 class="hero-title mt-2 mb-4">Contact Us</h1>
+            <p class="text-muted">
+                Have a question or need assistance? Our team is here to help. 
+                Fill out the form or reach out to us through our direct channels.
+            </p>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card bg-dark border-secondary">
-                <div class="card-header">
-                    <h4 class="text-white mb-0">Send us a Message</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="name" class="form-label text-white">Name</label>
-                            <input type="text" class="form-control bg-dark text-white border-secondary" 
-                                   id="name" name="name" required>
+
+    <div class="row g-5">
+        <!-- Contact Form -->
+        <div class="col-lg-7">
+            <div class="p-5 bg-white border">
+                <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Send us a Message</h3>
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="name" class="small fw-bold mb-2">FULL NAME</label>
+                            <input type="text" class="form-control rounded-0 border-dark shadow-none" id="name" name="name" required>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="email" class="form-label text-white">Email</label>
-                            <input type="email" class="form-control bg-dark text-white border-secondary" 
-                                   id="email" name="email" required>
+                        <div class="col-md-6 mb-4">
+                            <label for="email" class="small fw-bold mb-2">EMAIL ADDRESS</label>
+                            <input type="email" class="form-control rounded-0 border-dark shadow-none" id="email" name="email" required>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="message" class="form-label text-white">Message</label>
-                            <textarea class="form-control bg-dark text-white border-secondary" 
-                                      id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="subject" class="small fw-bold mb-2">SUBJECT</label>
+                        <input type="text" class="form-control rounded-0 border-dark shadow-none" id="subject" name="subject" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="small fw-bold mb-2">MESSAGE</label>
+                        <textarea class="form-control rounded-0 border-dark shadow-none" id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-alpine w-100">SEND MESSAGE</button>
+                </form>
             </div>
         </div>
-        
-        <div class="col-md-6">
-            <div class="card bg-dark border-secondary">
-                <div class="card-header">
-                    <h4 class="text-white mb-0">Get in Touch</h4>
-                </div>
-                <div class="card-body">
-                    <div class="mb-4">
-                        <h5 class="text-white mb-2">
-                            <i class="fas fa-envelope me-2"></i>Email
-                        </h5>
-                        <p class="text-muted">novasoftunderwear@gmail.com</p>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <h5 class="text-white mb-2">
-                            <i class="fas fa-phone me-2"></i>Phone
-                        </h5>
-                        <p class="text-muted">+201115176611/p>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <h5 class="text-white mb-2">
-                            <i class="fas fa-map-marker-alt me-2"></i>Address
-                        </h5>
-                        <p class="text-muted">
-                            Gesr el suez, street 10 from the 100 street <br>
-                             Egypt
-                        </p>
-                    </div>
-                    
-                    <div class="mb-4">
-                    </div>
-                    
-                    <div>
-                        <h5 class="text-white mb-2">
-                            <i class="fas fa-share-alt me-2"></i>Follow Us
-                        </h5>
-                        <div class="social-links">
-                            <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                            <a href="https://www.facebook.com/novasoftunderwear" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
-                            <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="text-white"><i class="fab fa-tiktok fa-lg"></i></a>
+
+        <!-- Contact Info -->
+        <div class="col-lg-5">
+            <div class="ps-lg-5">
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3" style="letter-spacing: -1px;">Information</h5>
+                    <div class="d-flex mb-4">
+                        <div class="me-3"><i class="fas fa-envelope text-muted"></i></div>
+                        <div>
+                            <p class="small fw-bold mb-0">EMAIL</p>
+                            <p class="text-muted mb-0">novasoftunderwear@gmail.com</p>
                         </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="me-3"><i class="fas fa-phone text-muted"></i></div>
+                        <div>
+                            <p class="small fw-bold mb-0">PHONE</p>
+                            <p class="text-muted mb-0">+201115176611</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3"><i class="fas fa-map-marker-alt text-muted"></i></div>
+                        <div>
+                            <p class="small fw-bold mb-0">ADDRESS</p>
+                            <p class="text-muted mb-0">
+                                Gesr el suez, street 10 from the 100 street <br>
+                                Egypt
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="fw-bold mb-3" style="letter-spacing: -1px;">Follow Us</h5>
+                    <div class="d-flex gap-4">
+                        <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="text-dark"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="https://www.facebook.com/novasoftunderwear" class="text-dark"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="https://www.tiktok.com/@nova4446?_t=ZS-90mCCAnPCz9&_r=1" class="text-dark"><i class="fab fa-tiktok fa-lg"></i></a>
                     </div>
                 </div>
             </div>

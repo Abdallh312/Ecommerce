@@ -41,6 +41,7 @@ class AddToCartView(CartMixin, View):
         try:
             data = json.loads(request.body)
             product_id = data.get('product_id')
+            variant_id = data.get('variant_id')
             size = data.get('size')
             color = data.get('color')
             quantity = int(data.get('quantity', 1))
@@ -56,8 +57,10 @@ class AddToCartView(CartMixin, View):
             product = get_object_or_404(Product, id=product_id)
             variant = None
             
-            # Find the variant based on size and color
-            if size and color:
+            # Use variant_id if provided, otherwise find by size/color
+            if variant_id:
+                variant = get_object_or_404(ProductVariant, id=variant_id)
+            elif size and color:
                 from products.models import Size, Color
                 try:
                     # Get Size and Color objects by ID
@@ -72,12 +75,7 @@ class AddToCartView(CartMixin, View):
                 except ProductVariant.DoesNotExist:
                     return JsonResponse({
                         'success': False,
-                        'error': f'The selected combination of size {size_obj.name} and color {color_obj.name} is not available'
-                    })
-                except Exception as e:
-                    return JsonResponse({
-                        'success': False,
-                        'error': f'Error finding product variant: {str(e)}'
+                        'error': 'Selected variant not available'
                     })
             
             # Check stock availability
@@ -105,7 +103,7 @@ class AddToCartView(CartMixin, View):
                 if new_total_quantity > available_stock:
                     return JsonResponse({
                         'success': False,
-                        'error': f'Cannot add {quantity} more items. Only {available_stock} items available in stock (you already have {cart_item.quantity} in your cart)'
+                        'error': f'Cannot add {quantity} more items. Only {available_stock} items available in stock'
                     })
                 
                 cart_item.quantity = new_total_quantity
@@ -141,23 +139,22 @@ class UpdateCartView(CartMixin, View):
             cart = self.get_cart(request)
             cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
             
-            if quantity <= 0:
-                cart_item.delete()
-            else:
-                # Check stock availability
-                available_stock = cart_item.variant.stock_quantity if cart_item.variant else cart_item.product.stock_quantity
-                if quantity > available_stock:
-                    return JsonResponse({
-                        'success': False,
-                        'error': f'Only {available_stock} items available in stock'
-                    })
-                
-                cart_item.quantity = quantity
-                cart_item.save()
+            # Check stock availability
+            available_stock = cart_item.variant.stock_quantity if cart_item.variant else cart_item.product.stock_quantity
+            if quantity > available_stock:
+                return JsonResponse({
+                    'success': False,
+                    'error': f'Only {available_stock} items available in stock'
+                })
+            
+            cart_item.quantity = quantity
+            cart_item.save()
             
             return JsonResponse({
                 'success': True,
-                'cart_total': cart.get_total_price()
+                'cart_total': cart.get_total_items(),
+                'subtotal': str(cart.get_total_price()),
+                'total': str(cart.get_final_total())
             })
             
         except Exception as e:
@@ -200,7 +197,7 @@ class UpdateCartVariantView(CartMixin, View):
             
             return JsonResponse({
                 'success': True,
-                'message': 'Cart item updated successfully'
+                'message': 'Cart item variant updated successfully'
             })
             
         except Exception as e:
@@ -427,7 +424,7 @@ class CartCountAPIView(CartMixin, View):
             cart = self.get_cart(request)
             return JsonResponse({
                 'success': True,
-                'count': cart.get_total_items()
+                'cart_total': cart.get_total_items()
             })
         except Exception as e:
             return JsonResponse({
@@ -492,6 +489,25 @@ class ApplyOfferView(CartMixin, View):
                     'error': 'Invalid or expired offer code'
                 })
                 
+        except Exception as e:
+                return JsonResponse({
+                    'success': False,
+                    'error': str(e)
+                })
+
+
+class RemoveOfferView(CartMixin, View):
+    def post(self, request):
+        try:
+            cart = self.get_cart(request)
+            cart.offer = None
+            cart.save()
+            return JsonResponse({
+                'success': True,
+                'message': 'Offer removed',
+                'subtotal': str(cart.get_total_price()),
+                'total': str(cart.get_final_total())
+            })
         except Exception as e:
             return JsonResponse({
                 'success': False,
