@@ -5,6 +5,10 @@ from django.core.validators import MinValueValidator
 import uuid
 from django.utils import timezone
 from decimal import Decimal
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class Offer(models.Model):
@@ -144,6 +148,28 @@ class Order(models.Model):
             timestamp = timezone.now().strftime('%Y%m%d%H%M%S')
             self.order_number = f"ORD-{timestamp}-{str(uuid.uuid4())[:8].upper()}"
         super().save(*args, **kwargs)
+
+    def send_invoice_email(self):
+        """Send invoice email to customer"""
+        try:
+            subject = f'Order Confirmation - {self.order_number}'
+            html_message = render_to_string('orders/email/invoice.html', {'order': self})
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                html_message=html_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[self.shipping_email],
+                fail_silently=False,
+            )
+            return True
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.exception(f"Failed to send invoice email for order {self.order_number}: {e}")
+            return False
 
 
 class OrderItem(models.Model):

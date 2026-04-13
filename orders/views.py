@@ -333,7 +333,7 @@ class CheckoutView(CartMixin, View):
                 pass
         
         # Send invoice email
-        self.send_invoice_email(order)
+        order.send_invoice_email()
         
         # Clear cart
         cart.items.all().delete()
@@ -354,23 +354,7 @@ class CheckoutView(CartMixin, View):
         
         return redirect('orders:order_success', order_id=order.id)
     
-    def send_invoice_email(self, order):
-        """Send invoice email to customer"""
-        try:
-            subject = f'Order Confirmation - {order.order_number}'
-            html_message = render_to_string('orders/email/invoice.html', {'order': order})
-            plain_message = strip_tags(html_message)
-            
-            send_mail(
-                subject=subject,
-                message=plain_message,
-                html_message=html_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[order.shipping_email],
-                fail_silently=False,
-            )
-        except Exception as e:
-            print(f"Failed to send invoice email: {e}")
+
 
 
 class OrderSuccessView(DetailView):
@@ -666,20 +650,7 @@ class PaymobResponseCallbackView(View):
             request.session.pop('pending_paymob_order_id', None)
 
             # Send confirmation email
-            try:
-                subject      = f'Order Confirmation - {order.order_number}'
-                html_message = render_to_string('orders/email/invoice.html', {'order': order})
-                plain_message = strip_tags(html_message)
-                send_mail(
-                    subject       = subject,
-                    message       = plain_message,
-                    html_message  = html_message,
-                    from_email    = settings.DEFAULT_FROM_EMAIL,
-                    recipient_list= [order.shipping_email],
-                    fail_silently = True,
-                )
-            except Exception as exc:
-                logger.exception('Failed to send confirmation email: %s', exc)
+            order.send_invoice_email()
 
             messages.success(request, f'Payment successful! Order {order.order_number} confirmed.')
             return redirect(reverse('orders:order_success', kwargs={'order_id': order.id}))

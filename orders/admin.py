@@ -86,11 +86,17 @@ class OrderAdmin(admin.ModelAdmin):
 
     def mark_as_processing(self, request, queryset):
         queryset.update(status='processing')
+        for order in queryset:
+            order.send_invoice_email()
+        self.message_user(request, f"Marked {queryset.count()} orders as processing and sent invoices.")
     mark_as_processing.short_description = 'Mark selected orders as processing'
     
     def mark_as_shipped(self, request, queryset):
         from django.utils import timezone
         queryset.update(status='shipped', shipped_at=timezone.now())
+        for order in queryset:
+            order.send_invoice_email()
+        self.message_user(request, f"Marked {queryset.count()} orders as shipped and sent updates.")
     mark_as_shipped.short_description = 'Mark selected orders as shipped'
     
     def mark_as_delivered(self, request, queryset):
