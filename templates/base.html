@@ -99,6 +99,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'core:about' %}">About</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orders:track_order' %}">Track Order</a>
+                    </li>
                 </ul>
             </div>
 
@@ -186,7 +189,8 @@
                         <li class="mb-2"><a href="{% url 'core:contact' %}" class="text-decoration-none text-muted">Contact Us</a></li>
                         <li class="mb-2"><a href="{% url 'core:faq' %}" class="text-decoration-none text-muted">FAQ</a></li>
                         <li class="mb-2"><a href="{% url 'core:shipping_info' %}" class="text-decoration-none text-muted">Shipping Information</a></li>
-                        <li><a href="{% url 'core:returns' %}" class="text-decoration-none text-muted">Returns & Exchanges</a></li>
+                        <li class="mb-2"><a href="{% url 'core:returns' %}" class="text-decoration-none text-muted">Returns & Exchanges</a></li>
+                        <li><a href="{% url 'orders:track_order' %}" class="text-decoration-none text-muted">Track Order</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3">

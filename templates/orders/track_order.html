@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Track Order - NOVA" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <span class="hero-tag">ORDER STATUS</span>
+            <h1 class="hero-title mt-2 mb-4">Track Your Order</h1>
+            <p class="hero-desc mx-auto">
+                Enter your order details below to see the current status of your shipment.
+            </p>
+        </div>
+    </div>
+
+    <!-- Tracking Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="bg-white p-4 p-md-5 border fade-in-up">
+                <form method="POST" action="{% url 'orders:track_order' %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-5">
+                        <label for="order_number" class="small fw-bold mb-2">ORDER NUMBER *</label>
+                        <input type="text" class="form-control rounded-0 border-dark shadow-none" id="order_number" name="order_number" required placeholder="e.g. ORD-20260413-..." value="{{ request.POST.order_number }}">
+                        <div class="form-text small">Check your confirmation message or email for the order number.</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn-alpine py-3">
+                            TRACK ORDER
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Help Section -->
+            <div class="mt-5 text-center small text-muted">
+                <p>Need help? <a href="{% url 'core:contact' %}" class="text-dark fw-bold text-decoration-none">Contact Support</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

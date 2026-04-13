@@ -108,10 +108,10 @@ class ProfileView(View):
     template_name = 'core/profile.html'
     
     def get(self, request):
-        # Get recent orders for the user
-        recent_orders = Order.objects.filter(user=request.user).order_by('-created_at')[:5]
+        # Order model currently does not have a 'user' field
+        # recent_orders = Order.objects.filter(user=request.user).order_by('-created_at')[:5]
         context = {
-            'recent_orders': recent_orders,
+            'recent_orders': [],
         }
         return render(request, self.template_name, context)
 
@@ -153,24 +153,7 @@ class TermsOfServiceView(TemplateView):
     template_name = 'core/terms_of_service.html'
 
 
-class TrackOrderView(View):
-    template_name = 'core/track_order.html'
-    
-    def get(self, request):
-        return render(request, self.template_name)
-    
-    def post(self, request):
-        order_number = request.POST.get('order_number')
-        if order_number:
-            try:
-                order = Order.objects.get(order_number=order_number)
-                return render(request, self.template_name, {'order': order})
-            except Order.DoesNotExist:
-                messages.error(request, 'Order not found. Please check your order number and try again.')
-        else:
-            messages.error(request, 'Please enter an order number.')
-        
-        return render(request, self.template_name)
+# TrackOrderView moved to orders app
 
 
 class ProfileView(TemplateView):
@@ -178,11 +161,12 @@ class ProfileView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            from orders.models import Order
-            context['recent_orders'] = Order.objects.filter(
-                user=self.request.user
-            ).order_by('-created_at')[:5]
+        # if self.request.user.is_authenticated:
+        #     from orders.models import Order
+        #     context['recent_orders'] = Order.objects.filter(
+        #         user=self.request.user
+        #     ).order_by('-created_at')[:5]
+        context['recent_orders'] = []
         return context
 
 

@@ -389,6 +389,26 @@ class OrderDetailView(DetailView):
     pk_url_kwarg = 'order_id'
 
 
+class TrackOrderView(View):
+    def get(self, request):
+        return render(request, 'orders/track_order.html')
+
+    def post(self, request):
+        order_number = request.POST.get('order_number', '').strip()
+
+        if not order_number:
+            messages.error(request, 'Please provide an order number.')
+            return render(request, 'orders/track_order.html')
+
+        try:
+            # Find order by number only
+            order = Order.objects.get(order_number__iexact=order_number)
+            return redirect('orders:order_detail', order_id=order.id)
+        except Order.DoesNotExist:
+            messages.error(request, 'No order found with that order number. Please check and try again.')
+            return render(request, 'orders/track_order.html')
+
+
 class ProductVariantsAPIView(View):
     def get(self, request, product_id):
         try:

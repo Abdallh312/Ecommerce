@@ -23,6 +23,7 @@ urlpatterns = [
     # Orders
     
     path('order/<uuid:order_id>/', views.OrderDetailView.as_view(), name='order_detail'),
+    path('track/', views.TrackOrderView.as_view(), name='track_order'),
     
     # API
     path('api/products/<uuid:product_id>/variants/', views.ProductVariantsAPIView.as_view(), name='product_variants_api'),

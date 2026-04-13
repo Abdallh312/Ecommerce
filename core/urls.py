@@ -13,7 +13,6 @@ urlpatterns = [
     path('returns/', views.ReturnsView.as_view(), name='returns'),
     path('privacy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
     path('terms/', views.TermsOfServiceView.as_view(), name='terms_of_service'),
-    path('track-order/', views.TrackOrderView.as_view(), name='track_order'),
     
     # Newsletter
     # path('newsletter/subscribe/', views.NewsletterSubscribeView.as_view(), name='newsletter_subscribe'),
