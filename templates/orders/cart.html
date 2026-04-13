@@ -107,7 +107,7 @@
                 
                 <div class="d-flex justify-content-between mb-3">
                     <span class="text-muted small fw-bold">SHIPPING</span>
-                    <span class="text-muted small">FREE</span>
+                    <span class="text-muted small">LE {{ cart.get_shipping_cost }}</span>
                 </div>
                 
                 {% if cart.offer and cart.offer.is_active %}

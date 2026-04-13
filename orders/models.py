@@ -34,12 +34,8 @@ class Cart(models.Model):
     
     def get_shipping_cost(self, shipping_state=None):
         """
-        Calculate shipping cost based on state:
-        - Giza and Cairo: LE 70
-        - Any other state: LE 90
+        Fixed shipping rate nationwide.
         """
-        if shipping_state and shipping_state.lower() in ['giza', 'cairo']:
-            return Decimal('70.00')
         return Decimal('90.00')
     
     def get_final_total(self, shipping_state=None):
