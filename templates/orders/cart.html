@@ -113,7 +113,15 @@
                 {% if cart.offer and cart.offer.is_active %}
                 <div class="d-flex justify-content-between mb-3 text-success">
                     <span class="small fw-bold">DISCOUNT ({{ cart.offer.code }})</span>
-                    <span class="small fw-bold">-{{ cart.offer.discount_percent }}%</span>
+                    <span class="small fw-bold">
+                        {% if cart.offer.offer_type == 'percentage' %}
+                            -{{ cart.offer.discount_percent }}%
+                        {% elif cart.offer.offer_type == 'bogo' %}
+                            BUY 1 GET 1
+                        {% elif cart.offer.offer_type == 'b1g2' %}
+                            BUY 1 GET 2
+                        {% endif %}
+                    </span>
                 </div>
                 {% endif %}
                 

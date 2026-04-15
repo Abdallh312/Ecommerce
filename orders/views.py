@@ -271,6 +271,7 @@ class CheckoutView(CartMixin, View):
             email=data.get('shipping_email'),
             subtotal=subtotal,
             shipping_cost=shipping_cost,
+            offer=cart.offer,
             total_amount=total_amount,
             payment_status=payment_status,
             shipping_name=data.get('shipping_name'),
@@ -479,9 +480,16 @@ class ApplyOfferView(CartMixin, View):
                 offer = Offer.objects.get(code__iexact=code, is_active=True)
                 cart.offer = offer
                 cart.save()
+                
+                message = f'Offer applied! {offer.discount_percent}% off'
+                if offer.offer_type == 'bogo':
+                    message = 'Offer applied! Buy 1 Get 1 Free'
+                elif offer.offer_type == 'b1g2':
+                    message = 'Offer applied! Buy 1 Get 2 Free'
+                
                 return JsonResponse({
                     'success': True,
-                    'message': f'Offer applied! {offer.discount_percent}% off',
+                    'message': message,
                     'subtotal': str(cart.get_total_price()),
                     'shipping_cost': str(cart.get_shipping_cost()),
                     'total': str(cart.get_final_total()),
@@ -494,10 +502,10 @@ class ApplyOfferView(CartMixin, View):
                 })
                 
         except Exception as e:
-                return JsonResponse({
-                    'success': False,
-                    'error': str(e)
-                })
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            })
 
 
 class RemoveOfferView(CartMixin, View):

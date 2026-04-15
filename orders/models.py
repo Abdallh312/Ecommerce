@@ -12,12 +12,18 @@ from django.conf import settings
 
 
 class Offer(models.Model):
+    OFFER_TYPES = [
+        ('percentage', 'Percentage Discount'),
+        ('bogo', 'Buy 1 Get 1 Free'),
+        ('b1g2', 'Buy 1 Get 2 Free'),
+    ]
     code = models.CharField(max_length=50, unique=True)
-    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0)])
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    offer_type = models.CharField(max_length=20, choices=OFFER_TYPES, default='percentage')
     is_active = models.BooleanField(default=True)
     
     def __str__(self):
-        return self.code
+        return f"{self.code} ({self.get_offer_type_display()})"
 
 
 class Cart(models.Model):
@@ -45,8 +51,40 @@ class Cart(models.Model):
     def get_final_total(self, shipping_state=None):
         """Calculate final total including shipping"""
         subtotal = self.get_total_price()
+        
         if self.offer and self.offer.is_active:
-            subtotal -= (subtotal * self.offer.discount_percent / Decimal('100.00'))
+            if self.offer.offer_type == 'percentage':
+                subtotal -= (subtotal * self.offer.discount_percent / Decimal('100.00'))
+            elif self.offer.offer_type == 'bogo':
+                # Buy 1 Get 1 Free - Pay for half of the items (rounded up)
+                total_items = self.get_total_items()
+                if total_items >= 2:
+                    # If we have 2 items, we pay for 1. If we have 3, we pay for 2.
+                    # This logic is simpler if we assume all items have same price.
+                    # But if they have different prices, we should subtract the cheapest ones.
+                    items = []
+                    for item in self.items.all():
+                        price = item.variant.final_price if item.variant else item.product.final_price
+                        for _ in range(item.quantity):
+                            items.append(price)
+                    items.sort()
+                    # Subtract the cheapest items
+                    num_free = total_items // 2
+                    subtotal -= sum(items[:num_free])
+            elif self.offer.offer_type == 'b1g2':
+                # Buy 1 Get 2 Free - Pay for 1, get 2 more free (total 3)
+                total_items = self.get_total_items()
+                if total_items >= 3:
+                    items = []
+                    for item in self.items.all():
+                        price = item.variant.final_price if item.variant else item.product.final_price
+                        for _ in range(item.quantity):
+                            items.append(price)
+                    items.sort()
+                    # Subtract the cheapest items (2 out of every 3)
+                    num_free = (total_items // 3) * 2
+                    subtotal -= sum(items[:num_free])
+        
         shipping = self.get_shipping_cost(shipping_state)
         total = subtotal + shipping
         return total.quantize(Decimal('0.01'))
