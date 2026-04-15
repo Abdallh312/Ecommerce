@@ -43,7 +43,7 @@ class CartAdmin(admin.ModelAdmin):
     get_total_items.short_description = 'Total Items'
     
     def get_total_price(self, obj):
-        return f"${obj.get_total_price()}"
+        return f"LE {obj.get_total_price()}"
     get_total_price.short_description = 'Total Price'
 
 

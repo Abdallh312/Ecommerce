@@ -352,6 +352,8 @@ async function updateVariantUI() {
             
             if (variant) {
                 priceElem.textContent = `LE ${variant.price}`;
+                const quantityInput = document.querySelector('.quantity-input');
+                if (quantityInput) quantityInput.max = variant.stock;
                 if (variant.stock > 0) {
                     stockElem.innerHTML = `<span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> IN STOCK</span>`;
                     addToCartBtn.disabled = false;
