@@ -4,6 +4,65 @@
 
 {% block title %}{{ product.name }} - NOVA{% endblock %}
 
+{% block extra_css %}
+<style>
+    .size-option-btn {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        color: #1a1a1a;
+        padding: 12px 20px;
+        min-width: 60px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    .size-option-btn:hover {
+        border-color: #1a1a1a;
+    }
+    .size-option-btn.active {
+        background: #1a1a1a;
+        color: #fff;
+        border-color: #1a1a1a;
+    }
+    .color-option-wrapper {
+        position: relative;
+        padding: 4px;
+        border: 2px solid transparent;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+    .color-option-wrapper:has(.color-option-circle.active) {
+        border-color: #1a1a1a;
+    }
+    .color-option-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(0,0,0,0.1);
+        cursor: pointer;
+        display: block;
+        padding: 0;
+    }
+    .color-name-tooltip {
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.65rem;
+        font-weight: 700;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        letter-spacing: 0.5px;
+    }
+    .color-option-wrapper:hover .color-name-tooltip {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-5" style="margin-top: 100px;">
     <!-- Breadcrumb -->

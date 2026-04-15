@@ -47,12 +47,18 @@
                             <p class="text-muted small mb-2">{{ item.product.category.name|upper }}</p>
                             
                             {% if item.variant %}
-                            <div class="mb-2">
-                                <span class="small text-muted bg-light px-2 py-1">
-                                    {% if item.variant.size %}SIZE: {{ item.variant.size.name }}{% endif %}
-                                    {% if item.variant.size and item.variant.color %} | {% endif %}
-                                    {% if item.variant.color %}COLOR: {{ item.variant.color.name }}{% endif %}
+                            <div class="mb-2 d-flex flex-wrap gap-2">
+                                {% if item.variant.size %}
+                                <span class="badge bg-light text-dark border rounded-0 fw-normal py-2 px-3" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                    SIZE: {{ item.variant.size.name }}
                                 </span>
+                                {% endif %}
+                                {% if item.variant.color %}
+                                <span class="badge bg-light text-dark border rounded-0 fw-normal py-2 px-3 d-flex align-items-center" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                    <span class="d-inline-block rounded-circle me-2" style="width: 10px; height: 10px; background-color: {{ item.variant.color.hex_code }}; border: 1px solid rgba(0,0,0,0.1);"></span>
+                                    COLOR: {{ item.variant.color.name|upper }}
+                                </span>
+                                {% endif %}
                             </div>
                             {% endif %}
                             
