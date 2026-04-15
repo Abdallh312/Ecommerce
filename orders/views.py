@@ -306,7 +306,7 @@ class CheckoutView(CartMixin, View):
         
         # Create order items and reduce specific variant stock
         for cart_item in cart.items.all():
-            unit_price = cart_item.variant.final_price if cart_item.variant else cart_item.product.base_price
+            unit_price = cart_item.variant.final_price if cart_item.variant else cart_item.product.final_price
             total_price = unit_price * cart_item.quantity
             
             # Create order item
@@ -325,13 +325,16 @@ class CheckoutView(CartMixin, View):
             )
             
             # Reduce product and variant stock
-            if cart_item.variant and cart_item.variant.stock_quantity >= cart_item.quantity:
-                cart_item.variant.stock_quantity -= cart_item.quantity
-                cart_item.variant.save()
-                cart_item.product.stock_quantity -= cart_item.quantity
-                cart_item.product.save()
+            if cart_item.variant:
+                if cart_item.variant.stock_quantity >= cart_item.quantity:
+                    cart_item.variant.stock_quantity -= cart_item.quantity
+                    cart_item.variant.save()
+                    cart_item.product.stock_quantity -= cart_item.quantity
+                    cart_item.product.save()
             else:
-                pass
+                if cart_item.product.stock_quantity >= cart_item.quantity:
+                    cart_item.product.stock_quantity -= cart_item.quantity
+                    cart_item.product.save()
         
         # Send invoice email
         order.send_invoice_email()
@@ -564,11 +567,26 @@ class PaymobInitiateView(CartMixin, View):
         shipping_cost = cart.get_shipping_cost(shipping_state)
         total_amount  = cart.get_final_total(shipping_state)
 
+        # Validate stock availability before creating order
+        for cart_item in cart.items.all():
+            if cart_item.variant:
+                available_stock = cart_item.variant.stock_quantity
+                variant_info = f"{cart_item.variant.size.name} / {cart_item.variant.color.name}"
+                if cart_item.quantity > available_stock:
+                    messages.error(request, f'Not enough stock for {cart_item.product.name} ({variant_info}). Only {available_stock} available.')
+                    return render(request, 'orders/checkout.html', {'cart': cart})
+            else:
+                available_stock = cart_item.product.stock_quantity
+                if cart_item.quantity > available_stock:
+                    messages.error(request, f'Not enough stock for {cart_item.product.name}. Only {available_stock} available.')
+                    return render(request, 'orders/checkout.html', {'cart': cart})
+
         # Create order with pending payment status
         order = Order.objects.create(
             email                  = data.get('shipping_email'),
             subtotal               = subtotal,
             shipping_cost          = shipping_cost,
+            offer                  = cart.offer,
             total_amount           = total_amount,
             payment_status         = 'pending',
             shipping_name          = data.get('shipping_name'),
@@ -644,11 +662,16 @@ class PaymobResponseCallbackView(View):
 
             # Reduce stock
             for item in order.items.all():
-                if item.variant and item.variant.stock_quantity >= item.quantity:
-                    item.variant.stock_quantity -= item.quantity
-                    item.variant.save()
-                    item.product.stock_quantity -= item.quantity
-                    item.product.save()
+                if item.variant:
+                    if item.variant.stock_quantity >= item.quantity:
+                        item.variant.stock_quantity -= item.quantity
+                        item.variant.save()
+                        item.product.stock_quantity -= item.quantity
+                        item.product.save()
+                else:
+                    if item.product.stock_quantity >= item.quantity:
+                        item.product.stock_quantity -= item.quantity
+                        item.product.save()
 
             # Clear the cart
             cart = Cart.objects.filter(session_key=request.session.session_key).first()
