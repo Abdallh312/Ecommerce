@@ -1,85 +1,147 @@
-/* Custom Admin Styling for Jazzmin */
+/* Custom Admin Styling for NOVA (Alpine Minimalist) */
 
-/* Login Page Logo Fix - More aggressive to override Jazzmin defaults */
+/* Global Reset & Background */
+:root {
+    --nova-black: #1a1a1a;
+    --nova-bg: #f8f8f8;
+    --nova-border: rgba(0,0,0,0.08);
+}
+
+body {
+    background-color: var(--nova-bg) !important;
+}
+
+/* Login Page Styling */
 .login-page {
-    background-color: #f8f8f8 !important;
+    background-color: var(--nova-bg) !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: flex-start !important; /* Center up */
-    padding-top: 5vh !important;
+    justify-content: center !important;
+    padding: 2rem !important;
 }
 
-.login-box, .register-box {
-    margin: 0 auto !important; /* Centered horizontally */
-    width: 360px !important;
+.login-box {
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05) !important;
+    border-radius: 0 !important;
+    width: 400px !important;
 }
 
-/* Ensure only ONE logo is shown */
-.login-logo, .register-logo {
+.login-box .card {
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.login-logo {
     margin-bottom: 2rem !important;
-    text-align: center !important;
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    background: transparent !important;
+    font-weight: 800 !important;
+    letter-spacing: 4px !important;
+    text-transform: uppercase !important;
 }
 
-.login-logo a, .register-logo a {
-    color: inherit !important;
-    text-decoration: none !important;
-}
-
-/* Hide any potential double logo or text branding */
-.login-logo a b, .login-logo a span {
-    display: none !important;
-}
-
-.login-logo img, .register-logo img, .login-logo a img, .register-logo a img {
-    max-width: 130px !important; /* Slightly smaller for elegance */
-    max-height: 60px !important;
+.login-logo img {
+    max-width: 150px !important;
     height: auto !important;
-    width: auto !important;
     object-fit: contain !important;
-    margin: 0 auto !important;
-    display: block !important;
+    margin-bottom: 1rem !important;
 }
 
-.card-primary.card-outline {
-    border-top: 3px solid #1a1a1a !important;
+/* Sidebar Styling */
+.main-sidebar {
+    background-color: #ffffff !important;
+    border-right: 1px solid var(--nova-border) !important;
+    box-shadow: none !important;
 }
 
-.btn-primary {
-    background-color: #1a1a1a !important;
-    border-color: #1a1a1a !important;
-}
-
-/* Sidebar Logo Fix */
 .brand-link {
+    border-bottom: 1px solid var(--nova-border) !important;
+    padding: 1.5rem 1rem !important;
+    text-align: center !important;
     display: flex !important;
     justify-content: center !important;
-    align-items: center !important;
-    padding: 15px 10px !important;
-    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
 }
 
 .brand-image {
-    max-height: 40px !important;
+    max-height: 45px !important;
     width: auto !important;
     float: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
 }
 
-/* Global Admin Aesthetic */
+.nav-sidebar .nav-item > .nav-link.active {
+    background-color: var(--nova-black) !important;
+    color: #ffffff !important;
+    border-radius: 0 !important;
+}
+
+.nav-sidebar .nav-link {
+    border-radius: 0 !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 0.9rem !important;
+}
+
+/* Header & Content */
 .main-header {
-    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    border-bottom: 1px solid var(--nova-border) !important;
+    box-shadow: none !important;
 }
 
-.btn-dark {
-    background-color: #1a1a1a !important;
-    border-color: #1a1a1a !important;
+.content-wrapper {
+    background-color: var(--nova-bg) !important;
 }
 
-.btn-dark:hover {
-    background-color: #333 !important;
+.card {
+    border-radius: 0 !important;
+    border: 1px solid var(--nova-border) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+}
+
+.card-header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid var(--nova-border) !important;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    padding: 0.5rem 1.2rem !important;
+}
+
+.btn-primary, .btn-dark, .save-box input[type="submit"] {
+    background-color: var(--nova-black) !important;
+    border-color: var(--nova-black) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover, .btn-dark:hover {
+    background-color: #333333 !important;
+    border-color: #333333 !important;
+}
+
+/* Tables */
+.table thead th {
+    border-top: none !important;
+    background-color: #fcfcfc !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 1px !important;
+    color: #888888 !important;
+}
+
+/* Dashboard Widgets */
+.small-box {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: 1px solid var(--nova-border) !important;
+}
+
+.bg-info, .bg-success, .bg-warning, .bg-danger {
+    background-color: #ffffff !important;
+    color: var(--nova-black) !important;
+}
+
+.small-box .icon > i {
+    color: rgba(0,0,0,0.05) !important;
 }
