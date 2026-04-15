@@ -243,15 +243,15 @@ function changeMainImage(src, thumbnail) {
 // Add to cart functionality (addToWishlist is handled globally in base.html)
 async function addToCart(productId) {
     // Get selected size and color
-    const selectedSizeBtn = document.querySelector('.size-option.active');
-    const selectedColorBtn = document.querySelector('.color-option.active');
+    const selectedSizeBtn = document.querySelector('.size-option-btn.active');
+    const selectedColorBtn = document.querySelector('.color-option-circle.active');
     
     const selectedSize = selectedSizeBtn ? selectedSizeBtn.dataset.size : null;
     const selectedColor = selectedColorBtn ? selectedColorBtn.dataset.color : null;
     
     // Check if we have size and color options available
-    const hasSizeOptions = document.querySelector('.size-option');
-    const hasColorOptions = document.querySelector('.color-option');
+    const hasSizeOptions = document.querySelector('.size-option-btn');
+    const hasColorOptions = document.querySelector('.color-option-circle');
     
     // Validate selections
     if (hasSizeOptions && !selectedSize) {
@@ -327,8 +327,8 @@ async function addToCart(productId) {
 
 async function updateVariantUI() {
     const productId = document.getElementById('add-to-cart-form').dataset.productId;
-    const selectedSizeBtn = document.querySelector('.size-option.active');
-    const selectedColorBtn = document.querySelector('.color-option.active');
+    const selectedSizeBtn = document.querySelector('.size-option-btn.active');
+    const selectedColorBtn = document.querySelector('.color-option-circle.active');
     
     const selectedSizeId = selectedSizeBtn ? selectedSizeBtn.dataset.size : null;
     const selectedColorId = selectedColorBtn ? selectedColorBtn.dataset.color : null;
@@ -378,10 +378,10 @@ async function updateVariantUI() {
 // Initialize product page
 document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners for size option buttons
-    document.querySelectorAll('.size-option').forEach(button => {
+    document.querySelectorAll('.size-option-btn').forEach(button => {
         button.addEventListener('click', function() {
             // Remove active class from other size buttons
-            document.querySelectorAll('.size-option').forEach(btn => {
+            document.querySelectorAll('.size-option-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
@@ -392,13 +392,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Add event listeners for color option buttons
-    document.querySelectorAll('.color-option').forEach(button => {
+    document.querySelectorAll('.color-option-circle').forEach(button => {
         if (button.dataset.hex) {
             button.style.backgroundColor = button.dataset.hex;
         }
         button.addEventListener('click', function() {
             // Remove active class from other color buttons
-            document.querySelectorAll('.color-option').forEach(btn => {
+            document.querySelectorAll('.color-option-circle').forEach(btn => {
                 btn.classList.remove('active');
             });
             
