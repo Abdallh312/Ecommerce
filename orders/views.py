@@ -585,7 +585,7 @@ class PaymobInitiateView(CartMixin, View):
 
         # Create order items (stock reduced only on payment success)
         for cart_item in cart.items.all():
-            unit_price  = cart_item.variant.final_price if cart_item.variant else cart_item.product.base_price
+            unit_price  = cart_item.variant.final_price if cart_item.variant else cart_item.product.final_price
             total_price = unit_price * cart_item.quantity
             OrderItem.objects.create(
                 order               = order,

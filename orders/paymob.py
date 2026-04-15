@@ -33,13 +33,20 @@ class PaymobService:
     # ------------------------------------------------------------------
     def get_auth_token(self):
         url  = f"{PAYMOB_BASE_URL}/auth/tokens"
-        resp = requests.post(url, json={"api_key": self.api_key}, timeout=15)
-        resp.raise_for_status()
-        data = resp.json()
-        token = data.get("token")
-        if not token:
-            raise ValueError(f"Paymob auth failed: {data}")
-        return token
+        try:
+            resp = requests.post(url, json={"api_key": self.api_key}, timeout=15)
+            resp.raise_for_status()
+            data = resp.json()
+            token = data.get("token")
+            if not token:
+                logger.error(f"Paymob auth failed: token missing in response {data}")
+                raise ValueError("Paymob auth failed: token missing")
+            return token
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Paymob auth request failed: {e}")
+            if e.response is not None:
+                logger.error(f"Paymob auth response: {e.response.text}")
+            raise
 
     # ------------------------------------------------------------------
     # Step 2 – Register the order with Paymob
@@ -59,13 +66,20 @@ class PaymobService:
             "merchant_order_id": str(order_id),
             "items":             items,
         }
-        resp = requests.post(url, json=payload, timeout=15)
-        resp.raise_for_status()
-        data = resp.json()
-        paymob_order_id = data.get("id")
-        if not paymob_order_id:
-            raise ValueError(f"Paymob order registration failed: {data}")
-        return paymob_order_id
+        try:
+            resp = requests.post(url, json=payload, timeout=15)
+            resp.raise_for_status()
+            data = resp.json()
+            paymob_order_id = data.get("id")
+            if not paymob_order_id:
+                logger.error(f"Paymob order registration failed: id missing in response {data}")
+                raise ValueError("Paymob order registration failed: id missing")
+            return paymob_order_id
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Paymob order registration request failed: {e}")
+            if e.response is not None:
+                logger.error(f"Paymob order registration response: {e.response.text}")
+            raise
 
     # ------------------------------------------------------------------
     # Step 3 – Get a payment key for the iframe
@@ -88,13 +102,20 @@ class PaymobService:
             "integration_id": self.integration_id,
             "lock_order_when_paid": True,
         }
-        resp = requests.post(url, json=payload, timeout=15)
-        resp.raise_for_status()
-        data = resp.json()
-        payment_key = data.get("token")
-        if not payment_key:
-            raise ValueError(f"Paymob payment key failed: {data}")
-        return payment_key
+        try:
+            resp = requests.post(url, json=payload, timeout=15)
+            resp.raise_for_status()
+            data = resp.json()
+            payment_key = data.get("token")
+            if not payment_key:
+                logger.error(f"Paymob payment key failed: token missing in response {data}")
+                raise ValueError("Paymob payment key failed: token missing")
+            return payment_key
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Paymob payment key request failed: {e}")
+            if e.response is not None:
+                logger.error(f"Paymob payment key response: {e.response.text}")
+            raise
 
     # ------------------------------------------------------------------
     # Full helper – run all 3 steps and return the iframe URL
@@ -136,6 +157,9 @@ class PaymobService:
 
         # Use wallet phone if provided, otherwise fall back to shipping phone
         phone_number = wallet_phone or order.shipping_phone or "NA"
+        
+        # Paymob requires postal_code, if empty use NA
+        postal_code = order.shipping_postal_code or "NA"
 
         billing_data = {
             "apartment":       "NA",
@@ -146,7 +170,7 @@ class PaymobService:
             "building":        "NA",
             "phone_number":    phone_number,
             "shipping_method": "PKG",
-            "postal_code":     order.shipping_postal_code,
+            "postal_code":     postal_code,
             "city":            order.shipping_city,
             "country":         order.shipping_country,
             "last_name":       last_name,
