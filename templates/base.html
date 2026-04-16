@@ -90,20 +90,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:home' %}">Home</a>
+                        <a class="nav-link fw-bold small" href="{% url 'products:home' %}">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:product_list' %}">Shop</a>
+                        <a class="nav-link fw-bold small" href="{% url 'products:product_list' %}">SHOP</a>
                     </li>
-                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                        <a class="nav-link fw-bold small" href="{% url 'core:about' %}">ABOUT</a>
                     </li>
-                    {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                        <a class="nav-link fw-bold small" href="{% url 'orders:track_order' %}">TRACK ORDER</a>
                     </li>
-                    {% endif %}
                 </ul>
             </div>
 
@@ -120,7 +117,6 @@
                 (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
             </span>
         </a>
-        <span class="nav-link px-2 d-none d-sm-inline ms-3" style="font-size: 0.8rem; font-weight: 600;">EN</span>
     </div>
 </div>
 </nav>
@@ -141,6 +137,13 @@
     font-weight: 800;
     letter-spacing: 4px;
     font-size: 1.8rem;
+    color: #1a1a1a !important;
+}
+
+#mainNav .nav-link {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: #1a1a1a !important;
 }
 
 @media (max-width: 991.98px) {
