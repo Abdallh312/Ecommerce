@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static %}
 
-{% block title %}{% trans "NOVA - Premium Softwear Customization" %}{% endblock %}
+{% block title %}NOVA - Premium Softwear Customization{% endblock %}
 
 {% block content %}
 <!-- Hero Section - Alpine Style -->
 <section class="hero-section">
     <div class="hero-grid">
         <div class="hero-text-side fade-in-up text-center text-lg-start">
-            <span class="hero-tag">{% trans "Softwear" %}</span>
-            <h1 class="hero-title">{% trans "Nova" %}<br>{% trans "Essentials" %}</h1>
+            <span class="hero-tag">Softwear</span>
+            <h1 class="hero-title">Nova<br>Essentials</h1>
             <p class="hero-desc mx-auto mx-lg-0">
-                {% trans "Premium soft underwear and apparel designed for ultimate comfort and minimalist aesthetic. Experience the next level of softwear." %}
+                Premium soft underwear and apparel designed for ultimate comfort and minimalist aesthetic.
+                Experience the next level of softwear.
             </p>
             <div class="d-flex justify-content-center justify-content-lg-start align-items-center">
-                <a href="{% url 'products:product_list' %}" class="btn-alpine me-lg-4">{% trans "SHOP NOW" %}</a>
+                <a href="{% url 'products:product_list' %}" class="btn-alpine me-lg-4">SHOP NOW</a>
             </div>
         </div>
         <div class="hero-image-side fade-in-up">
@@ -31,8 +32,8 @@
     <div class="container mb-4">
         <div class="d-flex justify-content-between align-items-end">
             <div>
-                <span class="hero-tag">{% trans "EXPLORE" %}</span>
-                <h2 class="fw-bold mt-2 mb-0">{% trans "Browse Categories" %}</h2>
+                <span class="hero-tag">EXPLORE</span>
+                <h2 class="fw-bold mt-2 mb-0">Browse Categories</h2>
             </div>
             <div class="swiper-navigation-custom">
                 <button class="swiper-prev-cat btn btn-outline-dark rounded-circle me-2"><i class="fas fa-chevron-left small"></i></button>
@@ -57,12 +58,12 @@
                                     </div>
                                 {% endif %}
                                 <div class="category-overlay">
-                                    <span class="btn-alpine py-2 px-3 small">{% trans "EXPLORE" %}</span>
+                                    <span class="btn-alpine py-2 px-3 small">EXPLORE</span>
                                 </div>
                             </div>
                             <div class="category-info pt-3">
                                 <h5 class="category-title-min mb-1">{{ category.name|upper }}</h5>
-                                <span class="small text-muted">{{ category.products.count }} {% trans "PRODUCTS" %}</span>
+                                <span class="small text-muted">{{ category.products.count }} PRODUCTS</span>
                             </div>
                         </div>
                     </a>
@@ -83,7 +84,7 @@
                     <div class="product-card">
                         <div class="product-image-container">
                             {% if product.has_discount %}
-                                <div class="product-badge-discount">{% trans "SALE" %} -{{ product.discount_percentage }}%</div>
+                                <div class="product-badge-discount">SALE -{{ product.discount_percentage }}%</div>
                             {% endif %}
                             {% if product.get_main_image %}
                                 <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
@@ -110,13 +111,13 @@
             </div>
             {% empty %}
             <div class="col-12 text-center py-5">
-                <p class="text-muted">{% trans "No featured products available." %}</p>
+                <p class="text-muted">No featured products available.</p>
             </div>
             {% endfor %}
         </div>
         
         <div class="text-center mt-5">
-            <a href="{% url 'products:product_list' %}" class="btn-alpine">{% trans "VIEW ALL COLLECTION" %}</a>
+            <a href="{% url 'products:product_list' %}" class="btn-alpine">VIEW ALL COLLECTION</a>
         </div>
     </div>
 </section>

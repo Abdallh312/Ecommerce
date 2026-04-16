@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-{% load i18n %}
-{% get_current_language as LANGUAGE_CODE %}
-{% get_current_language_bidi as LANGUAGE_BIDI %}
-<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,18 +90,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:home' %}">{% trans "Home" %}</a>
+                        <a class="nav-link" href="{% url 'products:home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:product_list' %}">{% trans "Shop" %}</a>
+                        <a class="nav-link" href="{% url 'products:product_list' %}">Shop</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Logout" %}</a>
+                        <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}">{% trans "Login" %}</a>
+                        <a class="nav-link" href="{% url 'account_login' %}">Login</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -117,37 +114,13 @@
             
     <!-- Right side: Cart & Language -->
     <div class="navbar-nav ms-auto flex-row align-items-center">
-        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="{% trans 'View Cart' %}">
+        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="View Cart">
             <i class="fas fa-shopping-bag me-1"></i>
             <span class="cart-count-wrapper small fw-bold">
                 (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
             </span>
         </a>
-        
-        <!-- Language Switcher -->
-        <div class="nav-item dropdown ms-3">
-            <a class="nav-link dropdown-toggle px-2 d-flex align-items-center fw-bold" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.8rem;">
-                {{ LANGUAGE_CODE|upper }}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-0" aria-labelledby="langDropdown">
-                <li>
-                    <form action="{% url 'set_language' %}" method="post">
-                        {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                        <input name="language" type="hidden" value="en">
-                        <button type="submit" class="dropdown-item small fw-bold {% if LANGUAGE_CODE == 'en' %}active{% endif %}">ENGLISH</button>
-                    </form>
-                </li>
-                <li>
-                    <form action="{% url 'set_language' %}" method="post">
-                        {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                        <input name="language" type="hidden" value="ar">
-                        <button type="submit" class="dropdown-item small fw-bold {% if LANGUAGE_CODE == 'ar' %}active{% endif %}">العربية</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
+        <span class="nav-link px-2 d-none d-sm-inline ms-3" style="font-size: 0.8rem; font-weight: 600;">EN</span>
     </div>
 </div>
 </nav>

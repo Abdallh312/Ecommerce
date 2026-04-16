@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static %}
 
-{% block title %}{% trans "Shopping Cart - NOVA" %}{% endblock %}
+{% block title %}Shopping Cart - NOVA{% endblock %}
 
 {% block content %}
 <div class="container py-5" style="margin-top: 100px;">
     <!-- Page Header -->
     <div class="row mb-5">
         <div class="col-12">
-            <span class="hero-tag">{% trans "YOUR SELECTION" %}</span>
-            <h1 class="hero-title mt-2 mb-4">{% trans "Shopping Cart" %}</h1>
+            <span class="hero-tag">YOUR SELECTION</span>
+            <h1 class="hero-title mt-2 mb-4">Shopping Cart</h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">{% trans "HOME" %}</a></li>
-                    <li class="breadcrumb-item active text-muted small">{% trans "SHOPPING CART" %}</li>
+                    <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+                    <li class="breadcrumb-item active text-muted small">SHOPPING CART</li>
                 </ol>
             </nav>
         </div>
@@ -49,13 +49,13 @@
                             <div class="mb-2 d-flex flex-wrap gap-2">
                                 {% if item.variant.size %}
                                 <span class="badge bg-light text-dark border rounded-0 fw-normal py-2 px-3" style="font-size: 0.7rem; letter-spacing: 1px;">
-                                    {% trans "SIZE" %}: {{ item.variant.size.name }}
+                                    SIZE: {{ item.variant.size.name }}
                                 </span>
                                 {% endif %}
                                 {% if item.variant.color %}
                                 <span class="badge bg-light text-dark border rounded-0 fw-normal py-2 px-3 d-flex align-items-center" style="font-size: 0.7rem; letter-spacing: 1px;">
                                     <span class="d-inline-block rounded-circle me-2" style="width: 10px; height: 10px; background-color: {{ item.variant.color.hex_code }}; border: 1px solid rgba(0,0,0,0.1);"></span>
-                                    {% trans "COLOR" %}: {{ item.variant.color.name|upper }}
+                                    COLOR: {{ item.variant.color.name|upper }}
                                 </span>
                                 {% endif %}
                             </div>
@@ -79,7 +79,7 @@
                                     <button class="btn btn-link text-dark text-decoration-none p-0 px-2 quantity-plus" type="button"><i class="fas fa-plus small"></i></button>
                                 </div>
                                 <button class="btn btn-link text-muted small ms-3 text-decoration-none remove-cart-btn" data-item-id="{{ item.id }}">
-                                    {% trans "REMOVE" %}
+                                    REMOVE
                                 </button>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
             
             <div class="mt-4">
                 <a href="{% url 'products:product_list' %}" class="text-dark small fw-bold text-decoration-none">
-                    <i class="fas fa-arrow-left me-2"></i> {% trans "CONTINUE SHOPPING" %}
+                    <i class="fas fa-arrow-left me-2"></i> CONTINUE SHOPPING
                 </a>
             </div>
         </div>
@@ -103,28 +103,28 @@
         <!-- Cart Summary -->
         <div class="col-lg-4">
             <div class="p-4 p-md-5 bg-white border" style="position: sticky; top: 120px;">
-                <h3 class="fw-bold mb-4" style="letter-spacing: -1.5px;">{% trans "Summary" %}</h3>
+                <h3 class="fw-bold mb-4" style="letter-spacing: -1.5px;">Summary</h3>
                 
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted small fw-bold">{% trans "SUBTOTAL" %}</span>
+                    <span class="text-muted small fw-bold">SUBTOTAL</span>
                     <span class="fw-bold small">LE {{ cart.get_total_price }}</span>
                 </div>
                 
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="text-muted small fw-bold">{% trans "SHIPPING" %}</span>
+                    <span class="text-muted small fw-bold">SHIPPING</span>
                     <span class="text-muted small">LE {{ cart.get_shipping_cost }}</span>
                 </div>
                 
                 {% if cart.offer and cart.offer.is_active %}
                 <div class="d-flex justify-content-between mb-3 text-success">
-                    <span class="small fw-bold">{% trans "DISCOUNT" %} ({{ cart.offer.code }})</span>
+                    <span class="small fw-bold">DISCOUNT ({{ cart.offer.code }})</span>
                     <span class="small fw-bold">
                         {% if cart.offer.offer_type == 'percentage' %}
                             -{{ cart.offer.discount_percent }}%
                         {% elif cart.offer.offer_type == 'bogo' %}
-                            {% trans "BUY 1 GET 1" %}
+                            BUY 1 GET 1
                         {% elif cart.offer.offer_type == 'b1g2' %}
-                            {% trans "BUY 1 GET 2" %}
+                            BUY 1 GET 2
                         {% endif %}
                     </span>
                 </div>
@@ -133,27 +133,27 @@
                 <hr class="my-4 opacity-10">
                 
                 <div class="d-flex justify-content-between mb-5">
-                    <span class="fw-bold h5 mb-0">{% trans "TOTAL" %}</span>
+                    <span class="fw-bold h5 mb-0">TOTAL</span>
                     <span class="fw-bold h4 mb-0" style="letter-spacing: -1px;">LE {{ cart.get_final_total }}</span>
                 </div>
                 
                 <div class="d-grid gap-3">
                     <a href="{% url 'orders:checkout' %}" class="btn-alpine py-3 text-center text-decoration-none">
-                        {% trans "PROCEED TO CHECKOUT" %}
+                        PROCEED TO CHECKOUT
                     </a>
                 </div>
                 
                 <!-- Promo Code -->
                 <div class="mt-5 pt-4 border-top">
-                    <h6 class="small fw-bold mb-3" style="letter-spacing: 1px;">{% trans "PROMO CODE" %}</h6>
+                    <h6 class="small fw-bold mb-3" style="letter-spacing: 1px;">PROMO CODE</h6>
                     <div class="input-group border bg-light">
-                        <input type="text" id="promo-code-input" class="form-control border-0 rounded-0 shadow-none small bg-transparent" placeholder="{% trans 'Enter code' %}" value="{{ cart.offer.code|default:'' }}" style="height: 45px;">
+                        <input type="text" id="promo-code-input" class="form-control border-0 rounded-0 shadow-none small bg-transparent" placeholder="Enter code" value="{{ cart.offer.code|default:'' }}" style="height: 45px;">
                         {% if cart.offer and cart.offer.is_active %}
                             <button class="btn btn-link text-danger text-decoration-none px-3" type="button" onclick="removeOffer()">
                                 <i class="fas fa-times"></i>
                             </button>
                         {% else %}
-                            <button class="btn btn-link text-dark text-decoration-none small fw-bold px-3" type="button" onclick="applyOffer()">{% trans "APPLY" %}</button>
+                            <button class="btn btn-link text-dark text-decoration-none small fw-bold px-3" type="button" onclick="applyOffer()">APPLY</button>
                         {% endif %}
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                 <div class="mt-5 text-center">
                     <p class="text-muted" style="font-size: 0.7rem;">
                         <i class="fas fa-lock me-1"></i>
-                        {% trans "SECURE CHECKOUT WITH SSL ENCRYPTION" %}
+                        SECURE CHECKOUT WITH SSL ENCRYPTION
                     </p>
                 </div>
             </div>
@@ -175,12 +175,12 @@
         <div class="col-12 text-center py-5">
             <div class="py-5">
                 <i class="fas fa-shopping-cart fa-3x text-muted mb-4 opacity-20"></i>
-                <h3 class="fw-bold mb-3">{% trans "Your cart is empty" %}</h3>
+                <h3 class="fw-bold mb-3">Your cart is empty</h3>
                 <p class="text-muted mb-5">
-                    {% trans "Looks like you haven't added any items to your cart yet." %}
+                    Looks like you haven't added any items to your cart yet.
                 </p>
                 <a href="{% url 'products:product_list' %}" class="btn-alpine text-decoration-none">
-                    {% trans "START SHOPPING" %}
+                    START SHOPPING
                 </a>
             </div>
         </div>
