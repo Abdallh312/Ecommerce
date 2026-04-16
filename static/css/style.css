@@ -297,6 +297,36 @@ body {
     letter-spacing: 1px;
 }
 
+/* RTL Support */
+[dir="rtl"] {
+    text-align: right;
+    font-family: 'Inter', sans-serif; /* You might want to add an Arabic font here later */
+}
+
+[dir="rtl"] .ms-auto {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .me-auto {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .ms-3 {
+    margin-right: 1rem !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .navbar-nav {
+    padding-right: 0;
+}
+
+[dir="rtl"] .dropdown-menu-end {
+    right: auto;
+    left: 0;
+}
+
 .dropdown-item:hover {
     background-color: var(--skin-nude);
     color: var(--deep-onyx);

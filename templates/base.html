@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load i18n %}
-<html lang="en">
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -118,7 +120,31 @@
                 (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
             </span>
         </a>
-        <span class="nav-link px-2 d-none d-sm-inline ms-3" style="font-size: 0.8rem; font-weight: 600;">{{ LANGUAGE_CODE|upper }}</span>
+        
+        <!-- Language Switcher -->
+        <div class="nav-item dropdown ms-3">
+            <a class="nav-link dropdown-toggle px-2 d-flex align-items-center fw-bold" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.8rem;">
+                {{ LANGUAGE_CODE|upper }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-0" aria-labelledby="langDropdown">
+                <li>
+                    <form action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' if LANGUAGE_CODE != 'en' else request.get_full_path }}">
+                        <input name="language" type="hidden" value="en">
+                        <button type="submit" class="dropdown-item small fw-bold {% if LANGUAGE_CODE == 'en' %}active{% endif %}">ENGLISH</button>
+                    </form>
+                </li>
+                <li>
+                    <form action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <input name="language" type="hidden" value="ar">
+                        <button type="submit" class="dropdown-item small fw-bold {% if LANGUAGE_CODE == 'ar' %}active{% endif %}">العربية</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 </nav>
