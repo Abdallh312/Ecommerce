@@ -93,17 +93,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'products:home' %}">{% trans "Home" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products:product_list' %}">Shop</a>
+                        <a class="nav-link" href="{% url 'products:product_list' %}">{% trans "Shop" %}</a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'core:about' %}">About</a>
+                        <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Logout" %}</a>
                     </li>
+                    {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'orders:track_order' %}">Track Order</a>
+                        <a class="nav-link" href="{% url 'account_login' %}">{% trans "Login" %}</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
 
@@ -114,7 +117,7 @@
             
     <!-- Right side: Cart & Language -->
     <div class="navbar-nav ms-auto flex-row align-items-center">
-        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="View Cart">
+        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="{% trans 'View Cart' %}">
             <i class="fas fa-shopping-bag me-1"></i>
             <span class="cart-count-wrapper small fw-bold">
                 (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
@@ -130,7 +133,7 @@
                 <li>
                     <form action="{% url 'set_language' %}" method="post">
                         {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' if LANGUAGE_CODE != 'en' else request.get_full_path }}">
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
                         <input name="language" type="hidden" value="en">
                         <button type="submit" class="dropdown-item small fw-bold {% if LANGUAGE_CODE == 'en' %}active{% endif %}">ENGLISH</button>
                     </form>

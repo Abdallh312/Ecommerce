@@ -31,11 +31,10 @@ urlpatterns += i18n_patterns(
     path('', include('products.urls')),
     path('orders/', include('orders.urls')),
     path('', include('core.urls')),
-    prefix_default_language=False,
+    prefix_default_language=False
 )
 
 # Serve media files
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    re_path(r'^/media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

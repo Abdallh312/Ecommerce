@@ -112,6 +112,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
                 'products.context_processors.active_announcements',
                 'products.context_processors.categories_processor',
                 'orders.context_processors.cart_count_processor',
