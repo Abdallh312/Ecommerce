@@ -62,20 +62,29 @@ class LogoutView(View):
         return redirect('products:home')
 
 
+from .models import StaticPage
+
 class AboutView(TemplateView):
     template_name = 'core/about.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='about').first()
+        return context
 
 
 class ContactView(View):
     template_name = 'core/contact.html'
     
     def get(self, request):
-        return render(request, self.template_name)
+        page = StaticPage.objects.filter(slug='contact').first()
+        return render(request, self.template_name, {'page': page})
     
     def post(self, request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
+        page = StaticPage.objects.filter(slug='contact').first()
         
         if name and email and message:
             try:
@@ -96,11 +105,16 @@ class ContactView(View):
         else:
             messages.error(request, 'Please fill in all required fields.')
         
-        return render(request, self.template_name)
+        return render(request, self.template_name, {'page': page})
 
 
 class FAQView(TemplateView):
     template_name = 'core/faq.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='faq').first()
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -135,22 +149,47 @@ class PasswordResetView(View):
 
 class SizeGuideView(TemplateView):
     template_name = 'core/size_guide.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='size-guide').first()
+        return context
 
 
 class ShippingInfoView(TemplateView):
     template_name = 'core/shipping_info.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='shipping').first()
+        return context
 
 
 class ReturnsView(TemplateView):
     template_name = 'core/returns.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='returns').first()
+        return context
 
 
 class PrivacyPolicyView(TemplateView):
     template_name = 'core/privacy_policy.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='privacy').first()
+        return context
 
 
 class TermsOfServiceView(TemplateView):
     template_name = 'core/terms_of_service.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = StaticPage.objects.filter(slug='terms').first()
+        return context
 
 
 # TrackOrderView moved to orders app

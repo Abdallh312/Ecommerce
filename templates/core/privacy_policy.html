@@ -13,43 +13,54 @@
         </ol>
     </nav>
 
-    <div class="row mb-5">
-        <div class="col-lg-8">
-            <span class="hero-tag">LEGAL</span>
-            <h1 class="hero-title mt-2 mb-4">Privacy Policy</h1>
-            <p class="text-muted small">LAST UPDATED: AUGUST 2024</p>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-10">
-            <div class="p-5 bg-white border mb-5">
-                <section class="mb-5">
-                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Information We Collect</h3>
-                    <p class="text-muted">We collect information you provide directly to us, such as when you create an account, make a purchase, or contact us. This may include your name, email address, phone number, and shipping information.</p>
-                </section>
-                
-                <section class="mb-5">
-                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">How We Use Information</h3>
-                    <p class="text-muted">We use the information we collect to provide, maintain, and improve our services, process transactions, and communicate with you about your orders and promotional offers.</p>
-                </section>
-                
-                <section class="mb-5">
-                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Information Sharing</h3>
-                    <p class="text-muted">We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy to facilitate shipping and payment processing.</p>
-                </section>
-                
-                <section class="mb-5">
-                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Data Security</h3>
-                    <p class="text-muted">We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. Your data is encrypted and handled securely.</p>
-                </section>
-                
-                <section>
-                    <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Contact Us</h3>
-                    <p class="text-muted">If you have questions about this Privacy Policy, please contact us at <a href="mailto:novakidwear@gmail.com" class="text-dark fw-bold">novakidwear@gmail.com</a></p>
-                </section>
+    {% if page %}
+        <div class="row">
+            <div class="col-lg-10">
+                <h1 class="hero-title mt-2 mb-4">{{ page.title }}</h1>
+                <div class="page-content bg-white p-5 border">
+                    {{ page.content|safe }}
+                </div>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <span class="hero-tag">LEGAL</span>
+                <h1 class="hero-title mt-2 mb-4">Privacy Policy</h1>
+                <p class="text-muted small">LAST UPDATED: AUGUST 2024</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="p-5 bg-white border mb-5">
+                    <section class="mb-5">
+                        <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Information We Collect</h3>
+                        <p class="text-muted">We collect information you provide directly to us, such as when you create an account, make a purchase, or contact us. This may include your name, email address, phone number, and shipping information.</p>
+                    </section>
+                    
+                    <section class="mb-5">
+                        <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">How We Use Information</h3>
+                        <p class="text-muted">We use the information we collect to provide, maintain, and improve our services, process transactions, and communicate with you about your orders and promotional offers.</p>
+                    </section>
+                    
+                    <section class="mb-5">
+                        <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Information Sharing</h3>
+                        <p class="text-muted">We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy to facilitate shipping and payment processing.</p>
+                    </section>
+                    
+                    <section class="mb-5">
+                        <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Data Security</h3>
+                        <p class="text-muted">We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. Your data is encrypted and handled securely.</p>
+                    </section>
+                    
+                    <section>
+                        <h3 class="fw-bold mb-4" style="letter-spacing: -1px;">Contact Us</h3>
+                        <p class="text-muted">If you have questions about this Privacy Policy, please contact us at <a href="mailto:novakidwear@gmail.com" class="text-dark fw-bold">novakidwear@gmail.com</a></p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,23 +1,41 @@
-{% comment %} {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Size Guide - Nova{% endblock %}
+{% block title %}Size Guide - NOVA{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-white text-center mb-5">Size Guide</h1>
+<div class="container py-5" style="margin-top: 100px;">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:home' %}" class="text-dark small text-decoration-none">HOME</a></li>
+            <li class="breadcrumb-item active text-muted small">SIZE GUIDE</li>
+        </ol>
+    </nav>
+
+    {% if page %}
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="hero-title mt-2 mb-4 text-center">{{ page.title }}</h1>
+                <div class="page-content bg-white p-5 border">
+                    {{ page.content|safe }}
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
-            <div class="card bg-dark border-secondary">
-                <div class="card-body">
-                    <h4 class="text-white mb-4">T-Shirts & Hoodies</h4>
+    {% else %}
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <span class="hero-tag">FITMENT</span>
+                <h1 class="hero-title mt-2 mb-4">Size Guide</h1>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="p-5 bg-white border">
+                    <h4 class="fw-bold mb-4" style="letter-spacing: -1px;">T-Shirts & Hoodies</h4>
                     <div class="table-responsive">
-                        <table class="table table-dark table-striped">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Size</th>
@@ -67,17 +85,17 @@
                         </table>
                     </div>
                     
-                    <div class="mt-4">
-                        <h5 class="text-white mb-3">How to Measure</h5>
-                        <ul class="text-muted">
-                            <li><strong>Chest:</strong> Measure around the fullest part of your chest</li>
-                            <li><strong>Length:</strong> Measure from the highest point of the shoulder to the bottom hem</li>
+                    <div class="mt-5">
+                        <h5 class="fw-bold mb-3" style="letter-spacing: -1px;">How to Measure</h5>
+                        <ul class="text-muted small">
+                            <li class="mb-2"><strong>Chest:</strong> Measure around the fullest part of your chest</li>
+                            <li class="mb-2"><strong>Length:</strong> Measure from the highest point of the shoulder to the bottom hem</li>
                             <li><strong>Sleeve:</strong> Measure from the center back of the neck to the end of the sleeve</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 </div>
-{% endblock %} {% endcomment %}
+{% endblock %}
