@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    {% load static %}
+    {% load static i18n %}
     
     <title>
-        {% block title %}Nova - Softwear{% endblock %}
+        {% block title %}{% trans "Nova - Softwear" %}{% endblock %}
     </title>
     
     <!-- Preconnect for performance -->
@@ -90,16 +90,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold small" href="{% url 'products:home' %}">HOME</a>
+                        <a class="nav-link fw-bold small" href="{% url 'products:home' %}">{% trans "HOME" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold small" href="{% url 'products:product_list' %}">SHOP</a>
+                        <a class="nav-link fw-bold small" href="{% url 'products:product_list' %}">{% trans "SHOP" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold small" href="{% url 'core:about' %}">ABOUT</a>
+                        <a class="nav-link fw-bold small" href="{% url 'core:about' %}">{% trans "ABOUT" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold small" href="{% url 'orders:track_order' %}">TRACK ORDER</a>
+                        <a class="nav-link fw-bold small" href="{% url 'orders:track_order' %}">{% trans "TRACK ORDER" %}</a>
                     </li>
                 </ul>
             </div>
@@ -110,8 +110,29 @@
             </a>
             
     <!-- Right side: Cart & Language -->
-    <div class="navbar-nav ms-auto flex-row align-items-center">
-        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="View Cart">
+    <div class="navbar-nav ms-auto flex-row align-items-center gap-3">
+        <!-- Native Django Language Switcher -->
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-bold small text-dark d-flex align-items-center" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-globe me-1"></i> <span class="text-uppercase">{{ LANGUAGE_CODE }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="langDropdown" style="min-width: 8rem;">
+                <form action="{% url 'set_language' %}" method="post" id="lang-en-form" class="d-none">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <input name="language" type="hidden" value="en">
+                </form>
+                <form action="{% url 'set_language' %}" method="post" id="lang-ar-form" class="d-none">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <input name="language" type="hidden" value="ar">
+                </form>
+                <li><a class="dropdown-item small" href="#" onclick="document.getElementById('lang-en-form').submit();"><img src="https://flagcdn.com/w20/us.png" alt="English" class="me-2"> English (EN)</a></li>
+                <li><a class="dropdown-item small" href="#" onclick="document.getElementById('lang-ar-form').submit();"><img src="https://flagcdn.com/w20/eg.png" alt="Arabic" class="me-2"> العربية (AR)</a></li>
+            </ul>
+        </div>
+
+        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="{% trans 'View Cart' %}">
             <i class="fas fa-shopping-bag me-1"></i>
             <span class="cart-count-wrapper small fw-bold">
                 (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
@@ -181,32 +202,32 @@
         <div class="container">
             <div class="row g-4 text-center text-md-start">
                 <div class="col-md-3">
-                    <h6 class="small fw-bold mb-4">SHOP</h6>
+                    <h6 class="small fw-bold mb-4">{% trans "SHOP" %}</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="{% url 'products:product_list' %}" class="text-decoration-none text-muted">All Collection</a></li>
-                        <li class="mb-2"><a href="{% url 'products:home' %}#featured" class="text-decoration-none text-muted">Featured Items</a></li>
-                        <li><a href="{% url 'products:product_list' %}?sort=-created_at" class="text-decoration-none text-muted">New Arrivals</a></li>
+                        <li class="mb-2"><a href="{% url 'products:product_list' %}" class="text-decoration-none text-muted">{% trans "All Collection" %}</a></li>
+                        <li class="mb-2"><a href="{% url 'products:home' %}#featured" class="text-decoration-none text-muted">{% trans "Featured Items" %}</a></li>
+                        <li><a href="{% url 'products:product_list' %}?sort=-created_at" class="text-decoration-none text-muted">{% trans "New Arrivals" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <h6 class="small fw-bold mb-4">SUPPORT</h6>
+                    <h6 class="small fw-bold mb-4">{% trans "SUPPORT" %}</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="{% url 'core:contact' %}" class="text-decoration-none text-muted">Contact Us</a></li>
-                        <li class="mb-2"><a href="{% url 'core:faq' %}" class="text-decoration-none text-muted">FAQ</a></li>
-                        <li class="mb-2"><a href="{% url 'core:shipping_info' %}" class="text-decoration-none text-muted">Shipping Information</a></li>
-                        <li class="mb-2"><a href="{% url 'core:returns' %}" class="text-decoration-none text-muted">Returns & Exchanges</a></li>
-                        <li><a href="{% url 'orders:track_order' %}" class="text-decoration-none text-muted">Track Order</a></li>
+                        <li class="mb-2"><a href="{% url 'core:contact' %}" class="text-decoration-none text-muted">{% trans "Contact Us" %}</a></li>
+                        <li class="mb-2"><a href="{% url 'core:faq' %}" class="text-decoration-none text-muted">{% trans "FAQ" %}</a></li>
+                        <li class="mb-2"><a href="{% url 'core:shipping_info' %}" class="text-decoration-none text-muted">{% trans "Shipping Information" %}</a></li>
+                        <li class="mb-2"><a href="{% url 'core:returns' %}" class="text-decoration-none text-muted">{% trans "Returns & Exchanges" %}</a></li>
+                        <li><a href="{% url 'orders:track_order' %}" class="text-decoration-none text-muted">{% trans "Track Order" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <h6 class="small fw-bold mb-4">LEGAL</h6>
+                    <h6 class="small fw-bold mb-4">{% trans "LEGAL" %}</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="{% url 'core:privacy_policy' %}" class="text-decoration-none text-muted">Privacy Policy</a></li>
-                        <li class="mb-2"><a href="{% url 'core:terms_of_service' %}" class="text-decoration-none text-muted">Terms of Service</a></li>
+                        <li class="mb-2"><a href="{% url 'core:privacy_policy' %}" class="text-decoration-none text-muted">{% trans "Privacy Policy" %}</a></li>
+                        <li class="mb-2"><a href="{% url 'core:terms_of_service' %}" class="text-decoration-none text-muted">{% trans "Terms of Service" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 text-md-end">
-                    <h6 class="small fw-bold mb-4">FOLLOW</h6>
+                    <h6 class="small fw-bold mb-4">{% trans "FOLLOW" %}</h6>
                     <div class="d-flex justify-content-center justify-content-md-end gap-3">
                         <a href="https://www.facebook.com/novasoftunderwear" class="text-dark"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/novakidswear0?igsh=bzRnNnVza3gyeDk0" class="text-dark"><i class="fab fa-instagram"></i></a>
@@ -215,7 +236,7 @@
                 </div>
             </div>
             <div class="mt-5 pt-4 border-top text-center">
-                <p class="small text-muted mb-0">© 2026 NOVA Essentials. All rights reserved.</p>
+                <p class="small text-muted mb-0">{% trans "© 2026 NOVA Essentials. All rights reserved." %}</p>
             </div>
         </div>
     </footer>

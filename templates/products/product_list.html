@@ -9,7 +9,7 @@
     <!-- Page Header -->
     <div class="row mb-5">
         <div class="col-12 text-center">
-            <h1 class="hero-title" style="font-size: 2.5rem;">Collection</h1>
+            <h1 class="hero-title" style="font-size: 2.5rem;">{% trans "Collection" %}</h1>
             <p class="hero-desc mx-auto">
                 {% trans "Explore our curated collection of premium soft underwear and apparel." %}
             </p>
@@ -19,13 +19,13 @@
     <!-- Filters Row - Alpine Style -->
     <div class="row mb-5 border-bottom pb-4">
         <div class="col-md-6 d-flex align-items-center">
-            <span class="small fw-bold text-muted me-4">FILTER:</span>
+            <span class="small fw-bold text-muted me-4">{% trans "FILTER:" %}</span>
             <div class="dropdown">
                 <button class="btn btn-link text-dark text-decoration-none small fw-bold p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    {% if current_category %}{{ current_category|upper }}{% else %}ALL CATEGORIES{% endif %}
+                    {% if current_category %}{{ current_category|upper }}{% else %}{% trans "ALL CATEGORIES" %}{% endif %}
                 </button>
                 <ul class="dropdown-menu border shadow-sm rounded-0">
-                    <li><a class="dropdown-item small" href="{% url 'products:product_list' %}">ALL CATEGORIES</a></li>
+                    <li><a class="dropdown-item small" href="{% url 'products:product_list' %}">{% trans "ALL CATEGORIES" %}</a></li>
                     {% for category in global_categories %}
                         <li><a class="dropdown-item small" href="?category={{ category.slug }}">{{ category.name|upper }}</a></li>
                     {% endfor %}
@@ -33,15 +33,15 @@
             </div>
         </div>
         <div class="col-md-6 text-md-end d-flex align-items-center justify-content-md-end mt-3 mt-md-0">
-            <span class="small fw-bold text-muted me-4">SORT:</span>
+            <span class="small fw-bold text-muted me-4">{% trans "SORT:" %}</span>
             <div class="dropdown">
                 <button class="btn btn-link text-dark text-decoration-none small fw-bold p-0 dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    {% if current_sort == '-created_at' %}NEWEST{% elif current_sort == 'base_price' %}PRICE LOW-HIGH{% elif current_sort == '-base_price' %}PRICE HIGH-LOW{% else %}DEFAULT{% endif %}
+                    {% if current_sort == '-created_at' %}{% trans "NEWEST" %}{% elif current_sort == 'base_price' %}{% trans "PRICE LOW-HIGH" %}{% elif current_sort == '-base_price' %}{% trans "PRICE HIGH-LOW" %}{% else %}{% trans "DEFAULT" %}{% endif %}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end border shadow-sm rounded-0">
-                    <li><a class="dropdown-item small" href="?sort=-created_at">NEWEST</a></li>
-                    <li><a class="dropdown-item small" href="?sort=base_price">PRICE LOW-HIGH</a></li>
-                    <li><a class="dropdown-item small" href="?sort=-base_price">PRICE HIGH-LOW</a></li>
+                    <li><a class="dropdown-item small" href="?sort=-created_at">{% trans "NEWEST" %}</a></li>
+                    <li><a class="dropdown-item small" href="?sort=base_price">{% trans "PRICE LOW-HIGH" %}</a></li>
+                    <li><a class="dropdown-item small" href="?sort=-base_price">{% trans "PRICE HIGH-LOW" %}</a></li>
                 </ul>
             </div>
         </div>
@@ -82,7 +82,7 @@
         </div>
         {% empty %}
         <div class="col-12 text-center py-5">
-            <p class="text-muted">No products found.</p>
+            <p class="text-muted">{% trans "No products found." %}</p>
         </div>
         {% endfor %}
     </div>

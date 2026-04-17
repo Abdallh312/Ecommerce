@@ -1,0 +1,214 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: you@example.com\n"
+"POT-Creation-Date: 2026-04-17 00:00+0000\n"
+"PO-Revision-Date: 2026-04-17 00:00+0000\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Terms of Service"
+msgstr "شروط الخدمة"
+
+msgid "PROCEED TO CHECKOUT"
+msgstr "المتابعة للدفع"
+
+msgid "Track Order - NOVA"
+msgstr "Track Order - NOVA"
+
+msgid "LEGAL"
+msgstr "قانوني"
+
+msgid "SECURE CHECKOUT WITH SSL ENCRYPTION"
+msgstr "دفع آمن بتقنية حماية SSL"
+
+msgid "Shopping Cart"
+msgstr "عربة التسوق"
+
+msgid "Collection"
+msgstr "التشكيلة"
+
+msgid "DEFAULT"
+msgstr "الافتراضي"
+
+msgid "View Cart"
+msgstr "عرض العربة"
+
+msgid "EXPLORE"
+msgstr "استكشف"
+
+msgid "Essentials"
+msgstr "الأساسيات"
+
+msgid "PRODUCTS"
+msgstr "منتجات"
+
+msgid "SALE"
+msgstr "تخفيض"
+
+msgid "START SHOPPING"
+msgstr "ابدأ التسوق"
+
+msgid "CONTINUE SHOPPING"
+msgstr "متابعة التسوق"
+
+msgid "Your cart is empty"
+msgstr "عربة التسوق فارغة"
+
+msgid "Contact Us"
+msgstr "اتصل بنا"
+
+msgid "Privacy Policy"
+msgstr "سياسة الخصوصية"
+
+msgid "© 2026 NOVA Essentials. All rights reserved."
+msgstr "© 2026 نوفا إيسنشالز. جميع الحقوق محفوظة."
+
+msgid "SUBTOTAL"
+msgstr "المجموع الفرعي"
+
+msgid "APPLY"
+msgstr "تطبيق"
+
+msgid "Nova - Softwear"
+msgstr "نوفا - ملابس مريحة"
+
+msgid "REMOVE"
+msgstr "إزالة"
+
+msgid "HOME"
+msgstr "الرئيسية"
+
+msgid "No featured products available."
+msgstr "لا توجد منتجات مميزة."
+
+msgid "BUY 1 GET 2"
+msgstr "اشتر 1 واحصل على 2"
+
+msgid "SORT:"
+msgstr "ترتيب:"
+
+msgid "Track Order"
+msgstr "تتبع الطلب"
+
+msgid "FAQ"
+msgstr "الأسئلة الشائعة"
+
+msgid "No products found."
+msgstr "لم يتم العثور على منتجات."
+
+msgid "SIZE:"
+msgstr "المقاس:"
+
+msgid "ABOUT"
+msgstr "عن المتجر"
+
+msgid "SUPPORT"
+msgstr "الدعم"
+
+msgid "DISCOUNT"
+msgstr "خصم"
+
+msgid "Softwear"
+msgstr "ملابس مريحة"
+
+msgid "Summary"
+msgstr "الملخص"
+
+msgid "Products - NOVA"
+msgstr "Products - NOVA"
+
+msgid "BUY 1 GET 1"
+msgstr "اشتر 1 واحصل على 1"
+
+msgid "All Collection"
+msgstr "كل التشكيلة"
+
+msgid "Shipping Information"
+msgstr "معلومات الشحن"
+
+msgid "FILTER:"
+msgstr "تصفية:"
+
+msgid "TOTAL"
+msgstr "الإجمالي"
+
+msgid ""
+"Premium soft underwear and apparel designed for ultimate comfort and "
+"minimalist aesthetic. Experience the next level of softwear."
+msgstr ""
+"ملابس داخلية فاخرة ومريحة مصممة لتوفير أقصى درجات الراحة بمظهر جذاب. جرب "
+"المستوى التالي من الملابس المريحة."
+
+msgid "Returns & Exchanges"
+msgstr "الاسترجاع والاستبدال"
+
+msgid "New Arrivals"
+msgstr "وصل حديثاً"
+
+msgid "PROMO CODE"
+msgstr "رمز ترويجي"
+
+msgid "Your Favorites - NOVA"
+msgstr "Your Favorites - NOVA"
+
+msgid "SHOP"
+msgstr "المتجر"
+
+msgid "Nova"
+msgstr "نوفا"
+
+msgid "PRICE LOW-HIGH"
+msgstr "السعر من الأقل للأعلى"
+
+msgid "PRICE HIGH-LOW"
+msgstr "السعر من الأعلى للأقل"
+
+msgid "ALL CATEGORIES"
+msgstr "جميع الفئات"
+
+msgid "SHOP NOW"
+msgstr "تسوق الآن"
+
+msgid "Shopping Cart - NOVA"
+msgstr "عربة التسوق - نوفا"
+
+msgid "Browse Categories"
+msgstr "تصفح الفئات"
+
+msgid "Enter code"
+msgstr "أدخل الرمز"
+
+msgid "YOUR SELECTION"
+msgstr "اختيارك"
+
+msgid "NEWEST"
+msgstr "الأحدث"
+
+msgid "TRACK ORDER"
+msgstr "تتبع الطلب"
+
+msgid "FOLLOW"
+msgstr "تابعنا"
+
+msgid "SHOPPING CART"
+msgstr "عربة التسوق"
+
+msgid "Featured Items"
+msgstr "عناصر مميزة"
+
+msgid "Explore our curated collection of premium soft underwear and apparel."
+msgstr "اكتشف تشكيلتنا المختارة من الملابس الداخلية المريحة والفاخرة."
+
+msgid "SHIPPING"
+msgstr "الشحن"
+
+msgid "COLOR:"
+msgstr "اللون:"
+
+msgid "VIEW ALL COLLECTION"
+msgstr "عرض كل التشكيلة"
