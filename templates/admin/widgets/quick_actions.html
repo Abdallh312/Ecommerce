@@ -1,0 +1,62 @@
+<div class="card card-outline card-dark">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-bolt mr-1"></i>
+            Quick Actions
+        </h3>
+    </div>
+    <div class="card-body p-0">
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+                <a href="{% url 'admin:products_product_add' %}" class="nav-link">
+                    <i class="fas fa-plus-circle text-success mr-2"></i>
+                    Add New Product
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin:orders_order_changelist' %}?status__exact=pending" class="nav-link">
+                    <i class="fas fa-clock text-warning mr-2"></i>
+                    Pending Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin:products_announcement_add' %}" class="nav-link">
+                    <i class="fas fa-bullhorn text-info mr-2"></i>
+                    Create Announcement
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin:products_category_changelist' %}" class="nav-link">
+                    <i class="fas fa-tags text-primary mr-2"></i>
+                    Manage Categories
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/" target="_blank" class="nav-link">
+                    <i class="fas fa-external-link-alt text-muted mr-2"></i>
+                    View Live Site
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .nav-pills .nav-link {
+        border-radius: 0;
+        padding: 12px 20px;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: background 0.2s;
+    }
+    .nav-pills .nav-link:hover {
+        background-color: #f8f9fa;
+    }
+    .nav-pills .nav-link:last-child {
+        border-bottom: none;
+    }
+    .nav-pills .nav-link i {
+        width: 20px;
+        text-align: center;
+    }
+</style>

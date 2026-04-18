@@ -14,6 +14,7 @@ class CartItemInline(admin.TabularInline):
     extra = 0
     readonly_fields = ('created_at',)
     fields = ('product', 'variant', 'quantity', 'customization_text', 'created_at')
+    autocomplete_fields = ['product', 'variant']
 
 
 class OrderItemInline(admin.TabularInline):
@@ -21,6 +22,7 @@ class OrderItemInline(admin.TabularInline):
     extra = 0
     readonly_fields = ('product_name', 'product_sku', 'size_name', 'color_name', 'unit_price', 'total_price')
     fields = ('product', 'variant', 'quantity', 'unit_price', 'total_price', 'customization_text')
+    autocomplete_fields = ['product', 'variant']
 
 
 class OrderTrackingInline(admin.TabularInline):
@@ -55,6 +57,8 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('order_number', 'email', 'shipping_email', 'tracking_number')
     readonly_fields = ('id', 'order_number', 'created_at', 'updated_at')
     inlines = [OrderItemInline, OrderTrackingInline]
+    list_per_page = 20
+    search_help_text = "Search by order number, email, or tracking number"
     
     fieldsets = (
         ('Order Information', {

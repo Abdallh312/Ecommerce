@@ -80,29 +80,62 @@
     {% endif %}
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-        <div class="container position-relative">
-            <!-- Left side: Menu toggle -->
-            <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top flex-column p-0" id="mainNav">
+        <!-- Top Row: Brand & Utilities -->
+        <div class="header-top-row w-100 py-2 border-bottom">
+            <div class="container d-flex justify-content-between align-items-center">
+                <!-- Left side: Menu toggle (Mobile only) -->
+                <div class="d-lg-none">
+                    <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="d-none d-lg-block" style="width: 100px;"></div>
+
+                <!-- Center: Logo -->
+                <a class="navbar-brand m-0" href="{% url 'products:home' %}">
+                    NOVA
+                </a>
+
+                <!-- Right side: Cart & Language -->
+                <div class="d-flex align-items-center gap-3" style="min-width: 100px; justify-content: flex-end;">
+                    <!-- Native Django Language Switcher -->
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold small text-dark d-flex align-items-center p-0" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe me-1"></i> <span class="text-uppercase">{{ LANGUAGE_CODE }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="langDropdown">
+                            <form action="{% url 'set_language' %}" method="post" id="lang-en-form" class="d-none">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <input name="language" type="hidden" value="en">
+                            </form>
+                            <form action="{% url 'set_language' %}" method="post" id="lang-ar-form" class="d-none">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <input name="language" type="hidden" value="ar">
+                            </form>
+                            <li><a class="dropdown-item small" href="#" onclick="document.getElementById('lang-en-form').submit();"><img src="https://flagcdn.com/w20/us.png" alt="English" class="me-2"> English (EN)</a></li>
+                            <li><a class="dropdown-item small" href="#" onclick="document.getElementById('lang-ar-form').submit();"><img src="https://flagcdn.com/w20/eg.png" alt="Arabic" class="me-2"> العربية (AR)</a></li>
+                        </ul>
+                    </div>
+
+                    <a class="nav-link p-0 d-flex align-items-center text-dark" href="{% url 'orders:cart' %}" title="{% trans 'View Cart' %}">
+                        <i class="fas fa-shopping-bag me-1"></i>
+                        <span class="cart-count-wrapper small fw-bold">
+                            (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Navigation Links -->
+        <div class="collapse navbar-collapse w-100 bg-white" id="navbarNav">
+            <div class="container py-2">
+                <ul class="navbar-nav mx-auto justify-content-center gap-lg-4">
                     <li class="nav-item">
                         <a class="nav-link fw-bold small" href="{% url 'products:home' %}">{% trans "HOME" %}</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-bold small" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% trans "SHOP" %}
-                        </a>
-                        <ul class="dropdown-menu border-0 shadow-sm rounded-0" aria-labelledby="shopDropdown">
-                            <li><a class="dropdown-item small fw-bold" href="{% url 'products:product_list' %}">{% trans "ALL COLLECTION" %}</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            {% for cat in global_categories %}
-                            <li><a class="dropdown-item small" href="{% url 'products:category_products' cat.slug %}">{{ cat.name|upper }}</a></li>
-                            {% endfor %}
-                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-bold small" href="{% url 'core:about' %}">{% trans "ABOUT" %}</a>
@@ -110,70 +143,59 @@
                     <li class="nav-item">
                         <a class="nav-link fw-bold small" href="{% url 'orders:track_order' %}">{% trans "TRACK ORDER" %}</a>
                     </li>
+                    {% for cat in global_categories %}
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold small" href="{% url 'products:category_products' cat.slug %}">{{ cat.name|upper }}</a>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
-
-            <!-- Center: Logo -->
-            <a class="navbar-brand" href="{% url 'products:home' %}">
-                NOVA
-            </a>
-            
-    <!-- Right side: Cart & Language -->
-    <div class="navbar-nav ms-auto flex-row align-items-center gap-3">
-        <!-- Native Django Language Switcher -->
-        <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fw-bold small text-dark d-flex align-items-center" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-globe me-1"></i> <span class="text-uppercase">{{ LANGUAGE_CODE }}</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="langDropdown" style="min-width: 8rem;">
-                <form action="{% url 'set_language' %}" method="post" id="lang-en-form" class="d-none">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    <input name="language" type="hidden" value="en">
-                </form>
-                <form action="{% url 'set_language' %}" method="post" id="lang-ar-form" class="d-none">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    <input name="language" type="hidden" value="ar">
-                </form>
-                <li><a class="dropdown-item small" href="#" onclick="document.getElementById('lang-en-form').submit();"><img src="https://flagcdn.com/w20/us.png" alt="English" class="me-2"> English (EN)</a></li>
-                <li><a class="dropdown-item small" href="#" onclick="document.getElementById('lang-ar-form').submit();"><img src="https://flagcdn.com/w20/eg.png" alt="Arabic" class="me-2"> العربية (AR)</a></li>
-            </ul>
         </div>
-
-        <a class="nav-link px-2 d-flex align-items-center" href="{% url 'orders:cart' %}" title="{% trans 'View Cart' %}">
-            <i class="fas fa-shopping-bag me-1"></i>
-            <span class="cart-count-wrapper small fw-bold">
-                (<span class="cart-count">{{ cart_item_count|default:0 }}</span>)
-            </span>
-        </a>
-    </div>
-</div>
-</nav>
+    </nav>
 
 <style>
-/* Centering Brand */
-#mainNav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Header Redesign Styles */
+#mainNav {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+.header-top-row {
+    background: transparent;
 }
 
 #mainNav .navbar-brand {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
     font-weight: 800;
-    letter-spacing: 4px;
+    letter-spacing: 6px;
     font-size: 1.8rem;
     color: #1a1a1a !important;
+    text-transform: uppercase;
 }
 
 #mainNav .nav-link {
-    font-size: 0.75rem;
-    letter-spacing: 1px;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
     color: #1a1a1a !important;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+}
+
+#mainNav .navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background-color: #1a1a1a;
+    transition: width 0.3s ease;
+}
+
+#mainNav .navbar-nav .nav-link:hover::after {
+    width: 100%;
 }
 
 @media (max-width: 991.98px) {
@@ -184,7 +206,13 @@
         right: 0;
         background: white;
         padding: 1rem;
-        border-bottom: 1px solid #eee;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .header-top-row {
+        padding: 0.5rem 0 !important;
+    }
+    #mainNav .navbar-brand {
+        font-size: 1.4rem;
     }
 }
 </style>

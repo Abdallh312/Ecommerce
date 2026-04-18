@@ -1,147 +1,206 @@
-/* Custom Admin Styling for NOVA (Alpine Minimalist) */
+/* Modern Admin Styling for NOVA - Indigo & Slate Theme */
 
-/* Global Reset & Background */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-    --nova-black: #1a1a1a;
-    --nova-bg: #f8f8f8;
-    --nova-border: rgba(0,0,0,0.08);
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary: #64748b;
+    --bg-main: #f8fafc;
+    --bg-surface: #ffffff;
+    --border: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --radius: 10px;
 }
 
 body {
-    background-color: var(--nova-bg) !important;
-}
-
-/* Login Page Styling */
-.login-page {
-    background-color: var(--nova-bg) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    padding: 2rem !important;
-}
-
-.login-box {
-    box-shadow: 0 15px 35px rgba(0,0,0,0.05) !important;
-    border-radius: 0 !important;
-    width: 400px !important;
-}
-
-.login-box .card {
-    border: none !important;
-    border-radius: 0 !important;
-}
-
-.login-logo {
-    margin-bottom: 2rem !important;
-    font-weight: 800 !important;
-    letter-spacing: 4px !important;
-    text-transform: uppercase !important;
-}
-
-.login-logo img {
-    max-width: 150px !important;
-    height: auto !important;
-    object-fit: contain !important;
-    margin-bottom: 1rem !important;
+    background-color: var(--bg-main) !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    color: var(--text-main) !important;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* Sidebar Styling */
 .main-sidebar {
-    background-color: #ffffff !important;
-    border-right: 1px solid var(--nova-border) !important;
-    box-shadow: none !important;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
 }
 
 .brand-link {
-    border-bottom: 1px solid var(--nova-border) !important;
-    padding: 1.5rem 1rem !important;
-    text-align: center !important;
-    display: flex !important;
-    justify-content: center !important;
+    padding: 1.25rem 1rem !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
 }
 
-.brand-image {
-    max-height: 45px !important;
-    width: auto !important;
-    float: none !important;
-}
-
-.nav-sidebar .nav-item > .nav-link.active {
-    background-color: var(--nova-black) !important;
-    color: #ffffff !important;
-    border-radius: 0 !important;
+.brand-text {
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
 }
 
 .nav-sidebar .nav-link {
-    border-radius: 0 !important;
-    padding: 0.8rem 1rem !important;
+    border-radius: 8px !important;
+    margin: 0.2rem 0.6rem !important;
+    padding: 0.6rem 0.8rem !important;
+    font-weight: 500 !important;
     font-size: 0.9rem !important;
+    transition: all 0.2s ease;
 }
 
-/* Header & Content */
+.nav-sidebar .nav-link i {
+    font-size: 1.1rem !important;
+    margin-right: 0.75rem !important;
+    width: 20px !important;
+    text-align: center !important;
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: var(--primary) !important;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.4) !important;
+}
+
+/* Header & Content Area */
 .main-header {
-    border-bottom: 1px solid var(--nova-border) !important;
-    box-shadow: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 0.5rem 1rem !important;
 }
 
 .content-wrapper {
-    background-color: var(--nova-bg) !important;
+    background-color: var(--bg-main) !important;
+    padding: 1.5rem !important;
 }
 
+.content-header {
+    padding: 0 0 1.5rem 0 !important;
+}
+
+.content-header h1 {
+    font-weight: 800 !important;
+    font-size: 1.75rem !important;
+    letter-spacing: -0.03em !important;
+    color: var(--text-main) !important;
+}
+
+/* Cards */
 .card {
-    border-radius: 0 !important;
-    border: 1px solid var(--nova-border) !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow) !important;
+    overflow: hidden !important;
+    margin-bottom: 2rem !important;
 }
 
 .card-header {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid var(--nova-border) !important;
+    background-color: #fff !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.card-title {
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    color: var(--text-main) !important;
+}
+
+/* Table Styling */
+.table {
+    margin-bottom: 0 !important;
+}
+
+.table thead th {
+    background-color: #f8fafc !important;
+    border-top: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: var(--text-muted) !important;
+    letter-spacing: 0.05em !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.table td {
+    padding: 1rem 1.25rem !important;
+    vertical-align: middle !important;
+    border-top: 1px solid var(--border) !important;
+    font-size: 0.9rem !important;
+    color: #334155 !important;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f5f9 !important;
+}
+
+/* Form Controls */
+.form-control, .select2-container--default .select2-selection--single {
+    border-radius: 8px !important;
+    border: 1px solid var(--border) !important;
+    padding: 0.6rem 0.75rem !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.form-control:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
 }
 
 /* Buttons */
 .btn {
-    border-radius: 0 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
+    border-radius: 8px !important;
     font-weight: 600 !important;
-    font-size: 0.8rem !important;
-    padding: 0.5rem 1.2rem !important;
+    padding: 0.6rem 1.25rem !important;
+    transition: all 0.2s ease !important;
 }
 
-.btn-primary, .btn-dark, .save-box input[type="submit"] {
-    background-color: var(--nova-black) !important;
-    border-color: var(--nova-black) !important;
-    color: #ffffff !important;
+.btn-indigo {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #fff !important;
 }
 
-.btn-primary:hover, .btn-dark:hover {
-    background-color: #333333 !important;
-    border-color: #333333 !important;
+.btn-indigo:hover {
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2) !important;
 }
 
-/* Tables */
-.table thead th {
-    border-top: none !important;
-    background-color: #fcfcfc !important;
-    text-transform: uppercase !important;
+/* Badges */
+.badge {
+    border-radius: 6px !important;
+    padding: 0.4rem 0.6rem !important;
+    font-weight: 600 !important;
     font-size: 0.75rem !important;
-    letter-spacing: 1px !important;
-    color: #888888 !important;
 }
+
+.badge-success { background-color: #dcfce7 !important; color: #166534 !important; }
+.badge-warning { background-color: #fef9c3 !important; color: #854d0e !important; }
+.badge-danger { background-color: #fee2e2 !important; color: #991b1b !important; }
+.badge-info { background-color: #e0f2fe !important; color: #075985 !important; }
 
 /* Dashboard Widgets */
 .small-box {
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    border: 1px solid var(--nova-border) !important;
+    border-radius: var(--radius) !important;
+    border: 1px solid var(--border) !important;
+    background: #fff !important;
+    box-shadow: var(--shadow) !important;
+    padding: 1.25rem !important;
+    color: var(--text-main) !important;
 }
 
-.bg-info, .bg-success, .bg-warning, .bg-danger {
-    background-color: #ffffff !important;
-    color: var(--nova-black) !important;
+.small-box h3 {
+    font-weight: 800 !important;
+    font-size: 1.8rem !important;
+    letter-spacing: -0.04em !important;
 }
 
-.small-box .icon > i {
-    color: rgba(0,0,0,0.05) !important;
+.small-box p {
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+}
+
+.small-box .icon {
+    color: rgba(79, 70, 229, 0.1) !important;
+}
+
+.small-box-footer {
+    display: none !important;
 }

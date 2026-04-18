@@ -30,7 +30,9 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent', 'slug', 'description')
     list_filter = ('parent',)
     prepopulated_fields = {'slug': ('name',)}
-    search_fields = ('name',)
+    search_fields = ('name', 'slug')
+    list_per_page = 20
+    search_help_text = "Search by category name or slug"
 
 
 @admin.register(Product)
@@ -38,10 +40,16 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('get_thumbnail', 'name', 'category', 'base_price', 'discount_price', 'is_active', 'is_featured', 'stock_quantity', 'created_at')
     list_editable = ('is_active', 'is_featured', 'stock_quantity', 'discount_price')
     list_filter = ('category', 'is_active', 'is_featured', 'is_customizable', 'created_at')
-    search_fields = ('name', 'description', 'short_description')
+    search_fields = ('name', 'description', 'short_description', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('available_sizes', 'available_colors')
+    autocomplete_fields = ['category']
     inlines = [ProductImageInline, ProductVariantInline]
+    list_per_page = 20
+    save_as = True
+    search_help_text = "Search products by name, description, or slug"
+    
+    actions = ['make_active', 'make_inactive', 'make_featured', 'remove_featured']
     
     fieldsets = (
         ('Basic Information', {
@@ -69,12 +77,28 @@ class ProductAdmin(admin.ModelAdmin):
         return "No Image"
     get_thumbnail.short_description = 'Thumbnail'
 
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Mark selected products as active"
+
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected products as inactive"
+
+    def make_featured(self, request, queryset):
+        queryset.update(is_featured=True)
+    make_featured.short_description = "Mark selected products as featured"
+
+    def remove_featured(self, request, queryset):
+        queryset.update(is_featured=False)
+    remove_featured.short_description = "Remove featured status from products"
+
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):
     form = ColorAdminForm
     list_display = ('name', 'hex_code', 'color_preview')
-    search_fields = ('name',)
+    search_fields = ('name', 'hex_code')
 
     def color_preview(self, obj):
         return mark_safe(f'<div style="width: 30px; height: 30px; background-color: {obj.hex_code}; border: 1px solid #ccc; border-radius: 4px;"></div>')
@@ -105,6 +129,7 @@ class ProductVariantAdmin(admin.ModelAdmin):
     list_display = ('product', 'size', 'color', 'final_price', 'stock_quantity', 'sku')
     list_filter = ('size', 'color')
     search_fields = ('product__name', 'sku')
+    autocomplete_fields = ['product', 'size', 'color']
 
 
 @admin.register(ProductReview)
