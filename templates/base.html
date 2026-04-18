@@ -92,8 +92,17 @@
                     <li class="nav-item">
                         <a class="nav-link fw-bold small" href="{% url 'products:home' %}">{% trans "HOME" %}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold small" href="{% url 'products:product_list' %}">{% trans "SHOP" %}</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold small" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans "SHOP" %}
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-sm rounded-0" aria-labelledby="shopDropdown">
+                            <li><a class="dropdown-item small fw-bold" href="{% url 'products:product_list' %}">{% trans "ALL COLLECTION" %}</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% for cat in global_categories %}
+                            <li><a class="dropdown-item small" href="{% url 'products:category_products' cat.slug %}">{{ cat.name|upper }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-bold small" href="{% url 'core:about' %}">{% trans "ABOUT" %}</a>

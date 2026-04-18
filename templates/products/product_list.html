@@ -47,42 +47,34 @@
         </div>
     </div>
     
-    <!-- Products Grid - Alpine Style -->
-    <div class="alpine-grid">
-        {% for product in products %}
-        <div class="fade-in-up">
-            <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none">
-                <div class="product-card">
-                    <div class="product-image-container">
-                        {% if product.has_discount %}
-                            <div class="product-badge-discount">{% trans "SALE" %} -{{ product.discount_percentage }}%</div>
-                        {% endif %}
-                        {% if product.get_main_image %}
-                            <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
+    <!-- Categories Grid - Alpine Style -->
+    <div class="row g-4">
+        {% for category in global_categories %}
+        <div class="col-md-4 col-lg-3">
+            <a href="{% url 'products:category_products' category.slug %}" class="text-decoration-none group">
+                <div class="category-slide-card border">
+                    <div class="category-image-wrapper">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
                         {% else %}
-                            <i class="fas fa-image fa-3x text-muted opacity-20"></i>
+                            <div class="category-img-placeholder d-flex align-items-center justify-content-center bg-white h-100 w-100" style="min-height: 250px;">
+                                <i class="fas fa-th-large fa-3x text-muted opacity-20"></i>
+                            </div>
                         {% endif %}
+                        <div class="category-overlay">
+                            <span class="btn-alpine py-2 px-3 small">{% trans "VIEW PRODUCTS" %}</span>
+                        </div>
                     </div>
-                    <div class="product-info-minimal">
-                        <div>
-                            <h3 class="product-title-min">{{ product.name }}</h3>
-                            <span class="product-cat-min">{{ product.category.name }}</span>
-                        </div>
-                        <div class="product-price-min">
-                            {% if product.has_discount %}
-                                <span class="product-price-old">LE {{ product.base_price }}</span>
-                                <span class="product-price-current has-discount">LE {{ product.discount_price }}</span>
-                            {% else %}
-                                <span class="product-price-current">LE {{ product.base_price }}</span>
-                            {% endif %}
-                        </div>
+                    <div class="category-info p-3 text-center">
+                        <h5 class="category-title-min mb-1 fw-bold">{{ category.name|upper }}</h5>
+                        <span class="small text-muted">{{ category.products.count }} {% trans "ITEMS" %}</span>
                     </div>
                 </div>
             </a>
         </div>
         {% empty %}
         <div class="col-12 text-center py-5">
-            <p class="text-muted">{% trans "No products found." %}</p>
+            <p class="text-muted">{% trans "No categories found." %}</p>
         </div>
         {% endfor %}
     </div>

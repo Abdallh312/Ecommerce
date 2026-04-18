@@ -26,98 +26,48 @@
     </div>
 </section>
 
-<!-- Category Slider Section -->
-<section class="py-5 bg-light overflow-hidden">
-    <div class="container mb-4">
-        <div class="d-flex justify-content-between align-items-end">
-            <div>
-                <span class="hero-tag">{% trans "EXPLORE" %}</span>
-                <h2 class="fw-bold mt-2 mb-0">{% trans "Browse Categories" %}</h2>
-            </div>
-            <div class="swiper-navigation-custom">
-                <button class="swiper-prev-cat btn btn-outline-dark rounded-circle me-2"><i class="fas fa-chevron-left small"></i></button>
-                <button class="swiper-next-cat btn btn-outline-dark rounded-circle"><i class="fas fa-chevron-right small"></i></button>
-            </div>
-        </div>
+<!-- Categories Section - Alpine Grid -->
+<section class="py-5 bg-white">
+    <div class="container mb-4 text-center">
+        <span class="hero-tag">{% trans "EXPLORE" %}</span>
+        <h2 class="fw-bold mt-2 mb-5">{% trans "Browse Categories" %}</h2>
     </div>
     
-    <div class="container-fluid pe-0">
-        <div class="swiper category-swiper">
-            <div class="swiper-wrapper">
-                {% for category in categories %}
-                <div class="swiper-slide">
-                    <a href="{% url 'products:category_products' category.slug %}" class="text-decoration-none group">
-                        <div class="category-slide-card">
-                            <div class="category-image-wrapper">
-                                {% if category.image %}
-                                    <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
-                                {% else %}
-                                    <div class="category-img-placeholder d-flex align-items-center justify-content-center bg-white h-100 w-100">
-                                        <i class="fas fa-th-large fa-2x text-muted opacity-20"></i>
-                                    </div>
-                                {% endif %}
-                                <div class="category-overlay">
-                                    <span class="btn-alpine py-2 px-3 small">{% trans "EXPLORE" %}</span>
-                                </div>
-                            </div>
-                            <div class="category-info pt-3">
-                                <h5 class="category-title-min mb-1">{{ category.name|upper }}</h5>
-                                <span class="small text-muted">{{ category.products.count }} {% trans "PRODUCTS" %}</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Products - Alpine Grid -->
-<section id="featured" class="py-5">
     <div class="container">
-        <div class="alpine-grid">
-            {% for product in featured_products %}
-            <div class="fade-in-up">
-                <a href="{% url 'products:product_detail' product.slug %}" class="text-decoration-none">
-                    <div class="product-card">
-                        <div class="product-image-container">
-                            {% if product.has_discount %}
-                                <div class="product-badge-discount">{% trans "SALE" %} -{{ product.discount_percentage }}%</div>
-                            {% endif %}
-                            {% if product.get_main_image %}
-                                <img src="{{ product.get_main_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-md-4">
+                <a href="{% url 'products:category_products' category.slug %}" class="text-decoration-none group">
+                    <div class="category-slide-card border">
+                        <div class="category-image-wrapper">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
                             {% else %}
-                                <i class="fas fa-image fa-3x text-muted opacity-20"></i>
+                                <div class="category-img-placeholder d-flex align-items-center justify-content-center bg-white h-100 w-100" style="min-height: 300px;">
+                                    <i class="fas fa-th-large fa-3x text-muted opacity-20"></i>
+                                </div>
                             {% endif %}
+                            <div class="category-overlay">
+                                <span class="btn-alpine py-2 px-3 small">{% trans "EXPLORE" %}</span>
+                            </div>
                         </div>
-                        <div class="product-info-minimal">
-                            <div>
-                                <h3 class="product-title-min">{{ product.name }}</h3>
-                                <span class="product-cat-min">{{ product.category.name }}</span>
-                            </div>
-                            <div class="product-price-min">
-                                {% if product.has_discount %}
-                                    <span class="product-price-old">LE {{ product.base_price }}</span>
-                                    <span class="product-price-current has-discount">LE {{ product.discount_price }}</span>
-                                {% else %}
-                                    <span class="product-price-current">LE {{ product.base_price }}</span>
-                                {% endif %}
-                            </div>
+                        <div class="category-info p-4 text-center">
+                            <h5 class="category-title-min mb-1 fw-bold">{{ category.name|upper }}</h5>
+                            <span class="small text-muted">{{ category.products.count }} {% trans "PRODUCTS" %}</span>
                         </div>
                     </div>
                 </a>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">{% trans "No featured products available." %}</p>
-            </div>
             {% endfor %}
         </div>
-        
-        <div class="text-center mt-5">
-            <a href="{% url 'products:product_list' %}" class="btn-alpine">{% trans "VIEW ALL COLLECTION" %}</a>
-        </div>
+    </div>
+</section>
+
+<!-- View All Collection CTA -->
+<section class="py-5 border-top">
+    <div class="container text-center py-4">
+        <h3 class="fw-bold mb-4">{% trans "Experience Premium Softwear" %}</h3>
+        <a href="{% url 'products:product_list' %}" class="btn-alpine">{% trans "VIEW ALL COLLECTION" %}</a>
     </div>
 </section>
 {% endblock %}
