@@ -1,6 +1,16 @@
 from django.contrib import admin
+from django import forms
 from django.utils.safestring import mark_safe
 from .models import Category, Product, ProductImage, Color, Size, ProductVariant, ProductReview, Wishlist, Announcement
+
+
+class ColorAdminForm(forms.ModelForm):
+    class Meta:
+        model = Color
+        fields = '__all__'
+        widgets = {
+            'hex_code': forms.TextInput(attrs={'type': 'color', 'style': 'height: 40px; width: 100px; cursor: pointer;'}),
+        }
 
 
 class ProductImageInline(admin.TabularInline):
@@ -62,6 +72,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):
+    form = ColorAdminForm
     list_display = ('name', 'hex_code', 'color_preview')
     search_fields = ('name',)
 
