@@ -219,9 +219,9 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = "pilotkidwear@gmail.com"
-EMAIL_HOST_PASSWORD = "mrtysklhzrqmuxmm"
-CONTACT_US_EMAIL = "pilotkidwear@gmail.com"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "pilotkidwear@gmail.com")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+CONTACT_US_EMAIL = os.getenv("CONTACT_US_EMAIL", "pilotkidwear@gmail.com")
 DEFAULT_FROM_EMAIL = 'Pilot <pilotkidwear@gmail.com>'
 ADMINS = [('Admin', 'admin@pilot.com')]
 
@@ -377,8 +377,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '586097926838-ecvdhgt06bvppole80n6ulrok965jeb3.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': os.getenv('GOOGLE_OAUTH_CLIENT_ID', ''),
+            'secret': os.getenv('GOOGLE_OAUTH_SECRET', ''),
             'key': '',
         },
         'SCOPE': [
