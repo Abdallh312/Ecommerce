@@ -53,3 +53,5 @@ zopfli==0.2.3.post1
 dj_database_url
 gunicorn
 PyJWT
+
+cryptography
