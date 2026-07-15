@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://pilotshopkidwear-sn0w.onrender.com',
     'https://pilotshopkidwear.onrender.com',
     'https://novashop-production-b6eb.up.railway.app',
+    'https://*.up.railway.app',
     'http://127.0.0.1',
     'http://127.0.0.1:8000',
     'http://localhost:8000/'
@@ -136,10 +137,9 @@ import dj_database_url
 # https://docs.djangoproject.com/en/4.2/ref/ /#databases
 import os
 DATABASES = {
-    'default': dj_database_url.parse(
-        "postgresql://postgres:YwItQtTjmcnLQdkbWqIkdOKLqsjYTUhd@metro.proxy.rlwy.net:20576/railway",
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
-        ssl_require=True
     )
 }
 # Password validation
